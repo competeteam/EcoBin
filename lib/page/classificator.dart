@@ -59,10 +59,10 @@ class _ClassificatorState extends State<Classificator> {
                       child: Stack(children: [
                         Positioned(
                           right: -28,
-                          bottom: -45,
+                          bottom: -60,
                           child: Container(
-                            width: 290,
-                            height: 260,
+                            width: 300,
+                            height: 250,
                             decoration: const BoxDecoration(
                                 image: DecorationImage(
                               image: AssetImage(
