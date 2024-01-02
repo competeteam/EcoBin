@@ -58,7 +58,7 @@ class _ClassificatorState extends State<Classificator> {
                       ),
                       child: Stack(children: [
                         Positioned(
-                          right: -28,
+                          right: -90,
                           bottom: -60,
                           child: Container(
                             width: 300,
@@ -111,7 +111,7 @@ class _ClassificatorState extends State<Classificator> {
                       ),
                       child: Stack(children: [
                         Positioned(
-                          left: -35,
+                          left: -23,
                           bottom: -54,
                           child: Container(
                             width: 236,
