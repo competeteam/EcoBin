@@ -126,7 +126,7 @@ class _ClassificatorState extends State<Classificator> {
                           ),
                         ),
                         Container(
-                          padding: const EdgeInsets.only(left: 70, top: 23, right: 26, bottom: 100),
+                          padding: const EdgeInsets.only(left: 120, top: 23, right: 26, bottom: 100),
                           child: const Column(
                             crossAxisAlignment: CrossAxisAlignment.end,
                             children: [
@@ -142,7 +142,8 @@ class _ClassificatorState extends State<Classificator> {
                                 height: 8,
                               ),
                               Text(
-                                'Take a photo of your waste. We will classify it.',
+                                'Take a photo of your waste. We’ll classify it.',
+                                textAlign: TextAlign.right,
                                 style: TextStyle(
                                   color: Colors.white,
                                   fontWeight: FontWeight.w300,
