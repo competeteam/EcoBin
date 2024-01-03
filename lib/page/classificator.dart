@@ -1,6 +1,7 @@
 import 'package:dinacom_2024/features/classificator/manual.dart';
+import 'package:dinacom_2024/router/app_navigation.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_svg/flutter_svg.dart';
+import 'package:go_router/go_router.dart';
 
 class Classificator extends StatefulWidget {
   const Classificator({super.key});
@@ -10,9 +11,12 @@ class Classificator extends StatefulWidget {
 }
 
 class _ClassificatorState extends State<Classificator> {
-  void manualFeature() {
-    Navigator.push(context,
-        MaterialPageRoute(builder: (context) => ManualClassificator()));
+  void classicatorFeature(int featureNum) {
+    if (featureNum == 1) {
+      GoRouter.of(context).go('/classificator/manual');
+    } else if (featureNum == 2) {
+      GoRouter.of(context).go('/classificator/automatic');
+    }
   }
 
   @override
@@ -59,7 +63,7 @@ class _ClassificatorState extends State<Classificator> {
                   children: [
                     GestureDetector(
                       onTap: () {
-                        manualFeature();
+                        classicatorFeature(1);
                       },
                       child: Container(
                         decoration: BoxDecoration(
@@ -116,57 +120,62 @@ class _ClassificatorState extends State<Classificator> {
                     const SizedBox(
                       height: 49,
                     ),
-                    Container(
-                      decoration: BoxDecoration(
-                        color: const Color(0xFF377EB5),
-                        borderRadius: BorderRadius.circular(20),
+                    GestureDetector(
+                      onTap: () {
+                        classicatorFeature(2);
+                      },
+                      child: Container(
+                        decoration: BoxDecoration(
+                          color: const Color(0xFF377EB5),
+                          borderRadius: BorderRadius.circular(20),
+                        ),
+                        child: Stack(children: [
+                          Positioned(
+                            left: -23,
+                            bottom: -54,
+                            child: Container(
+                              width: 236,
+                              height: 222,
+                              decoration: const BoxDecoration(
+                                  image: DecorationImage(
+                                image: AssetImage(
+                                  'assets/images/Aset2removebgpreview1.png',
+                                ),
+                                fit: BoxFit.fitWidth,
+                              )),
+                            ),
+                          ),
+                          Container(
+                            padding: const EdgeInsets.only(
+                                left: 120, top: 23, right: 26, bottom: 100),
+                            child: const Column(
+                              crossAxisAlignment: CrossAxisAlignment.end,
+                              children: [
+                                Text(
+                                  'Automatic',
+                                  style: TextStyle(
+                                    color: Colors.white,
+                                    fontWeight: FontWeight.w500,
+                                    fontSize: 35,
+                                  ),
+                                ),
+                                SizedBox(
+                                  height: 8,
+                                ),
+                                Text(
+                                  'Take a photo of your waste. We’ll classify it.',
+                                  textAlign: TextAlign.right,
+                                  style: TextStyle(
+                                    color: Colors.white,
+                                    fontWeight: FontWeight.w300,
+                                    fontSize: 15,
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ),
+                        ]),
                       ),
-                      child: Stack(children: [
-                        Positioned(
-                          left: -23,
-                          bottom: -54,
-                          child: Container(
-                            width: 236,
-                            height: 222,
-                            decoration: const BoxDecoration(
-                                image: DecorationImage(
-                              image: AssetImage(
-                                'assets/images/Aset2removebgpreview1.png',
-                              ),
-                              fit: BoxFit.fitWidth,
-                            )),
-                          ),
-                        ),
-                        Container(
-                          padding: const EdgeInsets.only(
-                              left: 120, top: 23, right: 26, bottom: 100),
-                          child: const Column(
-                            crossAxisAlignment: CrossAxisAlignment.end,
-                            children: [
-                              Text(
-                                'Automatic',
-                                style: TextStyle(
-                                  color: Colors.white,
-                                  fontWeight: FontWeight.w500,
-                                  fontSize: 35,
-                                ),
-                              ),
-                              SizedBox(
-                                height: 8,
-                              ),
-                              Text(
-                                'Take a photo of your waste. We’ll classify it.',
-                                textAlign: TextAlign.right,
-                                style: TextStyle(
-                                  color: Colors.white,
-                                  fontWeight: FontWeight.w300,
-                                  fontSize: 15,
-                                ),
-                              ),
-                            ],
-                          ),
-                        ),
-                      ]),
                     ),
                   ],
                 ),
