@@ -1,9 +1,20 @@
 import 'package:dinacom_2024/router/app_navigation.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'home.dart';
+import 'package:permission_handler/permission_handler.dart';
 
-void main() {
+void main() async {
+
+  WidgetsFlutterBinding.ensureInitialized();
+
+  await Permission.locationWhenInUse.isDenied.then((valueOfPermission)
+  {
+    if(valueOfPermission)
+    {
+      Permission.locationWhenInUse.request();
+    }
+  });
+
   runApp(const MyApp());
 }
 

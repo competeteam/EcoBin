@@ -37,9 +37,13 @@ dependencies:
   cupertino_icons: ^1.0.2
   cloud_firestore: ^4.13.6
   firebase_core: ^2.24.2
-  google_fonts: ^6.1.0
+  google_fonts: 
   go_router: ^10.1.0
   flutter_riverpod: ^2.4.9
+  google_maps_flutter:
+  permission_handler:
+  geolocator:
+  geocoder2:
 
 dev_dependencies:
   flutter_test:

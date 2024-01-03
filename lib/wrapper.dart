@@ -1,8 +1,3 @@
-import 'package:dinacom_2024/page/calculator.dart';
-import 'package:dinacom_2024/page/classificator.dart';
-import 'package:dinacom_2024/page/garbages.dart';
-import 'package:dinacom_2024/page/guide.dart';
-import 'package:dinacom_2024/page/profile.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 
