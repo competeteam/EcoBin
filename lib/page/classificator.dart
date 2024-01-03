@@ -1,3 +1,4 @@
+import 'package:dinacom_2024/features/classificator/manual.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 
@@ -9,6 +10,11 @@ class Classificator extends StatefulWidget {
 }
 
 class _ClassificatorState extends State<Classificator> {
+  void manualFeature() {
+    Navigator.push(context,
+        MaterialPageRoute(builder: (context) => ManualClassificator()));
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -51,55 +57,61 @@ class _ClassificatorState extends State<Classificator> {
                 Column(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    Container(
-                      decoration: BoxDecoration(
-                        color: const Color(0xFF5B8A62),
-                        borderRadius: BorderRadius.circular(20),
+                    GestureDetector(
+                      onTap: () {
+                        manualFeature();
+                      },
+                      child: Container(
+                        decoration: BoxDecoration(
+                          color: const Color(0xFF5B8A62),
+                          borderRadius: BorderRadius.circular(20),
+                        ),
+                        child: Stack(children: [
+                          Positioned(
+                            right: -90,
+                            bottom: -60,
+                            child: Container(
+                              width: 300,
+                              height: 250,
+                              decoration: const BoxDecoration(
+                                  image: DecorationImage(
+                                image: AssetImage(
+                                  'assets/images/Aset3removebgpreview1.png',
+                                ),
+                                fit: BoxFit.fitWidth,
+                              )),
+                            ),
+                          ),
+                          Container(
+                            padding: const EdgeInsets.only(
+                                left: 26, top: 23, right: 70, bottom: 100),
+                            child: const Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Text(
+                                  'Manual',
+                                  style: TextStyle(
+                                    color: Colors.white,
+                                    fontWeight: FontWeight.w500,
+                                    fontSize: 35,
+                                  ),
+                                ),
+                                SizedBox(
+                                  height: 8,
+                                ),
+                                Text(
+                                  'Answer questions to decide your waste classification.',
+                                  style: TextStyle(
+                                    color: Colors.white,
+                                    fontWeight: FontWeight.w300,
+                                    fontSize: 15,
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ),
+                        ]),
                       ),
-                      child: Stack(children: [
-                        Positioned(
-                          right: -90,
-                          bottom: -60,
-                          child: Container(
-                            width: 300,
-                            height: 250,
-                            decoration: const BoxDecoration(
-                                image: DecorationImage(
-                              image: AssetImage(
-                                'assets/images/Aset3removebgpreview1.png',
-                              ),
-                              fit: BoxFit.fitWidth,
-                            )),
-                          ),
-                        ),
-                        Container(
-                          padding: const EdgeInsets.only(left: 26, top: 23, right: 70, bottom: 100),
-                          child: const Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Text(
-                                'Manual',
-                                style: TextStyle(
-                                  color: Colors.white,
-                                  fontWeight: FontWeight.w500,
-                                  fontSize: 35,
-                                ),
-                              ),
-                              SizedBox(
-                                height: 8,
-                              ),
-                              Text(
-                                'Answer questions to decide your waste classification.',
-                                style: TextStyle(
-                                  color: Colors.white,
-                                  fontWeight: FontWeight.w300,
-                                  fontSize: 15,
-                                ),
-                              ),
-                            ],
-                          ),
-                        ),
-                      ]),
                     ),
                     const SizedBox(
                       height: 49,
@@ -126,7 +138,8 @@ class _ClassificatorState extends State<Classificator> {
                           ),
                         ),
                         Container(
-                          padding: const EdgeInsets.only(left: 120, top: 23, right: 26, bottom: 100),
+                          padding: const EdgeInsets.only(
+                              left: 120, top: 23, right: 26, bottom: 100),
                           child: const Column(
                             crossAxisAlignment: CrossAxisAlignment.end,
                             children: [
