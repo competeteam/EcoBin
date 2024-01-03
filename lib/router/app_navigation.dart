@@ -1,3 +1,5 @@
+import 'package:dinacom_2024/features/classificator/automatic.dart';
+import 'package:dinacom_2024/features/classificator/manual.dart';
 import 'package:dinacom_2024/page/calculator.dart';
 import 'package:dinacom_2024/page/classificator.dart';
 import 'package:dinacom_2024/page/garbages.dart';
@@ -24,6 +26,8 @@ class AppNavigation {
       GlobalKey<NavigatorState>(debugLabel: 'shellGuide');
   static final _shellNavigatorProfile =
       GlobalKey<NavigatorState>(debugLabel: 'shellProfile');
+  static final _shellNavigatorManualClassificator = 
+      GlobalKey<NavigatorState>(debugLabel: 'shellManualClassificator');
 
 
   // GoRouter configuration
@@ -60,9 +64,21 @@ class AppNavigation {
               GoRoute(
                 path: "/classificator",
                 name: "Classificator",
-                builder: (BuildContext context, GoRouterState state) =>
+                builder: (BuildContext context, GoRouterState state ) =>
                     const Classificator(),
               ),
+              GoRoute(
+                path: "/classificator/manual",
+                name: "Manual Classificator",
+                builder:(context, state) => 
+                  const ManualClassificator(),
+              ),
+              GoRoute(
+                path: "/classificator/automatic",
+                name: "Automatic Classificator",
+                builder:(context, state) => 
+                  const AutomaticClassificator(),
+              )
             ],
           ),
 
@@ -105,7 +121,6 @@ class AppNavigation {
             ],
           ),
 
-          
 
         ],
       ),
