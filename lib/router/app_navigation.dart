@@ -1,3 +1,4 @@
+import 'package:dinacom_2024/components/camera/camera.dart';
 import 'package:dinacom_2024/features/classificator/automatic.dart';
 import 'package:dinacom_2024/features/classificator/manual.dart';
 import 'package:dinacom_2024/page/calculator.dart';
@@ -26,9 +27,8 @@ class AppNavigation {
       GlobalKey<NavigatorState>(debugLabel: 'shellGuide');
   static final _shellNavigatorProfile =
       GlobalKey<NavigatorState>(debugLabel: 'shellProfile');
-  static final _shellNavigatorManualClassificator = 
-      GlobalKey<NavigatorState>(debugLabel: 'shellManualClassificator');
-
+  static final _shellNavigatorCamera = 
+      GlobalKey<NavigatorState>(debugLabel: 'shellCamera');
 
   // GoRouter configuration
   static final GoRouter router = GoRouter(
@@ -121,6 +121,17 @@ class AppNavigation {
             ],
           ),
 
+          StatefulShellBranch(
+            navigatorKey: _shellNavigatorCamera,
+            routes: <RouteBase>[
+              GoRoute(
+                path: "/camera",
+                name: "Camera",
+                builder:(context, state) => 
+                  const Camera(),
+              )
+            ]
+          ),
 
         ],
       ),
