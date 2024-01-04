@@ -15,7 +15,8 @@ class _ClassificatorState extends State<Classificator> {
     if (featureNum == 1) {
       GoRouter.of(context).go('/classificator/manual');
     } else if (featureNum == 2) {
-      GoRouter.of(context).go('/classificator/automatic');
+      
+      GoRouter.of(context).go('/camera');
     }
   }
 
