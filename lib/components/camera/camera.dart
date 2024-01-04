@@ -12,6 +12,7 @@ class Camera extends StatefulWidget {
 class _CameraState extends State<Camera> {
   late List<CameraDescription> camera;
   late CameraController cameraController;
+  bool _isCameraInitiated = false;
 
   @override
   void initState() {
@@ -33,7 +34,9 @@ class _CameraState extends State<Camera> {
         return;
       }
 
-      setState(() {});
+      setState(() {
+        _isCameraInitiated = true;
+      });
     }).catchError((Object e) {
       if (e is CameraException) {
         switch (e.code) {
@@ -54,59 +57,60 @@ class _CameraState extends State<Camera> {
 
   @override
   Widget build(BuildContext context) {
-    if (cameraController.value.isInitialized) {
-      return Scaffold(
-          body: Stack(
-        children: [
-          Container(
-            height: double.infinity,
-            child: CameraPreview(cameraController),
-          ),
-          Column(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              Container(
-                alignment: Alignment.topLeft,
-                padding: const EdgeInsets.only(top: 30, left: 20),
-                child: MaterialButton(
-                    onPressed: () {
-                      GoRouter.of(context).go('/classificator');
-                    },
-                    padding: const EdgeInsets.only(left: 9),
-                    shape: const CircleBorder(),
-                    height: 50,
-                    minWidth: 50,
-                    color: Colors.white,
-                    child: const Icon(
-                      IconData(
-                        0xe093,
-                        fontFamily: 'MaterialIcons',
-                        matchTextDirection: true,
-                      ),
-                      size: 20,
-                    )),
-              ),
-              Container(
-                padding: const EdgeInsets.only(bottom: 30, left: 9, right: 9),
-                child: Center(
-                  child: MaterialButton(
-                    onPressed: () {},
-                    shape: const CircleBorder(),
-                    padding: const EdgeInsets.all(20),
-                    color: Colors.white,
-                    child: const Icon(
-                      IconData(0xf60b, fontFamily: 'MaterialIcons'),
-                      size: 50,
+    if (!_isCameraInitiated) {
+      // TODO: Make progress loading
+      return const CircularProgressIndicator();
+    }
+
+    return Scaffold(
+        body: Stack(
+      children: [
+        Container(
+          height: double.infinity,
+          child: CameraPreview(cameraController),
+        ),
+        Column(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            Container(
+              alignment: Alignment.topLeft,
+              padding: const EdgeInsets.only(top: 30, left: 20),
+              child: MaterialButton(
+                  onPressed: () {
+                    GoRouter.of(context).go('/classificator');
+                  },
+                  padding: const EdgeInsets.only(left: 9),
+                  shape: const CircleBorder(),
+                  height: 50,
+                  minWidth: 50,
+                  color: Colors.white,
+                  child: const Icon(
+                    IconData(
+                      0xe093,
+                      fontFamily: 'MaterialIcons',
+                      matchTextDirection: true,
                     ),
+                    size: 20,
+                  )),
+            ),
+            Container(
+              padding: const EdgeInsets.only(bottom: 30, left: 9, right: 9),
+              child: Center(
+                child: MaterialButton(
+                  onPressed: () {},
+                  shape: const CircleBorder(),
+                  padding: const EdgeInsets.all(20),
+                  color: Colors.white,
+                  child: const Icon(
+                    IconData(0xf60b, fontFamily: 'MaterialIcons'),
+                    size: 50,
                   ),
                 ),
-              )
-            ],
-          )
-        ],
-      ));
-    } else {
-      return const SizedBox();
-    }
+              ),
+            )
+          ],
+        )
+      ],
+    ));
   }
 }
