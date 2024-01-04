@@ -1,5 +1,7 @@
+import 'package:dinacom_2024/page/add_bins.dart';
 import 'package:dinacom_2024/page/calculator.dart';
 import 'package:dinacom_2024/page/classificator.dart';
+import 'package:dinacom_2024/page/complaint.dart';
 import 'package:dinacom_2024/page/garbages.dart';
 import 'package:dinacom_2024/page/guide.dart';
 import 'package:dinacom_2024/page/profile.dart';
@@ -75,6 +77,30 @@ class AppNavigation {
                 name: "Garbages",
                 builder: (BuildContext context, GoRouterState state) =>
                     const Garbages(),
+                routes: [
+                  GoRoute(
+                    path: 'addbin',
+                    name: 'addbin',
+                    pageBuilder: (context, state) => CustomTransitionPage<void>(
+                      key: state.pageKey,
+                      child: const AddBinPage(),
+                      transitionsBuilder:
+                          (context, animation, secondaryAnimation, child) =>
+                              FadeTransition(opacity: animation, child: child),
+                    ),
+                  ),
+                  GoRoute(
+                    path: 'complaint',
+                    name: 'complaint',
+                    pageBuilder: (context, state) => CustomTransitionPage<void>(
+                      key: state.pageKey,
+                      child: const ComplaintPage(),
+                      transitionsBuilder:
+                          (context, animation, secondaryAnimation, child) =>
+                              FadeTransition(opacity: animation, child: child),
+                    ),
+                  ),
+                ],
               ),
             ],
           ),

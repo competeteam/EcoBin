@@ -1,8 +1,10 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
+import 'package:flutter_speed_dial/flutter_speed_dial.dart';
 import 'package:geocoder2/geocoder2.dart';
 import 'package:geolocator/geolocator.dart';
+import 'package:go_router/go_router.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 
 class Garbages extends StatefulWidget {
@@ -61,8 +63,28 @@ class _GarbagesState extends State<Garbages> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        appBar: AppBar(
-          title: const Text('Garbages'),
+        floatingActionButton: SpeedDial(
+          childrenButtonSize: const Size(60, 60),
+          spacing: 3,
+          spaceBetweenChildren: 5,
+          backgroundColor: const Color.fromARGB(255, 34, 34, 34),
+          animatedIcon: AnimatedIcons.menu_close,
+          foregroundColor: Colors.white,
+          children: [
+            SpeedDialChild(
+              child: const Icon(Icons.add),
+              shape: CircleBorder(),
+              onTap: (){context.goNamed('addbin');},
+              
+              label: 'Add Bin',
+            ),
+            SpeedDialChild(
+              child: const Icon(Icons.message),
+              shape: CircleBorder(),
+              label: 'Complaint',
+              onTap: (){context.goNamed('complaint');},
+            ),
+          ],
         ),
         body: Stack(
           children: [
@@ -79,7 +101,7 @@ class _GarbagesState extends State<Garbages> {
                   });
                 }
               },
-              onTap: (latlng){
+              onTap: (latlng) {
                 print(_address);
               },
               onMapCreated: (GoogleMapController mapController) {
@@ -95,7 +117,7 @@ class _GarbagesState extends State<Garbages> {
               child: Padding(
                   padding: EdgeInsets.only(bottom: 35),
                   child: Icon(Icons.pin_drop_outlined)),
-            )
+            ),
           ],
         ));
   }
