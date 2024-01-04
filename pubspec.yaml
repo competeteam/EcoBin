@@ -44,6 +44,7 @@ dependencies:
   permission_handler:
   geolocator:
   geocoder2:
+  flutter_speed_dial:
 
 dev_dependencies:
   flutter_test:
