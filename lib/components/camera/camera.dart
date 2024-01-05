@@ -1,4 +1,5 @@
 import 'package:camera/camera.dart';
+import 'package:dinacom_2024/components/loading/loading.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 
@@ -59,7 +60,7 @@ class _CameraState extends State<Camera> {
   Widget build(BuildContext context) {
     if (!_isCameraInitiated) {
       // TODO: Make progress loading
-      return const CircularProgressIndicator();
+      return const Loading();
     }
 
     return Scaffold(
