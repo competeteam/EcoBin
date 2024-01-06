@@ -14,6 +14,8 @@ class _CameraState extends State<Camera> {
   late List<CameraDescription> camera;
   late CameraController cameraController;
   bool _isCameraInitiated = false;
+  bool _isTakingPicture = false;
+  bool _isCameraOn = true;
 
   @override
   void initState() {
@@ -23,6 +25,10 @@ class _CameraState extends State<Camera> {
 
   void startCamera() async {
     camera = await availableCameras();
+
+    if (camera.isEmpty) {
+      return;
+    }
 
     cameraController = CameraController(
       camera[0],
@@ -54,6 +60,40 @@ class _CameraState extends State<Camera> {
         }
       }
     });
+  }
+
+  @override
+  void dispose() {
+    cameraController.dispose();
+    super.dispose();
+  }
+
+  Future takePicture() async {
+    if (!cameraController.value.isInitialized) {
+      return null;
+    }
+
+    if (cameraController.value.isTakingPicture) {
+      return null;
+    }
+
+    try {
+      setState(() {
+        _isTakingPicture = true;
+      });
+
+      await cameraController.setFlashMode(FlashMode.off);
+
+      XFile picture = await cameraController.takePicture();
+
+      await cameraController.pausePreview();
+
+      // ignore: use_build_context_synchronously
+      context.go('/camera/preview', extra: picture);
+    } on CameraException catch (e) {
+      debugPrint("Error occurred while taking picture: $e");
+      return null;
+    }
   }
 
   @override
@@ -97,8 +137,10 @@ class _CameraState extends State<Camera> {
             Container(
               padding: const EdgeInsets.only(bottom: 30, left: 9, right: 9),
               child: Center(
-                child: MaterialButton(
-                  onPressed: () {},
+                child: _isTakingPicture 
+                ? const CircularProgressIndicator()
+                : MaterialButton(
+                  onPressed: takePicture,
                   shape: const CircleBorder(),
                   padding: const EdgeInsets.all(20),
                   color: Colors.white,
