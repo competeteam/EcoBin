@@ -1,4 +1,8 @@
+import 'dart:io';
+
+import 'package:camera/camera.dart';
 import 'package:dinacom_2024/components/camera/camera.dart';
+import 'package:dinacom_2024/components/camera/camera_result_preview.dart';
 import 'package:dinacom_2024/features/classificator/automatic.dart';
 import 'package:dinacom_2024/features/classificator/manual.dart';
 import 'package:dinacom_2024/page/calculator.dart';
@@ -129,6 +133,14 @@ class AppNavigation {
                 name: "Camera",
                 builder:(context, state) => 
                   const Camera(),
+              ),
+              GoRoute(
+                path: "/camera/preview",
+                name: "Camera Preview",
+                builder: (context, state) {
+                  XFile file = state.extra as XFile;
+                  return CameraShootPreview(file);
+                },
               )
             ]
           ),
