@@ -1,22 +1,28 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
-class Profile extends StatefulWidget {
+import '../models/user.dart';
+import 'login.dart';
+
+class Profile extends StatelessWidget {
   const Profile({super.key});
 
   @override
-  State<Profile> createState() => _ProfileState();
-}
-
-class _ProfileState extends State<Profile> {
-  @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: const Text('Profile'),
-      ),
-      body: const Center(
-        child: Text('Profile'),
-      ),
-    );
+
+    final user = Provider.of<UserModel?>(context);
+
+    if (user == null) {
+      return const Login();
+    } else {
+      return Scaffold(
+        appBar: AppBar(
+          title: const Text('Profile'),
+        ),
+        body: const Center(
+          child: Text('Profile'),
+        ),
+      );
+    }
   }
 }
