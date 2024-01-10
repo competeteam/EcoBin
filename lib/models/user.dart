@@ -5,14 +5,12 @@ import 'model.dart';
 enum UserType { user, admin }
 
 class UserModel implements Model {
-  final Timestamp? deletedAt;
-  final Timestamp? createdAt;
+  final DateTime? deletedAt;
+  final DateTime? createdAt;
   final String? uid;
   final String? displayName;
   final String? email;
-  final String? password;
   final String? photoURL;
-
   final bool? isEmailVerified;
   final bool? isAnonymous;
   final UserType? type;
@@ -23,7 +21,6 @@ class UserModel implements Model {
     this.uid,
     this.displayName,
     this.email,
-    this.password,
     this.photoURL,
     this.isEmailVerified,
     this.isAnonymous,
@@ -42,7 +39,6 @@ class UserModel implements Model {
         uid: data?['uid'],
         displayName: data?['displayName'],
         email: data?['email'],
-        password: data?['password'],
         photoURL: data?['photoURL'],
         isEmailVerified: data?['isEmailVerified'],
         isAnonymous: data?['isAnonymous'],
@@ -52,12 +48,11 @@ class UserModel implements Model {
   @override
   Map<String, dynamic> toFirestore() {
     return {
-      if (deletedAt != null) "deletedAt": deletedAt!.seconds,
-      if (createdAt != null) "createdAt": createdAt!.seconds,
+      if (deletedAt != null) "deletedAt": deletedAt!.toString(),
+      if (createdAt != null) "createdAt": createdAt!.toString(),
       if (uid != null) "uid": uid,
       if (displayName != null) "displayName": displayName,
       if (email != null) "email": email,
-      if (password != null) "password": password,
       if (photoURL != null) "photoURL": photoURL,
       if (isEmailVerified != null) "isEmailVerified": isEmailVerified,
       if (isAnonymous != null) "isAnonymous": isAnonymous,
