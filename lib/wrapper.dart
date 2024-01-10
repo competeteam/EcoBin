@@ -23,7 +23,7 @@ class _WrapperState extends State<Wrapper> {
   bool isCamera = false;
 
   void hideCamera() {
-    if (GoRouterState.of(context).matchedLocation == '/camera') {
+    if (GoRouterState.of(context).matchedLocation == '/camera' || GoRouterState.of(context).matchedLocation == '/camera/preview') {
       isCamera = true;
     } else {
       isCamera = false;
