@@ -8,7 +8,6 @@ class Wrapper extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    print(navigationShell.currentIndex);
 
     const List<BottomNavigationBarItem> navigationBarItems =
         <BottomNavigationBarItem>[
@@ -23,8 +22,6 @@ class Wrapper extends StatelessWidget {
       BottomNavigationBarItem(
           icon: Icon(Icons.person, size: 25), label: 'Profile'),
     ];
-
-    print(navigationBarItems.length);
 
     return Scaffold(
       body: navigationShell,
