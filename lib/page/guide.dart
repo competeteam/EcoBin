@@ -1,5 +1,6 @@
 import 'package:dinacom_2024/home.dart';
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 
 class Guide extends StatefulWidget {
   const Guide({super.key});
@@ -14,7 +15,7 @@ class _GuideState extends State<Guide> {
     return Scaffold(
       backgroundColor: const Color.fromRGBO(34, 34, 34, 0.98),
       body: ListView(
-        padding: const EdgeInsets.only(left: 40, right: 40, top: 70, bottom: 40),
+        padding: const EdgeInsets.only(left: 30, right: 30, top: 70, bottom: 40),
         children: const <Widget>[
           Text(
             'Guides',
@@ -52,12 +53,14 @@ class GuideCard extends StatelessWidget {
   final String title;
   final String subtitle;
   final String content;
+  final int id;
   const GuideCard({super.key,
     this.title = "Lorem Ipsum",
     this.subtitle = "Lorem ipsum dolor sit amet, consectetur adipiscing elit. "
         "Cras et euismod justo, id dapibus est. "
         "Etiam auctor sem nec nisl rhoncus, a malesuada odio fringilla.",
     this.content = "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Cras et euismod justo, id dapibus est. Etiam auctor sem nec nisl rhoncus, a malesuada odio fringilla. Praesent tempus turpis sem, a egestas lacus rutrum eget. Curabitur vulputate, velit ut faucibus interdum, lacus leo egestas risus, a congue ipsum erat et arcu. In id commodo arcu. Donec vel metus sapien. Phasellus lobortis risus felis. In congue nisi a nulla viverra, quis tristique lacus egestas. Ut molestie auctor erat, non aliquam risus consequat vel. Ut convallis nibh eget ultricies luctus. Cras lacinia malesuada hendrerit.\n\nVestibulum bibendum nulla vitae nibh blandit tincidunt. Nulla lorem eros, rutrum vel tristique et, dictum non velit. Duis a imperdiet nisl, ut varius sem. Quisque rutrum pellentesque malesuada. Nulla id bibendum justo, id laoreet ipsum. Donec sed nulla dapibus, pharetra velit a, vulputate augue. Phasellus nec mi nec mauris venenatis volutpat. Etiam ultricies, lorem quis porta accumsan, arcu nibh pharetra elit, eget tincidunt purus lorem eu ipsum. Cras dapibus et nisl eget tristique. Vestibulum ut tempus lectus. Cras vitae sem commodo, venenatis ante vel, vulputate purus. Suspendisse hendrerit risus diam, quis convallis risus lacinia a. In pretium porttitor dui non laoreet. Mauris vitae eleifend felis. Nulla facilisi.",
+    this.id = -1,
   });
 
   @override
@@ -72,14 +75,7 @@ class GuideCard extends StatelessWidget {
         color: const Color(0xFF5A8A62),
         child: InkWell(
           onTap: () {
-            // var currentScreen = context.findAncestorStateOfType<State<Home>>();
-
-            Navigator.push(
-                context,
-                MaterialPageRoute(builder: (context) => GuideArticle(
-                  title: title,
-                  content: content,))
-            );
+            GoRouter.of(context).push('/guide/${id}');
           },
           child: Padding(
             padding: const EdgeInsets.fromLTRB(16, 18, 15, 18),
