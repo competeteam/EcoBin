@@ -1,7 +1,8 @@
+import 'package:dinacom_2024/page/profile/register.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
-import '../models/user.dart';
+import '../../models/user.dart';
 import 'login.dart';
 
 class Profile extends StatelessWidget {
