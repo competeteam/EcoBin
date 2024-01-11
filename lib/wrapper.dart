@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
+import 'package:permission_handler/permission_handler.dart';
 
 class Wrapper extends StatefulWidget {
    const Wrapper({
@@ -39,9 +40,19 @@ class _WrapperState extends State<Wrapper> {
           backgroundColor: currentPage == 2
               ? const Color.fromARGB(255, 212, 234, 214)
               : const Color.fromARGB(255, 215, 215, 215),
-          onPressed: () {
+          onPressed: () async {
+            
+            await Permission.locationWhenInUse.isDenied.then((valueOfPermission)
+            {
+              if(valueOfPermission)
+              {
+                Permission.locationWhenInUse.request();
+              }
+            });
+
             setState(() {
               //currentScreen = const Garbages()
+              
               _goBranch(2);
               currentPage = 2;
             });

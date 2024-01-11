@@ -97,6 +97,15 @@ class _ComplaintPageState extends State<ComplaintPage> {
               padding: EdgeInsets.only(bottom: 35),
               child: Icon(Icons.pin_drop_outlined)),
         ),
+        Align(
+              alignment: Alignment.bottomCenter,
+              child: Padding(
+                  padding: EdgeInsets.only(bottom: 35),
+                  child: ElevatedButton(
+                    onPressed: () {},
+                    child: Text("Add complaint here"),
+                  )),
+            ),
         
       ],
     ));

@@ -17,7 +17,7 @@ class Garbages extends StatefulWidget {
 class _GarbagesState extends State<Garbages> {
   Position? currentPositionOfUser;
   LatLng? destLocation;
-  String? _address;
+  String? _address = "225 Bill Graham Pkwy, Mountain View, CA 94043, USA";
 
   getAddressFromLatLng() async {
     try {
@@ -74,7 +74,7 @@ class _GarbagesState extends State<Garbages> {
             SpeedDialChild(
               child: const Icon(Icons.add),
               shape: CircleBorder(),
-              onTap: (){context.goNamed('addbin');},
+              onTap: (){context.goNamed('addbin', pathParameters: {'adrs':_address!});},
               
               label: 'Add Bin',
             ),

@@ -1,4 +1,5 @@
 import 'package:dinacom_2024/page/add_bins.dart';
+import 'package:dinacom_2024/page/add_bins2.dart';
 import 'package:dinacom_2024/page/calculator.dart';
 import 'package:dinacom_2024/page/classificator.dart';
 import 'package:dinacom_2024/page/complaint.dart';
@@ -26,7 +27,6 @@ class AppNavigation {
       GlobalKey<NavigatorState>(debugLabel: 'shellGuide');
   static final _shellNavigatorProfile =
       GlobalKey<NavigatorState>(debugLabel: 'shellProfile');
-
 
   // GoRouter configuration
   static final GoRouter router = GoRouter(
@@ -79,16 +79,18 @@ class AppNavigation {
                     const Garbages(),
                 routes: [
                   GoRoute(
-                    path: 'addbin',
-                    name: 'addbin',
-                    pageBuilder: (context, state) => CustomTransitionPage<void>(
-                      key: state.pageKey,
-                      child: const AddBinPage(),
-                      transitionsBuilder:
-                          (context, animation, secondaryAnimation, child) =>
-                              FadeTransition(opacity: animation, child: child),
-                    ),
-                  ),
+                      path: 'addbin/:adrs',
+                      name: 'addbin',
+                      pageBuilder: (context, state) =>
+                          CustomTransitionPage<void>(
+                            key: state.pageKey,
+                            child: AddBin2Page(adrs: state.pathParameters['adrs']),
+                            transitionsBuilder: (context, animation,
+                                    secondaryAnimation, child) =>
+                                FadeTransition(
+                                    opacity: animation, child: child),
+                          ),
+                        ),
                   GoRoute(
                     path: 'complaint',
                     name: 'complaint',
@@ -130,9 +132,6 @@ class AppNavigation {
               ),
             ],
           ),
-
-          
-
         ],
       ),
     ],

@@ -3,6 +3,7 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:geocoder2/geocoder2.dart';
 import 'package:geolocator/geolocator.dart';
+import 'package:go_router/go_router.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 
 class AddBinPage extends StatefulWidget {
@@ -61,44 +62,51 @@ class _AddBinPageState extends State<AddBinPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: const Text('Add Bin'),
-      ),
+        appBar: AppBar(
+          title: const Text('Add Bin'),
+        ),
         body: Stack(
-      children: [
-        
-        GoogleMap(
-          initialCameraPosition: googlePlexInitialPosition,
-          mapType: MapType.normal,
-          zoomControlsEnabled: true,
-          mapToolbarEnabled: true,
-          onCameraMove: (CameraPosition? position) {
-            if (destLocation != position!.target) {
-              setState(() {
-                destLocation = position.target;
-                getAddressFromLatLng();
-              });
-            }
-          },
-          onTap: (latlng) {
-            print(_address);
-          },
-          onMapCreated: (GoogleMapController mapController) {
-            controllerGoogleMap = mapController;
+          children: [
+            GoogleMap(
+              initialCameraPosition: googlePlexInitialPosition,
+              mapType: MapType.normal,
+              zoomControlsEnabled: true,
+              mapToolbarEnabled: true,
+              onCameraMove: (CameraPosition? position) {
+                if (destLocation != position!.target) {
+                  setState(() {
+                    destLocation = position.target;
+                    getAddressFromLatLng();
+                  });
+                }
+              },
+              onTap: (latlng) {
+                print(_address);
+              },
+              onMapCreated: (GoogleMapController mapController) {
+                controllerGoogleMap = mapController;
 
-            googleMapCompleterController.complete(controllerGoogleMap);
+                googleMapCompleterController.complete(controllerGoogleMap);
 
-            getCurrentLiveLocationOfUser();
-          },
-        ),
-        const Align(
-          alignment: Alignment.center,
-          child: Padding(
-              padding: EdgeInsets.only(bottom: 35),
-              child: Icon(Icons.pin_drop_outlined)),
-        ),
-        
-      ],
-    ));
+                getCurrentLiveLocationOfUser();
+              },
+            ),
+            const Align(
+              alignment: Alignment.center,
+              child: Padding(
+                  padding: EdgeInsets.only(bottom: 35),
+                  child: Icon(Icons.pin_drop_outlined)),
+            ),
+            Align(
+              alignment: Alignment.bottomCenter,
+              child: Padding(
+                  padding: EdgeInsets.only(bottom: 35),
+                  child: ElevatedButton(
+                    onPressed: () {context.goNamed("addbin2");},
+                    child: Text("Add bin here"),
+                  )),
+            ),
+          ],
+        ));
   }
 }
