@@ -109,6 +109,12 @@ class AppNavigation {
                 builder: (BuildContext context, GoRouterState state) =>
                     const Guide(),
               ),
+              GoRoute(
+                path: "/guide/:id",
+                name: "Guide Content",
+                builder: (BuildContext context, GoRouterState state) =>
+                    const GuideArticle(),
+              ),
             ],
           ),
 
