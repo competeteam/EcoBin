@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
+import 'package:permission_handler/permission_handler.dart';
 
 class Wrapper extends StatelessWidget {
   const Wrapper({required this.navigationShell, super.key});
@@ -8,9 +9,8 @@ class Wrapper extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-
     const List<BottomNavigationBarItem> navigationBarItems =
-    <BottomNavigationBarItem>[
+        <BottomNavigationBarItem>[
       BottomNavigationBarItem(
           icon: Icon(Icons.menu_book_rounded, size: 25), label: 'Guide'),
       BottomNavigationBarItem(
@@ -38,7 +38,14 @@ class Wrapper extends StatelessWidget {
     );
   }
 
-  void _onTap(index) {
+  void _onTap(index) async {
+    if (index == 2) {
+      await Permission.locationWhenInUse.isDenied.then((valueOfPermission) {
+        if (valueOfPermission) {
+          Permission.locationWhenInUse.request();
+        }
+      });
+    }
     navigationShell.goBranch(
       index,
       initialLocation: index == navigationShell.currentIndex,
