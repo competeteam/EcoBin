@@ -23,17 +23,17 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
 
     return StreamProvider<UserModel?>.value(
-      value: AuthService().user,
-      initialData: null,
-      child: MaterialApp.router(
-        debugShowCheckedModeBanner: false,
-        theme: ThemeData(
-          primarySwatch: Colors.blue,
-          textTheme: GoogleFonts.interTextTheme(),
-          visualDensity: VisualDensity.adaptivePlatformDensity,
-        ),
-        routerConfig: AppNavigation.getRouter(),
-      )
+        value: AuthService().user,
+        initialData: null,
+        child: MaterialApp.router(
+          debugShowCheckedModeBanner: false,
+          theme: ThemeData(
+            primarySwatch: Colors.blue,
+            textTheme: GoogleFonts.interTextTheme(),
+            visualDensity: VisualDensity.adaptivePlatformDensity,
+          ),
+          routerConfig: AppNavigation.getRouter(),
+        )
     );
   }
 }

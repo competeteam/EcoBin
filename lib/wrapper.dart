@@ -10,7 +10,7 @@ class Wrapper extends StatelessWidget {
   Widget build(BuildContext context) {
 
     const List<BottomNavigationBarItem> navigationBarItems =
-        <BottomNavigationBarItem>[
+    <BottomNavigationBarItem>[
       BottomNavigationBarItem(
           icon: Icon(Icons.menu_book_rounded, size: 25), label: 'Guide'),
       BottomNavigationBarItem(

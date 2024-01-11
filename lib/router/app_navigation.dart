@@ -16,19 +16,19 @@ class AppNavigation {
   // Private navigators
   static final _rootNavigatorKey = GlobalKey<NavigatorState>();
   static final _calculatorNavigatorKey =
-      GlobalKey<NavigatorState>(debugLabel: 'calculatorNavigator');
+  GlobalKey<NavigatorState>(debugLabel: 'calculatorNavigator');
   static final _classificatorNavigatorKey =
-      GlobalKey<NavigatorState>(debugLabel: 'classificatorNavigator');
+  GlobalKey<NavigatorState>(debugLabel: 'classificatorNavigator');
   static final _garbageNavigatorKey =
-      GlobalKey<NavigatorState>(debugLabel: 'garbageNavigator');
+  GlobalKey<NavigatorState>(debugLabel: 'garbageNavigator');
   static final _guidesNavigatorKey =
-      GlobalKey<NavigatorState>(debugLabel: 'guidesNavigator');
+  GlobalKey<NavigatorState>(debugLabel: 'guidesNavigator');
   static final _profileNavigatorKey =
-      GlobalKey<NavigatorState>(debugLabel: 'profileNavigator');
+  GlobalKey<NavigatorState>(debugLabel: 'profileNavigator');
   static final _loginNavigatorKey =
-      GlobalKey<NavigatorState>(debugLabel: 'loginNavigator');
+  GlobalKey<NavigatorState>(debugLabel: 'loginNavigator');
   static final _registerNavigatorKey =
-      GlobalKey<NavigatorState>(debugLabel: 'registerNavigator');
+  GlobalKey<NavigatorState>(debugLabel: 'registerNavigator');
 
   static final _router = GoRouter(
     debugLogDiagnostics: true,
@@ -64,13 +64,13 @@ class AppNavigation {
                           name: 'Manual Classificator',
                           path: 'manual',
                           builder: (context, state) =>
-                              const ManualClassificator(),
+                          const ManualClassificator(),
                         ),
                         GoRoute(
                           name: 'Automatic Classificator',
                           path: 'automatic',
                           builder: (context, state) =>
-                              const AutomaticClassificator(),
+                          const AutomaticClassificator(),
                         )
                       ])
                 ]),
