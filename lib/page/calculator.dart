@@ -181,7 +181,7 @@ class CalculatorInputField extends StatefulWidget {
 }
 
 class _CalculatorInputFieldState extends State<CalculatorInputField> {
-  FocusNode _focus = FocusNode();
+  final FocusNode _focus = FocusNode();
   Color labelColor = const Color(0xFF77777A);
 
   @override
@@ -243,7 +243,11 @@ class _CalculatorInputFieldState extends State<CalculatorInputField> {
               fontWeight: FontWeight.w400,
               height: 0,
             ),
-            suffix: Text('lbs', style: TextStyle(color: Colors.white),),
+            suffixIcon: Padding(
+              padding: EdgeInsets.all(10.0),
+              child: Text('lbs', style: TextStyle(color: Colors.white), ),
+            ),
+            suffixIconConstraints: BoxConstraints(minWidth: 0, minHeight: 0),
             suffixStyle: TextStyle(
               fontSize: 12,
               fontFamily: 'Inter',
@@ -251,7 +255,7 @@ class _CalculatorInputFieldState extends State<CalculatorInputField> {
               height: 0,
             ),
             // labelText: 'a',
-            hintText: '0 lbs',
+            hintText: '0',
           ),
         ),
 
