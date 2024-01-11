@@ -1,158 +1,131 @@
-import 'dart:io';
-
-import 'package:camera/camera.dart';
 import 'package:dinacom_2024/components/camera/camera.dart';
-import 'package:dinacom_2024/components/camera/camera_result_preview.dart';
 import 'package:dinacom_2024/features/classificator/automatic.dart';
 import 'package:dinacom_2024/features/classificator/manual.dart';
 import 'package:dinacom_2024/page/calculator.dart';
 import 'package:dinacom_2024/page/classificator.dart';
 import 'package:dinacom_2024/page/garbages.dart';
 import 'package:dinacom_2024/page/guide.dart';
-import 'package:dinacom_2024/page/profile.dart';
+import 'package:dinacom_2024/page/profile/login.dart';
+import 'package:dinacom_2024/page/profile/profile.dart';
+import 'package:dinacom_2024/page/profile/register.dart';
 import 'package:dinacom_2024/wrapper.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 
 class AppNavigation {
-  AppNavigation._();
-
-  static String initial = "/calculator";
-
   // Private navigators
   static final _rootNavigatorKey = GlobalKey<NavigatorState>();
-  static final _shellNavigatorCalculator =
-      GlobalKey<NavigatorState>(debugLabel: 'shellCalculator');
-  static final _shellNavigatorClassificator =
-      GlobalKey<NavigatorState>(debugLabel: 'shellClassificator');
-  static final _shellNavigatorGarbages =
-      GlobalKey<NavigatorState>(debugLabel: 'shellGarbages');
-  static final _shellNavigatorGuide =
-      GlobalKey<NavigatorState>(debugLabel: 'shellGuide');
-  static final _shellNavigatorProfile =
-      GlobalKey<NavigatorState>(debugLabel: 'shellProfile');
-  static final _shellNavigatorCamera = 
-      GlobalKey<NavigatorState>(debugLabel: 'shellCamera');
+  static final _calculatorNavigatorKey =
+  GlobalKey<NavigatorState>(debugLabel: 'calculatorNavigator');
+  static final _classificatorNavigatorKey =
+  GlobalKey<NavigatorState>(debugLabel: 'classificatorNavigator');
+  static final _garbageNavigatorKey =
+  GlobalKey<NavigatorState>(debugLabel: 'garbageNavigator');
+  static final _guidesNavigatorKey =
+  GlobalKey<NavigatorState>(debugLabel: 'guidesNavigator');
+  static final _profileNavigatorKey =
+  GlobalKey<NavigatorState>(debugLabel: 'profileNavigator');
+  static final _loginNavigatorKey =
+  GlobalKey<NavigatorState>(debugLabel: 'loginNavigator');
+  static final _registerNavigatorKey =
+  GlobalKey<NavigatorState>(debugLabel: 'registerNavigator');
 
-  // GoRouter configuration
-  static final GoRouter router = GoRouter(
-    initialLocation: initial,
+  static final _router = GoRouter(
     debugLogDiagnostics: true,
     navigatorKey: _rootNavigatorKey,
-    routes: [
-      /// MainWrapper
+    initialLocation: '/garbage',
+    routes: <RouteBase>[
       StatefulShellRoute.indexedStack(
-        builder: (context, state, navigationShell) {
-          return Wrapper(
-            navigationShell: navigationShell,
-          );
-        },
-        branches: <StatefulShellBranch>[
-          /// Calculator
-          StatefulShellBranch(
-            navigatorKey: _shellNavigatorCalculator,
-            routes: <RouteBase>[
-              GoRoute(
-                path: "/calculator",
-                name: "Calculator",
-                builder: (BuildContext context, GoRouterState state) =>
-                    const Calculator(),
-              ),
-            ],
-          ),
+          builder: (context, state, navigationShell) {
+            return Wrapper(navigationShell: navigationShell);
+          },
+          branches: <StatefulShellBranch>[
+            // Calculator
+            StatefulShellBranch(
+                navigatorKey: _calculatorNavigatorKey,
+                routes: <RouteBase>[
+                  GoRoute(
+                    name: 'Calculator',
+                    path: '/calculator',
+                    builder: (context, state) => const Calculator(),
+                  )
+                ]),
 
-          // Classificator
-          StatefulShellBranch(
-            navigatorKey: _shellNavigatorClassificator,
-            routes: <RouteBase>[
-              GoRoute(
-                path: "/classificator",
-                name: "Classificator",
-                builder: (BuildContext context, GoRouterState state ) =>
-                    const Classificator(),
-              ),
-              GoRoute(
-                path: "/classificator/manual",
-                name: "Manual Classificator",
-                builder:(context, state) => 
-                  const ManualClassificator(),
-              ),
-              GoRoute(
-                path: "/classificator/automatic",
-                name: "Automatic Classificator",
-                builder:(context, state) => 
-                  const AutomaticClassificator(),
-              )
-            ],
-          ),
+            // Classificator
+            StatefulShellBranch(
+                navigatorKey: _classificatorNavigatorKey,
+                routes: <RouteBase>[
+                  GoRoute(
+                      name: 'Classificator',
+                      path: '/classificator',
+                      builder: (context, state) => const Classificator(),
+                      routes: <RouteBase>[
+                        GoRoute(
+                          name: 'Manual Classificator',
+                          path: 'manual',
+                          builder: (context, state) =>
+                          const ManualClassificator(),
+                        ),
+                        GoRoute(
+                          name: 'Automatic Classificator',
+                          path: 'automatic',
+                          builder: (context, state) =>
+                          const AutomaticClassificator(),
+                        )
+                      ])
+                ]),
 
-          // Garbages
-          StatefulShellBranch(
-            navigatorKey: _shellNavigatorGarbages,
-            routes: <RouteBase>[
-              GoRoute(
-                path: "/garbages",
-                name: "Garbages",
-                builder: (BuildContext context, GoRouterState state) =>
-                    const Garbages(),
-              ),
-            ],
-          ),
+            // Garbage
+            StatefulShellBranch(
+                navigatorKey: _garbageNavigatorKey,
+                routes: <RouteBase>[
+                  GoRoute(
+                    name: 'Garbage',
+                    path: '/garbage',
+                    builder: (context, state) => const Garbages(),
+                  )
+                ]),
 
-          // Guide
-          StatefulShellBranch(
-            navigatorKey: _shellNavigatorGuide,
-            routes: <RouteBase>[
-              GoRoute(
-                path: "/guide",
-                name: "Guide",
-                builder: (BuildContext context, GoRouterState state) =>
-                    const Guide(),
-              ),
-              GoRoute(
-                path: "/guide/:id",
-                name: "Guide Content",
-                builder: (BuildContext context, GoRouterState state) =>
-                    const GuideArticle(),
-              ),
-            ],
-          ),
+            // Guides
+            StatefulShellBranch(
+                navigatorKey: _guidesNavigatorKey,
+                routes: <RouteBase>[
+                  GoRoute(
+                    name: 'Guides',
+                    path: '/guides',
+                    builder: (context, state) => const Guide(),
+                  )
+                ]),
 
-          // Profile
-          StatefulShellBranch(
-            navigatorKey: _shellNavigatorProfile,
-            routes: <RouteBase>[
-              GoRoute(
-                path: "/profile",
-                name: "Profile",
-                builder: (BuildContext context, GoRouterState state) =>
-                    const Profile(),
-              ),
-            ],
-          ),
+            // Profile
+            StatefulShellBranch(
+                navigatorKey: _profileNavigatorKey,
+                routes: <RouteBase>[
+                  GoRoute(
+                    name: 'Profile',
+                    path: '/profile',
+                    builder: (context, state) => const Profile(),
+                  )
+                ]),
+          ]),
 
-          StatefulShellBranch(
-            navigatorKey: _shellNavigatorCamera,
-            routes: <RouteBase>[
-              GoRoute(
-                path: "/camera",
-                name: "Camera",
-                builder:(context, state) => 
-                  const Camera(),
-              ),
-              GoRoute(
-                path: "/camera/preview",
-                name: "Camera Preview",
-                builder: (context, state) {
-                  XFile file = state.extra as XFile;
-                  return CameraShootPreview(file);
-                },
-              )
-            ]
-          ),
-
-        ],
+      // Login
+      GoRoute(
+        name: 'Login',
+        path: '/login',
+        builder: (context, state) => const Login(),
       ),
+
+      // Register
+      GoRoute(
+        name: 'Register',
+        path: '/register',
+        builder: (context, state) => const Register(),
+      )
     ],
   );
+
+  static GoRouter getRouter() {
+    return _router;
+  }
 }

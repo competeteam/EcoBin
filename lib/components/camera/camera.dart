@@ -48,11 +48,11 @@ class _CameraState extends State<Camera> {
       if (e is CameraException) {
         switch (e.code) {
           case 'CameraAccessDenied':
-            // ignore: avoid_print
+          // ignore: avoid_print
             print("access was denied");
             break;
           default:
-            // ignore: avoid_print
+          // ignore: avoid_print
             print('error');
             // ignore: avoid_print
             print(e.description);
@@ -105,55 +105,55 @@ class _CameraState extends State<Camera> {
 
     return Scaffold(
         body: Stack(
-      children: [
-        Container(
-          height: double.infinity,
-          child: CameraPreview(cameraController),
-        ),
-        Column(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
             Container(
-              alignment: Alignment.topLeft,
-              padding: const EdgeInsets.only(top: 30, left: 20),
-              child: MaterialButton(
-                  onPressed: () {
-                    GoRouter.of(context).go('/classificator');
-                  },
-                  padding: const EdgeInsets.only(left: 9),
-                  shape: const CircleBorder(),
-                  height: 50,
-                  minWidth: 50,
-                  color: Colors.white,
-                  child: const Icon(
-                    IconData(
-                      0xe093,
-                      fontFamily: 'MaterialIcons',
-                      matchTextDirection: true,
-                    ),
-                    size: 20,
-                  )),
+              height: double.infinity,
+              child: CameraPreview(cameraController),
             ),
-            Container(
-              padding: const EdgeInsets.only(bottom: 30, left: 9, right: 9),
-              child: Center(
-                child: _isTakingPicture 
-                ? const CircularProgressIndicator()
-                : MaterialButton(
-                  onPressed: takePicture,
-                  shape: const CircleBorder(),
-                  padding: const EdgeInsets.all(20),
-                  color: Colors.white,
-                  child: const Icon(
-                    IconData(0xf60b, fontFamily: 'MaterialIcons'),
-                    size: 50,
-                  ),
+            Column(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Container(
+                  alignment: Alignment.topLeft,
+                  padding: const EdgeInsets.only(top: 30, left: 20),
+                  child: MaterialButton(
+                      onPressed: () {
+                        GoRouter.of(context).go('/classificator');
+                      },
+                      padding: const EdgeInsets.only(left: 9),
+                      shape: const CircleBorder(),
+                      height: 50,
+                      minWidth: 50,
+                      color: Colors.white,
+                      child: const Icon(
+                        IconData(
+                          0xe093,
+                          fontFamily: 'MaterialIcons',
+                          matchTextDirection: true,
+                        ),
+                        size: 20,
+                      )),
                 ),
-              ),
+                Container(
+                  padding: const EdgeInsets.only(bottom: 30, left: 9, right: 9),
+                  child: Center(
+                    child: _isTakingPicture
+                        ? const CircularProgressIndicator()
+                        : MaterialButton(
+                      onPressed: takePicture,
+                      shape: const CircleBorder(),
+                      padding: const EdgeInsets.all(20),
+                      color: Colors.white,
+                      child: const Icon(
+                        IconData(0xf60b, fontFamily: 'MaterialIcons'),
+                        size: 50,
+                      ),
+                    ),
+                  ),
+                )
+              ],
             )
           ],
-        )
-      ],
-    ));
+        ));
   }
 }

@@ -2,53 +2,52 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:dinacom_2024/models/user.dart';
 
 class UserService {
-  FirebaseFirestore db = FirebaseFirestore.instance;
+  final CollectionReference db = FirebaseFirestore.instance.collection('users');
 
-  Future<String> addUser(
-      {required String name,
+  Future<void> addUser(
+      {required createdAt,
+      required String uid,
+      required String displayName,
       required String email,
-      required String password,
+      String? photoURL,
+      required bool isEmailVerified,
+      required bool isAnonymous,
       UserType type = UserType.user}) async {
     try {
-      final docRef = db.collection("users").withConverter(
-          fromFirestore: User.fromFirestore,
-          toFirestore: (User user, options) => user.toFirestore());
+      final docRef = db
+          .withConverter(
+              fromFirestore: UserModel.fromFirestore,
+              toFirestore: (UserModel user, options) => user.toFirestore())
+          .doc(uid);
 
-      User user = User(
-          createdAt: Timestamp.now(),
-          name: name,
+      UserModel user = UserModel(
+          createdAt: createdAt,
+          displayName: displayName,
           email: email,
-          password: password,
+          photoURL: photoURL ?? '',
+          isEmailVerified: isEmailVerified,
+          isAnonymous: isAnonymous,
           type: type);
 
-      DocumentReference<User> addedDocRef = await docRef.add(user);
-
-      return addedDocRef.id;
+      await docRef.set(user);
     } catch (e) {
-      return "";
+      // TODO: Throw error
+      print(e.toString());
     }
   }
 
-  void updateUser(String userID, Map<String, dynamic> data) async {
-    final docRef = db.collection("users").doc(userID).withConverter(
-        fromFirestore: User.fromFirestore,
-        toFirestore: (User user, options) => user.toFirestore());
-
-    await docRef.update(data);
-  }
-
   void deleteUser(String userID) async {
-    final docRef = db.collection("users").doc(userID).withConverter(
-        fromFirestore: User.fromFirestore,
-        toFirestore: (User user, options) => user.toFirestore());
+    final docRef = db.doc(userID).withConverter(
+        fromFirestore: UserModel.fromFirestore,
+        toFirestore: (UserModel user, options) => user.toFirestore());
 
-    await docRef.update({"deletedAt": Timestamp.now().seconds});
+    await docRef.update({"deletedAt": DateTime.now().toString()});
   }
 
-  Future<User?> getUserByUserID(String userID) async {
-    final docRef = db.collection("users").doc(userID).withConverter(
-        fromFirestore: User.fromFirestore,
-        toFirestore: (User user, options) => user.toFirestore());
+  Future<UserModel?> getUserByUserID(String userID) async {
+    final docRef = db.doc(userID).withConverter(
+        fromFirestore: UserModel.fromFirestore,
+        toFirestore: (UserModel user, options) => user.toFirestore());
 
     final docSnap = await docRef.get();
 
@@ -61,19 +60,16 @@ class UserService {
     }
   }
 
-  Future<User?> getUserByEmail(String email) async {
-    final docRef = db
-        .collection("users")
-        .where("email", isEqualTo: email)
-        .withConverter(
-            fromFirestore: User.fromFirestore,
-            toFirestore: (User user, options) => user.toFirestore());
+  Future<UserModel?> getUserByEmail(String email) async {
+    final docRef = db.where("email", isEqualTo: email).withConverter(
+        fromFirestore: UserModel.fromFirestore,
+        toFirestore: (UserModel user, options) => user.toFirestore());
 
     final docSnap = await docRef.get();
 
     final user = docSnap.docs[0].data();
 
-    if (User != null) {
+    if (UserModel != null) {
       return user;
     } else {
       // TODO: Throw exception
