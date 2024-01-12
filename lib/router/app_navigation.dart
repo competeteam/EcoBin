@@ -1,4 +1,5 @@
 import 'package:dinacom_2024/components/camera/camera.dart';
+import 'package:dinacom_2024/components/filepicker/filepicker.dart';
 import 'package:dinacom_2024/features/classificator/automatic.dart';
 import 'package:dinacom_2024/features/classificator/manual.dart';
 import 'package:dinacom_2024/page/addbin.dart';
@@ -18,19 +19,21 @@ class AppNavigation {
   // Private navigators
   static final _rootNavigatorKey = GlobalKey<NavigatorState>();
   static final _calculatorNavigatorKey =
-  GlobalKey<NavigatorState>(debugLabel: 'calculatorNavigator');
+      GlobalKey<NavigatorState>(debugLabel: 'calculatorNavigator');
   static final _classificatorNavigatorKey =
-  GlobalKey<NavigatorState>(debugLabel: 'classificatorNavigator');
+      GlobalKey<NavigatorState>(debugLabel: 'classificatorNavigator');
   static final _garbageNavigatorKey =
-  GlobalKey<NavigatorState>(debugLabel: 'garbageNavigator');
+      GlobalKey<NavigatorState>(debugLabel: 'garbageNavigator');
   static final _guidesNavigatorKey =
-  GlobalKey<NavigatorState>(debugLabel: 'guidesNavigator');
+      GlobalKey<NavigatorState>(debugLabel: 'guidesNavigator');
   static final _profileNavigatorKey =
-  GlobalKey<NavigatorState>(debugLabel: 'profileNavigator');
+      GlobalKey<NavigatorState>(debugLabel: 'profileNavigator');
   static final _loginNavigatorKey =
-  GlobalKey<NavigatorState>(debugLabel: 'loginNavigator');
+      GlobalKey<NavigatorState>(debugLabel: 'loginNavigator');
   static final _registerNavigatorKey =
-  GlobalKey<NavigatorState>(debugLabel: 'registerNavigator');
+      GlobalKey<NavigatorState>(debugLabel: 'registerNavigator');
+  static final _filePickerKey =
+      GlobalKey<NavigatorState>(debugLabel: 'filePickerNavigator');
 
   static final _router = GoRouter(
     debugLogDiagnostics: true,
@@ -54,8 +57,7 @@ class AppNavigation {
                   GoRoute(
                       name: 'Guide Content',
                       path: '/guide/:id',
-                      builder: (context, state) => const GuideArticle()
-                  )
+                      builder: (context, state) => const GuideArticle())
                 ]),
 
             // Classificator
@@ -71,13 +73,13 @@ class AppNavigation {
                           name: 'Manual Classificator',
                           path: 'manual',
                           builder: (context, state) =>
-                          const ManualClassificator(),
+                              const ManualClassificator(),
                         ),
                         GoRoute(
                           name: 'Automatic Classificator',
                           path: 'automatic',
                           builder: (context, state) =>
-                          const AutomaticClassificator(),
+                              const AutomaticClassificator(),
                         )
                       ])
                 ]),
@@ -97,8 +99,7 @@ class AppNavigation {
                         pageBuilder: (context, state) =>
                             CustomTransitionPage<void>(
                           key: state.pageKey,
-                          child:
-                              AddBinPage(adrs: state.pathParameters['adrs']),
+                          child: AddBinPage(adrs: state.pathParameters['adrs']),
                           transitionsBuilder: (context, animation,
                                   secondaryAnimation, child) =>
                               FadeTransition(opacity: animation, child: child),
@@ -110,7 +111,8 @@ class AppNavigation {
                         pageBuilder: (context, state) =>
                             CustomTransitionPage<void>(
                           key: state.pageKey,
-                          child: ComplaintPage(adrs: state.pathParameters['adrs']),
+                          child:
+                              ComplaintPage(adrs: state.pathParameters['adrs']),
                           transitionsBuilder: (context, animation,
                                   secondaryAnimation, child) =>
                               FadeTransition(opacity: animation, child: child),
@@ -139,6 +141,16 @@ class AppNavigation {
                     name: 'Profile',
                     path: '/profile',
                     builder: (context, state) => const Profile(),
+                  )
+                ]),
+                
+            StatefulShellBranch(
+                navigatorKey: _filePickerKey,
+                routes: <RouteBase>[
+                  GoRoute(
+                    name: 'File Picker',
+                    path: '/filepicker',
+                    builder: (context, state) => const FilePickerUpload(),
                   )
                 ]),
           ]),
