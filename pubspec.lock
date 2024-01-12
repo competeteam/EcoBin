@@ -639,7 +639,7 @@ packages:
       sha256: "9a96a0a19b594dbc5bf0f1f27d2bc67d5f95957359b461cd9feb44ed6ae75096"
       url: "https://pub.dev"
     source: hosted
-    version: "6.1.1"
+    version: "2.1.7"
   riverpod:
     dependency: transitive
     description:
@@ -733,6 +733,14 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "0.6.1"
+  tflite:
+    dependency: "direct main"
+    description:
+      name: tflite
+      sha256: "661f8942a0e8ca05fedf554cc6f9cc95f526d0e4588d1665e0eb4d29e25e69b1"
+      url: "https://pub.dev"
+    source: hosted
+    version: "1.1.2"
   typed_data:
     dependency: transitive
     description:
@@ -812,7 +820,7 @@ packages:
       sha256: b015a8ad1c488f66851d762d3090a21c600e479dc75e68328c52774040cf9226
       url: "https://pub.dev"
     source: hosted
-    version: "6.5.0"
+    version: "1.0.3"
 sdks:
   dart: ">=3.2.3 <4.0.0"
   flutter: ">=3.16.0"
