@@ -35,7 +35,7 @@ class AppNavigation {
   static final _router = GoRouter(
     debugLogDiagnostics: true,
     navigatorKey: _rootNavigatorKey,
-    initialLocation: '/profile',
+    initialLocation: '/garbage',
     routes: <RouteBase>[
       StatefulShellRoute.indexedStack(
           builder: (context, state, navigationShell) {
@@ -50,6 +50,11 @@ class AppNavigation {
                     name: 'Guides',
                     path: '/guides',
                     builder: (context, state) => const Guide(),
+                  ),
+                  GoRoute(
+                      name: 'Guide Content',
+                      path: '/guide/:id',
+                      builder: (context, state) => const GuideArticle()
                   )
                 ]),
 
@@ -123,7 +128,7 @@ class AppNavigation {
                     name: 'Calculator',
                     path: '/calculator',
                     builder: (context, state) => const Calculator(),
-                  )
+                  ),
                 ]),
 
             // Profile
