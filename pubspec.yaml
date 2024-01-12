@@ -50,6 +50,7 @@ dependencies:
   geolocator:
   geocoder2:
   flutter_speed_dial:
+  firebase_storage: ^11.6.0
 
 dev_dependencies:
   flutter_test:
