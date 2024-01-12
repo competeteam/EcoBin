@@ -42,14 +42,19 @@ class AppNavigation {
             return Wrapper(navigationShell: navigationShell);
           },
           branches: <StatefulShellBranch>[
-            // Calculator
+            // Guides
             StatefulShellBranch(
-                navigatorKey: _calculatorNavigatorKey,
+                navigatorKey: _guidesNavigatorKey,
                 routes: <RouteBase>[
                   GoRoute(
-                    name: 'Calculator',
-                    path: '/calculator',
-                    builder: (context, state) => const Calculator(),
+                    name: 'Guides',
+                    path: '/guides',
+                    builder: (context, state) => const Guide(),
+                  ),
+                  GoRoute(
+                      name: 'Guide Content',
+                      path: '/guide/:id',
+                      builder: (context, state) => const GuideArticle()
                   )
                 ]),
 
@@ -115,15 +120,15 @@ class AppNavigation {
                   )
                 ]),
 
-            // Guides
+            // Calculator
             StatefulShellBranch(
-                navigatorKey: _guidesNavigatorKey,
+                navigatorKey: _calculatorNavigatorKey,
                 routes: <RouteBase>[
                   GoRoute(
-                    name: 'Guides',
-                    path: '/guides',
-                    builder: (context, state) => const Guide(),
-                  )
+                    name: 'Calculator',
+                    path: '/calculator',
+                    builder: (context, state) => const Calculator(),
+                  ),
                 ]),
 
             // Profile
