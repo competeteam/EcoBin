@@ -11,13 +11,15 @@ class AuthService {
     return user == null
         ? null
         : UserModel(
-            createdAt: user.metadata.creationTime,
+            deletedAt: DateTime.utc(0),
+            createdAt: user.metadata.creationTime ?? DateTime.utc(0),
             uid: user.uid,
-            displayName: user.displayName,
-            email: user.email,
+            displayName: user.displayName ?? '',
+            email: user.email ?? '',
+            photoURL: user.photoURL ?? '',
             isEmailVerified: user.emailVerified,
             isAnonymous: user.isAnonymous,
-          );
+            type: UserType.user);
   }
 
   // auth change user stream
@@ -67,11 +69,13 @@ class AuthService {
 
       User? user = credential.user;
 
-      await UserService().addUser(
-        createdAt: user!.metadata.creationTime,
-        uid: user!.uid,
-        displayName: user.displayName ?? '',
+      await UserService(uid: user!.uid).addUser(
+        deletedAt: DateTime.utc(0),
+        createdAt: user.metadata.creationTime ?? DateTime.utc(0),
+        uid: user.uid,
+        displayName: name,
         email: user.email ?? '',
+        photoURL: user.photoURL ?? '',
         isEmailVerified: user.emailVerified,
         isAnonymous: user.isAnonymous,
       );
