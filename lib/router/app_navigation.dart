@@ -1,4 +1,6 @@
+import 'package:camera/camera.dart';
 import 'package:dinacom_2024/components/camera/camera.dart';
+import 'package:dinacom_2024/components/camera/camera_result_preview.dart';
 import 'package:dinacom_2024/features/classificator/automatic.dart';
 import 'package:dinacom_2024/features/classificator/manual.dart';
 import 'package:dinacom_2024/models/user_model.dart';
@@ -41,6 +43,7 @@ class AppNavigation {
     routes: <RouteBase>[
       StatefulShellRoute.indexedStack(
           builder: (context, state, navigationShell) {
+            print('This is route file state ${state.uri.path}');
             return Wrapper(navigationShell: navigationShell);
           },
           branches: <StatefulShellBranch>[
@@ -73,8 +76,10 @@ class AppNavigation {
                         GoRoute(
                           name: 'Automatic Classificator',
                           path: 'automatic',
-                          builder: (context, state) =>
-                              const AutomaticClassificator(),
+                          builder: (context, state) {
+                            XFile file = state.extra as XFile;
+                            return AutomaticClassificator(file);
+                          },
                         )
                       ])
                 ]),
@@ -143,6 +148,23 @@ class AppNavigation {
                     builder: (context, state) => const Profile(),
                   )
                 ]),
+          ]),
+
+      GoRoute(
+          name: 'Camera',
+          path: '/camera',
+          builder: (context, state) {
+            return const Camera();
+          },
+          routes: [
+            GoRoute(
+              name: 'Camera Preview',
+              path: 'preview',
+              builder: (context, state) {
+                XFile file = state.extra as XFile;
+                return CameraShootPreview(file);
+              },
+            )
           ]),
 
       // Login
