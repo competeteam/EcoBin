@@ -5,49 +5,49 @@ import 'package:dinacom_2024/page/calculator.dart';
 import 'package:dinacom_2024/page/classificator.dart';
 import 'package:dinacom_2024/page/garbages.dart';
 import 'package:dinacom_2024/page/guide.dart';
+import 'package:dinacom_2024/page/profile/forgot_password.dart';
 import 'package:dinacom_2024/page/profile/login.dart';
 import 'package:dinacom_2024/page/profile/profile.dart';
 import 'package:dinacom_2024/page/profile/register.dart';
+import 'package:dinacom_2024/page/profile/settings.dart';
 import 'package:dinacom_2024/wrapper.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
+
+import '../page/profile/trash_bin.dart';
 
 class AppNavigation {
   // Private navigators
   static final _rootNavigatorKey = GlobalKey<NavigatorState>();
   static final _calculatorNavigatorKey =
-  GlobalKey<NavigatorState>(debugLabel: 'calculatorNavigator');
+      GlobalKey<NavigatorState>(debugLabel: 'calculatorNavigator');
   static final _classificatorNavigatorKey =
-  GlobalKey<NavigatorState>(debugLabel: 'classificatorNavigator');
+      GlobalKey<NavigatorState>(debugLabel: 'classificatorNavigator');
   static final _garbageNavigatorKey =
-  GlobalKey<NavigatorState>(debugLabel: 'garbageNavigator');
+      GlobalKey<NavigatorState>(debugLabel: 'garbageNavigator');
   static final _guidesNavigatorKey =
-  GlobalKey<NavigatorState>(debugLabel: 'guidesNavigator');
+      GlobalKey<NavigatorState>(debugLabel: 'guidesNavigator');
   static final _profileNavigatorKey =
-  GlobalKey<NavigatorState>(debugLabel: 'profileNavigator');
-  static final _loginNavigatorKey =
-  GlobalKey<NavigatorState>(debugLabel: 'loginNavigator');
-  static final _registerNavigatorKey =
-  GlobalKey<NavigatorState>(debugLabel: 'registerNavigator');
+      GlobalKey<NavigatorState>(debugLabel: 'profileNavigator');
 
   static final _router = GoRouter(
     debugLogDiagnostics: true,
     navigatorKey: _rootNavigatorKey,
-    initialLocation: '/garbage',
+    initialLocation: '/profile',
     routes: <RouteBase>[
       StatefulShellRoute.indexedStack(
           builder: (context, state, navigationShell) {
             return Wrapper(navigationShell: navigationShell);
           },
           branches: <StatefulShellBranch>[
-            // Calculator
+            // Guides
             StatefulShellBranch(
-                navigatorKey: _calculatorNavigatorKey,
+                navigatorKey: _guidesNavigatorKey,
                 routes: <RouteBase>[
                   GoRoute(
-                    name: 'Calculator',
-                    path: '/calculator',
-                    builder: (context, state) => const Calculator(),
+                    name: 'Guides',
+                    path: '/guides',
+                    builder: (context, state) => const Guide(),
                   )
                 ]),
 
@@ -64,13 +64,13 @@ class AppNavigation {
                           name: 'Manual Classificator',
                           path: 'manual',
                           builder: (context, state) =>
-                          const ManualClassificator(),
+                              const ManualClassificator(),
                         ),
                         GoRoute(
                           name: 'Automatic Classificator',
                           path: 'automatic',
                           builder: (context, state) =>
-                          const AutomaticClassificator(),
+                              const AutomaticClassificator(),
                         )
                       ])
                 ]),
@@ -86,14 +86,14 @@ class AppNavigation {
                   )
                 ]),
 
-            // Guides
+            // Calculator
             StatefulShellBranch(
-                navigatorKey: _guidesNavigatorKey,
+                navigatorKey: _calculatorNavigatorKey,
                 routes: <RouteBase>[
                   GoRoute(
-                    name: 'Guides',
-                    path: '/guides',
-                    builder: (context, state) => const Guide(),
+                    name: 'Calculator',
+                    path: '/calculator',
+                    builder: (context, state) => const Calculator(),
                   )
                 ]),
 
@@ -121,6 +121,28 @@ class AppNavigation {
         name: 'Register',
         path: '/register',
         builder: (context, state) => const Register(),
+      ),
+
+      // Forgot Password
+      GoRoute(
+        name: 'Forgot Password',
+        path: '/forgot-password',
+        builder: (context, state) => const ForgotPassword(),
+      ),
+
+      // Settings
+      GoRoute(
+        name: 'Settings',
+        path: '/settings',
+        builder: (context, state) => const Settings(),
+      ),
+
+      // Trash Bin
+      GoRoute(
+        name: 'Trash Bin',
+        path: '/trash-bin/:id',
+        builder: (context, state) =>
+            TrashBin(trashBinID: state.pathParameters['id'] ?? '1'),
       )
     ],
   );
