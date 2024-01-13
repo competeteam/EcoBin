@@ -5,58 +5,62 @@ import 'model.dart';
 enum UserType { user, admin }
 
 class UserModel implements Model {
-  final DateTime? deletedAt;
-  final DateTime? createdAt;
-  final String? uid;
-  final String? displayName;
-  final String? email;
-  final String? photoURL;
-  final bool? isEmailVerified;
-  final bool? isAnonymous;
-  final UserType? type;
+  final DateTime deletedAt;
+  final DateTime createdAt;
+  final String uid;
+  final String displayName;
+  final String email;
+  final String photoURL;
+  final bool isEmailVerified;
+  final bool isAnonymous;
+  final UserType type;
 
   UserModel({
-    this.deletedAt,
-    this.createdAt,
-    this.uid,
-    this.displayName,
-    this.email,
-    this.photoURL,
-    this.isEmailVerified,
-    this.isAnonymous,
-    this.type,
+    required this.deletedAt,
+    required this.createdAt,
+    required this.uid,
+    required this.displayName,
+    required this.email,
+    required this.photoURL,
+    required this.isEmailVerified,
+    required this.isAnonymous,
+    required this.type,
   });
 
   factory UserModel.fromFirestore(
-    DocumentSnapshot<Map<String, dynamic>> snapshot,
+    DocumentSnapshot snapshot,
     SnapshotOptions? options,
   ) {
-    final data = snapshot.data();
+    Map<String, dynamic> data = snapshot.data()! as Map<String, dynamic>;
 
     return UserModel(
-        deletedAt: data?['deletedAt'],
-        createdAt: data?['createdAt'],
-        uid: data?['uid'],
-        displayName: data?['displayName'],
-        email: data?['email'],
-        photoURL: data?['photoURL'],
-        isEmailVerified: data?['isEmailVerified'],
-        isAnonymous: data?['isAnonymous'],
-        type: data?['type']);
+      deletedAt: DateTime.parse(data['deletedAt']),
+      createdAt: DateTime.parse(data['createdAt']),
+      uid: data['uid'],
+      displayName: data['displayName'],
+      email: data['email'],
+      photoURL: data['photoURL'],
+      isEmailVerified: data['isEmailVerified'],
+      isAnonymous: data['isAnonymous'],
+      type: UserType.values
+          .firstWhere((e) => e.toString() == 'UserType.${data["type"]}'),
+    );
   }
 
   @override
   Map<String, dynamic> toFirestore() {
+    print(deletedAt.toString());
+
     return {
-      if (deletedAt != null) "deletedAt": deletedAt!.toString(),
-      if (createdAt != null) "createdAt": createdAt!.toString(),
-      if (uid != null) "uid": uid,
-      if (displayName != null) "displayName": displayName,
-      if (email != null) "email": email,
-      if (photoURL != null) "photoURL": photoURL,
-      if (isEmailVerified != null) "isEmailVerified": isEmailVerified,
-      if (isAnonymous != null) "isAnonymous": isAnonymous,
-      if (type != null) "type": type.toString().split('.').last,
+      "deletedAt": deletedAt.toString(),
+      "createdAt": createdAt.toString(),
+      "uid": uid,
+      "displayName": displayName,
+      "email": email,
+      "photoURL": photoURL,
+      "isEmailVerified": isEmailVerified,
+      "isAnonymous": isAnonymous,
+      "type": type.toString().split('.').last,
     };
   }
 }

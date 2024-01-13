@@ -52,7 +52,7 @@ class _RegisterState extends State<Register> {
         : Scaffold(
             backgroundColor: const Color(0xFF222222),
             body: SingleChildScrollView(
-                padding: const EdgeInsets.fromLTRB(30.0, 150.0, 30.0, 0.0),
+                padding: const EdgeInsets.fromLTRB(30.0, 100.0, 30.0, 0.0),
                 child: Form(
                   key: _formKey,
                   child: Column(
@@ -213,6 +213,8 @@ class _RegisterState extends State<Register> {
                                 errorMessage = 'Email address already in use';
                                 loading = false;
                               });
+                            } else {
+                              GoRouter.of(context).go('/profile');
                             }
                           }
                         },
@@ -273,7 +275,7 @@ class _RegisterState extends State<Register> {
                           ),
                           TextButton(
                             onPressed: () {
-                              GoRouter.of(context).go('/profile/login');
+                              GoRouter.of(context).go('/login');
                             },
                             child: const Text(
                               'Login',
