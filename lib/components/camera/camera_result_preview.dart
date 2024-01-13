@@ -35,7 +35,7 @@ class _CameraShootPreviewState extends State<CameraShootPreview> {
                 padding: const EdgeInsets.only(top: 30, left: 20),
                 child: MaterialButton(
                     onPressed: () {
-                      GoRouter.of(context).go('/camera');
+                      GoRouter.of(context).pop();
                     },
                     padding: const EdgeInsets.only(left: 9),
                     shape: const CircleBorder(),

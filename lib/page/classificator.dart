@@ -13,11 +13,10 @@ class Classificator extends StatefulWidget {
 class _ClassificatorState extends State<Classificator> {
   void classicatorFeature(int featureNum) {
     if (featureNum == 1) {
-      GoRouter.of(context).go('/classificator/manual');
+      GoRouter.of(context).push('/classificator/manual');
     } else if (featureNum == 2) {
-      
-      GoRouter.of(context).go('/camera');
-    }
+      GoRouter.of(context).push('/camera');
+    } 
   }
 
   @override
