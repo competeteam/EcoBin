@@ -2,6 +2,13 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:dinacom_2024/models/complaint.dart';
 
 class ComplaintService {
+  String? uid;
+
+  ComplaintService({this.uid});
+
+  final CollectionReference collectionReference =
+      FirebaseFirestore.instance.collection("complaints");
+
   FirebaseFirestore db = FirebaseFirestore.instance;
 
   Future<String> addComplaint({
@@ -58,6 +65,32 @@ class ComplaintService {
         toFirestore: (Complaint complaint, options) => complaint.toFirestore());
 
     await docRef.update({"deletedAt": Timestamp.now().seconds});
+  }
+
+  Future<List<Complaint?>> get complaintModels async {
+    final docRef = collectionReference.where("uid", isEqualTo: uid);
+
+    final docSnap = await docRef.get();
+
+    List<Complaint> complaints = docSnap.docs.map((doc) {
+      Map<String, dynamic> data = doc.data()! as Map<String, dynamic>;
+
+      return Complaint(
+          deletedAt: DateTime.parse(data['deletedAt']),
+          createdAt: DateTime.parse(data['createdAt']),
+          uid: data['uid'],
+          cid: data['cid'],
+          content: data['content'],
+          location: data['location'],
+          isResolved: data['isResolved'],
+          resolvedAt: DateTime.parse(data['resolvedAt']),
+          type: ComplaintType.values
+              .firstWhere((e) => e.toString() == data['type']),
+          createdBy: data['createdBy'],
+          resolvedBy: data['resolvedBy']);
+    }).toList();
+
+    return complaints;
   }
 
   Future<Complaint?> getComplaintByComplaintID(String complaintID) async {
