@@ -58,7 +58,7 @@ class _UserProfileState extends State<UserProfile> {
         trashBinCount = userModel.trashBinCount.toString();
         totalTrashBinFillCount = userModel.totalTrashBinFillCount.toString();
         totalEmissionReduced = userModel.totalEmissionReduced.toString();
-
+        
         List<TrashBinModel?> trashBinModels =
             snapshot.data![1] as List<TrashBinModel?>;
 

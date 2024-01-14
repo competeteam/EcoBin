@@ -35,7 +35,7 @@ class AppNavigation {
   static final _router = GoRouter(
     debugLogDiagnostics: true,
     navigatorKey: _rootNavigatorKey,
-    initialLocation: '/garbage',
+    initialLocation: '/profile',
     routes: <RouteBase>[
       StatefulShellRoute.indexedStack(
           builder: (context, state, navigationShell) {
