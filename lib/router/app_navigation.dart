@@ -1,15 +1,17 @@
 import 'package:dinacom_2024/components/camera/camera.dart';
 import 'package:dinacom_2024/features/classificator/automatic.dart';
 import 'package:dinacom_2024/features/classificator/manual.dart';
+import 'package:dinacom_2024/models/user_model.dart';
 import 'package:dinacom_2024/page/calculator.dart';
 import 'package:dinacom_2024/page/classificator.dart';
 import 'package:dinacom_2024/page/garbages.dart';
 import 'package:dinacom_2024/page/guide.dart';
+import 'package:dinacom_2024/page/profile.dart';
 import 'package:dinacom_2024/page/profile/forgot_password.dart';
 import 'package:dinacom_2024/page/profile/login.dart';
-import 'package:dinacom_2024/page/profile/profile.dart';
 import 'package:dinacom_2024/page/profile/register.dart';
 import 'package:dinacom_2024/page/profile/settings.dart';
+import 'package:dinacom_2024/page/profile/user_profile.dart';
 import 'package:dinacom_2024/wrapper.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
@@ -130,11 +132,18 @@ class AppNavigation {
         builder: (context, state) => const ForgotPassword(),
       ),
 
+      // User Profile
+      GoRoute(
+        name: 'User Profile',
+        path: '/user-profile',
+        builder: (context, state) => UserProfile(user: state.extra! as UserModel),
+      ),
+
       // Settings
       GoRoute(
         name: 'Settings',
         path: '/settings',
-        builder: (context, state) => const Settings(),
+        builder: (context, state) => Settings(user: state.extra! as UserModel),
       ),
 
       // Trash Bin
