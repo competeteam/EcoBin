@@ -1,11 +1,17 @@
 import 'dart:async';
+import 'dart:convert';
 
+import 'package:dinacom_2024/components/prediction_place_ui.dart';
+import 'package:dinacom_2024/models/prediction_model.dart';
+import 'package:dinacom_2024/services/trash_bin_service.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_speed_dial/flutter_speed_dial.dart';
 import 'package:geocoder2/geocoder2.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:go_router/go_router.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
+import 'package:http/http.dart' as http;
+import 'package:provider/provider.dart';
 
 class Garbages extends StatefulWidget {
   const Garbages({super.key});
@@ -15,19 +21,79 @@ class Garbages extends StatefulWidget {
 }
 
 class _GarbagesState extends State<Garbages> {
+  final TrashBinService _trashBinService = TrashBinService();
+  TextEditingController destinationTextEditingController =
+      TextEditingController();
+  List<PredictionModel> dropOffPredictionsPlacesList = [];
+  String map_api_key = "AIzaSyAo8mKGA9Lu3v77seiutfmPAP8ErsiRhiE";
+
   Position? currentPositionOfUser;
   LatLng? destLocation;
+  double? lat;
+  double? lng;
   String? _address = "225 Bill Graham Pkwy, Mountain View, CA 94043, USA";
+
+  Future<List<Marker>> getMarkers() async {
+    final cans = await _trashBinService.getAllTrashCan();
+    return List<Marker>.from(cans.map((e) => Marker(
+          markerId: MarkerId(e!.xCoord!),
+          position: LatLng(double.parse(e.xCoord!), double.parse(e.yCoord!)),
+        )));
+  }
+ sendRequestToAPI(String apiUrl) async {
+    http.Response responseFromAPI = await http.get(Uri.parse(apiUrl));
+
+    try {
+      if (responseFromAPI.statusCode == 200) {
+        String dataFromApi = responseFromAPI.body;
+        var dataDecoded = jsonDecode(dataFromApi);
+        return dataDecoded;
+      } else {
+        return "error";
+      }
+    } catch (errorMsg) {
+      return "error";
+    }
+  }
+  searchLocation(String locationName) async {
+    if(locationName == ""){
+      dropOffPredictionsPlacesList = List.empty();
+    }
+    if (locationName.length > 1) {
+      String apiPlacesUrl =
+          "https://maps.googleapis.com/maps/api/place/autocomplete/json?input=$locationName&key=$map_api_key&components=country:id";
+
+      var responseFromPlacesAPI =
+          await sendRequestToAPI(apiPlacesUrl);
+
+      if (responseFromPlacesAPI == "error") {
+        return;
+      }
+
+      if (responseFromPlacesAPI["status"] == "OK") {
+        var predictionResultInJson = responseFromPlacesAPI["predictions"];
+        var predictionsList = (predictionResultInJson as List)
+            .map((eachPlacePrediction) =>
+                PredictionModel.fromJson(eachPlacePrediction))
+            .toList();
+
+        setState(() {
+          dropOffPredictionsPlacesList = predictionsList;
+        });
+      }
+    }
+  }
 
   getAddressFromLatLng() async {
     try {
       GeoData data = await Geocoder2.getDataFromCoordinates(
           latitude: destLocation!.latitude,
           longitude: destLocation!.longitude,
-          googleMapApiKey: "AIzaSyAo8mKGA9Lu3v77seiutfmPAP8ErsiRhiE");
+          googleMapApiKey: map_api_key);
       setState(() {
         _address = data.address;
       });
+      _trashBinService.getAllTrashCan();
     } catch (e) {
       print(e);
     }
@@ -60,8 +126,12 @@ class _GarbagesState extends State<Garbages> {
     zoom: 14.4746,
   );
 
+  Set<Marker> markers = Set();
+  var mymarkers = [];
+
   @override
   Widget build(BuildContext context) {
+
     return Scaffold(
         floatingActionButton: SpeedDial(
           childrenButtonSize: const Size(60, 60),
@@ -75,7 +145,10 @@ class _GarbagesState extends State<Garbages> {
               child: const Icon(Icons.add),
               shape: CircleBorder(),
               onTap: () {
-                context.goNamed('addbin', pathParameters: {'adrs': _address!});
+                context.goNamed('addbin', queryParameters: {
+                  'lat': lat.toString(),
+                  'lng': lng.toString()
+                });
               },
               label: 'Add Bin',
             ),
@@ -84,7 +157,8 @@ class _GarbagesState extends State<Garbages> {
               shape: CircleBorder(),
               label: 'Complaint',
               onTap: () {
-                context.goNamed('complaint', pathParameters: {'adrs': _address!});
+                context
+                    .goNamed('complaint', pathParameters: {'adrs': _address!});
               },
             ),
           ],
@@ -100,12 +174,24 @@ class _GarbagesState extends State<Garbages> {
                 if (destLocation != position!.target) {
                   setState(() {
                     destLocation = position.target;
+                    lat = destLocation!.latitude;
+                    lng = destLocation!.longitude;
                     getAddressFromLatLng();
                   });
                 }
               },
-              onTap: (latlng) {
+              markers: markers,
+              onTap: (latlng) async {
                 print(_address);
+
+                final ok = await getMarkers();
+                setState(() {
+                  for (var marker in ok) {
+                    markers.add(marker);
+                  }
+                });
+                setState(() {});
+                print(ok);
               },
               onMapCreated: (GoogleMapController mapController) {
                 controllerGoogleMap = mapController;
@@ -121,6 +207,79 @@ class _GarbagesState extends State<Garbages> {
                   padding: EdgeInsets.only(bottom: 35),
                   child: Icon(Icons.pin_drop_outlined)),
             ),
+            Align(
+              alignment: Alignment.topCenter,
+              child: Padding(
+                padding: EdgeInsets.only(top: 75,right: 20),
+                child: Row(
+                  children: [
+                    const SizedBox(
+                      width: 18,
+                    ),
+                    Expanded(
+                      child: Container(
+                        decoration: BoxDecoration(
+                            color: Color.fromARGB(255, 255, 255, 255),
+                            borderRadius: BorderRadius.circular(50),
+                            boxShadow: [
+                              BoxShadow(color: Colors.black, blurRadius: 3)
+                            ]),
+                        child: Padding(
+                          padding: const EdgeInsets.all(3),
+                          child: TextField(
+                            controller: destinationTextEditingController,
+                            onEditingComplete: () {
+                              searchLocation("");
+                            },
+                            onTapOutside: (e) {
+                              searchLocation("");
+                            },
+                            
+                            onChanged: (inputText) {
+                              searchLocation(inputText);
+                            },
+                            decoration: const InputDecoration(
+                                hintText: "Location search",
+                                fillColor: Colors.white12,
+                                filled: true,
+                                border: InputBorder.none,
+                                isDense: true,
+                                contentPadding: EdgeInsets.only(
+                                    left: 11, top: 9, bottom: 9)),
+                          ),
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            ),
+            (dropOffPredictionsPlacesList.isNotEmpty)
+                ? Padding(
+                    padding:
+                        const EdgeInsets.symmetric(vertical: 8, horizontal: 16),
+                    child: ListView.separated(
+                      padding: const EdgeInsets.only(top:130),
+                      itemBuilder: (context, index) {
+                        return Card(
+                          color: Colors.transparent,
+                          elevation: 0,
+                          child: PredictionPlaceUI(
+                            predictedPlaceData:
+                                dropOffPredictionsPlacesList[index],
+                          ),
+                        );
+                      },
+                      separatorBuilder: (BuildContext context, int index) =>
+                          const SizedBox(
+                        height: 2,
+                      ),
+                      itemCount: dropOffPredictionsPlacesList.length,
+                      shrinkWrap: true,
+                      physics: const ClampingScrollPhysics(),
+                    ),
+                  )
+                : Container(),
           ],
         ));
   }
