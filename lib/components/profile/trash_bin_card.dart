@@ -4,6 +4,15 @@ import 'package:flutter_svg/svg.dart';
 import 'package:go_router/go_router.dart';
 
 class TrashBinCard extends StatelessWidget {
+  final String defaultTrashBinImagePath = 'assets/images/default_trash_bin.png';
+  final String organicTrashBinLogoPath = 'assets/logos/type_trash_bin_organic.svg';
+  final String paperTrashBinLogoPath = 'assets/logos/type_trash_bin_paper.svg';
+  final String chemicalTrashBinLogoPath = 'assets/logos/type_trash_bin_chemical.svg';
+  final String plasticTrashBinLogoPath = 'assets/logos/type_trash_bin_plastic.svg';
+  final String glassTrashBinLogoPath = 'assets/logos/type_trash_bin_glass.svg';
+  final String metalTrashBinLogoPath = 'assets/logos/type_trash_bin_metal.svg';
+  final String eWasteTrashBinLogoPath = 'assets/logos/type_trash_bin_ewaste.svg';
+
   final DateTime createdAt;
   final String tid;
   final String imagePath;
@@ -22,15 +31,6 @@ class TrashBinCard extends StatelessWidget {
     required this.isFull,
     required this.types,
   });
-
-  final String defaultTrashBinImagePath = 'assets/images/default_trash_bin.png';
-  final String organicTrashBinLogoPath = 'assets/logos/organic_type.svg';
-  final String paperTrashBinLogoPath = 'assets/logos/paper_type.svg';
-  final String chemicalTrashBinLogoPath = 'assets/logos/chemical_type.svg';
-  final String plasticTrashBinLogoPath = 'assets/logos/plastic_type.svg';
-  final String glassTrashBinLogoPath = 'assets/logos/glass_type.svg';
-  final String metalTrashBinLogoPath = 'assets/logos/metal_type.svg';
-  final String eWasteTrashBinLogoPath = 'assets/logos/ewaste_type.svg';
 
   @override
   Widget build(BuildContext context) {
@@ -70,7 +70,7 @@ class TrashBinCard extends StatelessWidget {
                           crossAxisAlignment: CrossAxisAlignment.center,
                           children: [
                             ...types
-                                .map((type) => _trashBinCardHeader(type))
+                                .map((type) => _trashBinCardHeaderLogos(type))
                                 .expand((e) => [e, const SizedBox(width: 5.0)])
                                 .toList(),
                             Text(createdLocation,
@@ -110,7 +110,7 @@ class TrashBinCard extends StatelessWidget {
     );
   }
 
-  SvgPicture _trashBinCardHeader(TrashBinType type) {
+  SvgPicture _trashBinCardHeaderLogos(TrashBinType type) {
     if (type == TrashBinType.organic) {
       return SvgPicture.asset(organicTrashBinLogoPath,
           height: 16.0, width: 16.0);
