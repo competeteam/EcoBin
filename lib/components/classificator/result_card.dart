@@ -1,4 +1,3 @@
-import 'package:dinacom_2024/common/helper.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 
@@ -15,7 +14,7 @@ class ClassificatorResultCard extends StatefulWidget {
 class _ClassificatorResultCardState extends State<ClassificatorResultCard> {
   @override
   Widget build(BuildContext context) {
-    String result = capitalize(widget.result);
+    String result = widget.result;
 
     return Scaffold(
         backgroundColor: const Color(0xFF222222),
