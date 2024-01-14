@@ -1,5 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:dinacom_2024/models/user.dart';
+import 'package:dinacom_2024/models/user_model.dart';
 
 class UserService {
   String? uid;
@@ -10,14 +10,19 @@ class UserService {
       FirebaseFirestore.instance.collection('users');
 
   Future<void> addUser(
-      {required DateTime deletedAt,
-      required DateTime createdAt,
+      {required DateTime createdAt,
       required String uid,
       required String displayName,
       required String email,
-      required String photoURL,
       required bool isEmailVerified,
       required bool isAnonymous,
+      DateTime? deletedAt,
+      String photoURL = '',
+      String city = '',
+      String province = '',
+      int totalEmissionReduced = 0,
+      int trashBinCount = 0,
+      int totalTrashBinFillCount = 0,
       UserType type = UserType.user}) async {
     try {
       final docRef = collectionReference
@@ -27,12 +32,17 @@ class UserService {
           .doc(uid);
 
       UserModel user = UserModel(
-          deletedAt: deletedAt,
+          deletedAt: deletedAt ?? DateTime.utc(0),
           createdAt: createdAt,
           uid: uid,
           displayName: displayName,
           email: email,
-          photoURL: photoURL ?? '',
+          photoURL: photoURL,
+          city: city,
+          province: province,
+          trashBinCount: trashBinCount,
+          totalTrashBinFillCount: totalTrashBinFillCount,
+          totalEmissionReduced: totalEmissionReduced,
           isEmailVerified: isEmailVerified,
           isAnonymous: isAnonymous,
           type: type);
@@ -44,6 +54,28 @@ class UserService {
     }
   }
 
+  Future<void> updateUser(
+      {required String uid,
+      required String displayName,
+      required String city,
+      required String province}) async {
+    try {
+      final docRef = collectionReference.doc(uid).withConverter(
+          fromFirestore: UserModel.fromFirestore,
+          toFirestore: (UserModel user, options) => user.toFirestore());
+
+      await docRef.update({
+        "displayName": displayName,
+        "city": city,
+        "province": province,
+      });
+    } catch (e) {
+      // TODO: throw error
+      print(e.toString());
+    }
+  }
+
+  // TODO: Fix deleteUser
   void deleteUser(String userID) async {
     final docRef = collectionReference.doc(userID).withConverter(
         fromFirestore: UserModel.fromFirestore,
@@ -52,61 +84,13 @@ class UserService {
     await docRef.update({"deletedAt": DateTime.now().toString()});
   }
 
-  Future<UserModel?> getUserByUserID(String userID) async {
-    final docRef = collectionReference.doc(userID).withConverter(
+  Future<UserModel?> get userModel async {
+    final docRef = collectionReference.doc(uid).withConverter(
         fromFirestore: UserModel.fromFirestore,
         toFirestore: (UserModel user, options) => user.toFirestore());
 
     final docSnap = await docRef.get();
 
-    final user = docSnap.data();
-
-    if (user != null) {
-      return user;
-    } else {
-      // TODO: Throw exception
-    }
-  }
-
-  Future<UserModel?> getUserByEmail(String email) async {
-    final docRef = collectionReference
-        .where("email", isEqualTo: email)
-        .withConverter(
-            fromFirestore: UserModel.fromFirestore,
-            toFirestore: (UserModel user, options) => user.toFirestore());
-
-    final docSnap = await docRef.get();
-
-    final user = docSnap.docs[0].data();
-
-    if (UserModel != null) {
-      return user;
-    } else {
-      // TODO: Throw exception
-    }
-  }
-
-  UserModel _userDataFromSnapshot(DocumentSnapshot snapshot) {
-    Map<String, dynamic> data = snapshot.data()! as Map<String, dynamic>;
-
-    return UserModel(
-      deletedAt: DateTime.parse(data['deletedAt']),
-      createdAt: DateTime.parse(data['createdAt']),
-      uid: data['uid'],
-      displayName: data['displayName'],
-      email: data['email'],
-      photoURL: data['photoURL'],
-      isEmailVerified: data['isEmailVerified'],
-      isAnonymous: data['isAnonymous'],
-      type: UserType.values
-          .firstWhere((e) => e.toString() == 'UserType.${data["type"]}'),
-    );
-  }
-
-  Stream<UserModel> get userModel {
-    return collectionReference
-        .doc(uid)
-        .snapshots()
-        .map((DocumentSnapshot snapshot) => _userDataFromSnapshot(snapshot));
+    return docSnap.data();
   }
 }
