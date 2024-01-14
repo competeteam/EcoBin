@@ -5,7 +5,6 @@ import 'package:dinacom_2024/models/trash_bin_model.dart';
 import 'package:dinacom_2024/services/trash_bin_service.dart';
 import 'package:dinacom_2024/services/user_service.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_svg/svg.dart';
 import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
 
@@ -49,7 +48,7 @@ class _UserProfileState extends State<UserProfile> {
 
         UserModel? userModel = snapshot.data![0] as UserModel?;
 
-        displayPictureImagePath = userModel!.photoURL.isNotEmpty
+        displayPictureImagePath = userModel!.photoURL != ''
             ? userModel.photoURL
             : 'assets/images/default_profile_picture.png';
         displayName = userModel.displayName;
@@ -59,6 +58,10 @@ class _UserProfileState extends State<UserProfile> {
         trashBinCount = userModel.trashBinCount.toString();
         totalTrashBinFillCount = userModel.totalTrashBinFillCount.toString();
         totalEmissionReduced = userModel.totalEmissionReduced.toString();
+
+        print('SUS');
+        print(userModel.photoURL == '');
+        print(displayPictureImagePath);
 
         List<TrashBinModel?> trashBinModels =
             snapshot.data![1] as List<TrashBinModel?>;
@@ -115,6 +118,7 @@ class _UserProfileState extends State<UserProfile> {
                 children: <Widget>[
                   Center(
                     child: Column(children: <Widget>[
+                      // TODO: Fix image to circle
                       Container(
                         width: 150.0,
                         height: 150.0,
@@ -128,8 +132,10 @@ class _UserProfileState extends State<UserProfile> {
                           ],
                           shape: BoxShape.circle,
                         ),
-                        child: SvgPicture.asset(displayPictureImagePath,
-                            height: 150.0, width: 150.0, fit: BoxFit.cover),
+                        child: Image(
+                          image: AssetImage(displayPictureImagePath),
+                            height: 150.0, width: 150.0, fit: BoxFit.cover
+                        ),
                       ),
                       const SizedBox(height: 20.0),
                       Text(displayName,
