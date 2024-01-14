@@ -1,4 +1,5 @@
 import 'package:dinacom_2024/home.dart';
+import 'package:dinacom_2024/models/guide_content.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 
@@ -10,14 +11,34 @@ class Guide extends StatefulWidget {
 }
 
 class _GuideState extends State<Guide> {
+  static List<GuideContent> contents = <GuideContent>[
+    GuideContent(
+      title: 'Trial title',
+      content: 'Trial content',
+    ),
+    GuideContent(
+      title: 'Trial title 2',
+      content: 'Trial content 2'
+    )
+  ];
+  // TODO replace with getAll from service
+  _GuideState();
+
+
   @override
   Widget build(BuildContext context) {
+    int p = 0;
+    final cards = contents.map((e) => GuideCard(
+      title: e.title ?? '',
+      subtitle: e.content ?? '',
+      id: p++,)).toList();
+
     return Scaffold(
       backgroundColor: const Color.fromRGBO(34, 34, 34, 0.98),
       body: ListView(
         padding: const EdgeInsets.only(left: 30, right: 30, top: 70, bottom: 40),
-        children: const <Widget>[
-          Text(
+        children: <Widget>[
+          const Text(
             'Guides',
             style: TextStyle(
               color: Colors.white,
@@ -25,7 +46,7 @@ class _GuideState extends State<Guide> {
               fontWeight: FontWeight.normal
             ),
           ),
-          Text(
+          const Text(
             'Read our latest blogs!',
             style: TextStyle(
               color: Colors.white,
@@ -34,14 +55,9 @@ class _GuideState extends State<Guide> {
             ),
           ),
           Padding(padding: EdgeInsets.only(top: 50)),
-          GuideCard(
-            title: 'Ini title custom',
-            subtitle: 'Ini subtitle custom',
-            content: 'Ini content custom',
+          Column(
+            children: cards,
           ),
-          GuideCard(),
-          GuideCard(),
-          GuideCard(),
         ],
       ),
     );
@@ -118,12 +134,17 @@ class GuideCard extends StatelessWidget {
 }
 
 class GuideArticle extends StatelessWidget {
-  final String title;
-  final String content;
-  const GuideArticle({super.key, this.title = "Title", this.content = "Content"});
+  const GuideArticle({super.key});
 
   @override
   Widget build(BuildContext context) {
+    final int id = int.tryParse(
+        GoRouterState.of(context).pathParameters['id'] ?? ''
+    ) ?? -1;
+    final GuideContent guideContent = (0 <= id && id < _GuideState.contents.length)
+        ? _GuideState.contents[id]
+        : GuideContent();
+
     return Scaffold(
       appBar: AppBar(
         backgroundColor: const Color(0xF9212121),
@@ -135,7 +156,7 @@ class GuideArticle extends StatelessWidget {
         child: ListView(
           clipBehavior: Clip.antiAlias,
           children: <Widget>[
-            Text(title,
+            Text(guideContent.title ?? 'Guide not found',
               overflow: TextOverflow.fade,
               maxLines: 3,
               style: const TextStyle(
@@ -149,9 +170,10 @@ class GuideArticle extends StatelessWidget {
                 height: 170,
                 child: Placeholder()
             ),
+            Text(id.toString()),
             Padding(
               padding: const EdgeInsets.only(top: 17),
-              child: Text(content,
+              child: Text(guideContent.content ?? 'Guide with id $id not found',
                 textAlign: TextAlign.left,
                 overflow: TextOverflow.visible,
                 style: const TextStyle(

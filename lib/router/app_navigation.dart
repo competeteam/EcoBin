@@ -54,7 +54,7 @@ class AppNavigation {
                   GoRoute(
                       name: 'Guide Content',
                       path: '/guide/:id',
-                      builder: (context, state) => const GuideArticle()
+                      builder: (context, state) => const GuideArticle(),
                   )
                 ]),
 
