@@ -1,12 +1,12 @@
 import 'package:flutter/material.dart';
 
-class ProfileFormField extends StatelessWidget {
+class TitleFormField extends StatelessWidget {
   final String formTitle;
   final String formValue;
   final String? Function(String?)? validatorFunction;
   final void Function(String)? onChangedFunction;
 
-  const ProfileFormField({
+  const TitleFormField({
     super.key,
     required this.formTitle,
     required this.formValue,
@@ -23,7 +23,6 @@ class ProfileFormField extends StatelessWidget {
             style: const TextStyle(color: Colors.white, fontSize: 16.0)),
         const SizedBox(height: 10.0),
         TextFormField(
-          validator: validatorFunction,
           onChanged: onChangedFunction,
           decoration: InputDecoration(
               isDense: true,
