@@ -50,7 +50,6 @@ class UserService {
       await docRef.set(user);
     } catch (e) {
       // TODO: Throw error
-      print(e.toString());
     }
   }
 
@@ -71,7 +70,6 @@ class UserService {
       });
     } catch (e) {
       // TODO: throw error
-      print(e.toString());
     }
   }
 

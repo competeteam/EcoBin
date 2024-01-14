@@ -44,7 +44,6 @@ class TrashBinService {
       await docRef.add(trashBin);
     } catch (e) {
       // TODO: Throw error
-      print(e.toString());
     }
   }
 
@@ -63,7 +62,7 @@ class TrashBinService {
         'types': types.map((type) => type.toString())
       });
     } catch (e) {
-      print(e.toString());
+      // TODO: Throw error
     }
   }
 

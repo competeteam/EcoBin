@@ -42,7 +42,7 @@ class AuthService {
 
       return _userFromFirebaseUser(user);
     } catch (e) {
-      print(e.toString());
+      // TODO: Throw error
 
       return null;
     }
@@ -58,8 +58,7 @@ class AuthService {
 
       return _userFromFirebaseUser(user);
     } catch (e) {
-      print(e.toString());
-
+      // TODO: Throw error
       return null;
     }
   }
@@ -86,7 +85,7 @@ class AuthService {
 
       return _userFromFirebaseUser(user);
     } catch (e) {
-      print(e.toString());
+      // TODO: Throw error
 
       return null;
     }
@@ -97,7 +96,7 @@ class AuthService {
     try {
       return await _authService.signOut();
     } catch (e) {
-      print(e.toString());
+      // TODO: Throw error
     }
   }
 }

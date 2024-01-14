@@ -52,12 +52,20 @@ class _RegisterState extends State<Register> {
         : Scaffold(
             backgroundColor: const Color(0xFF222222),
             body: SingleChildScrollView(
-                padding: const EdgeInsets.fromLTRB(30.0, 100.0, 30.0, 0.0),
+                padding: const EdgeInsets.fromLTRB(30.0, 60.0, 30.0, 0.0),
                 child: Form(
                   key: _formKey,
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.stretch,
                     children: <Widget>[
+                      const Center(
+                        child: Image(
+                          image: AssetImage('assets/images/app_logo.png'),
+                          width: 160.0,
+                          height: 160.0,
+                          fit: BoxFit.cover,
+                        ),
+                      ),
                       const Center(
                         child: Text(
                           'Create Your Account',
@@ -214,7 +222,9 @@ class _RegisterState extends State<Register> {
                                 loading = false;
                               });
                             } else {
-                              GoRouter.of(context).go('/profile');
+                              if (context.mounted) {
+                                GoRouter.of(context).go('/profile');
+                              }
                             }
                           }
                         },
