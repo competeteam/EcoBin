@@ -34,7 +34,7 @@ class _RegisterState extends State<Register> {
     if (!RegExp(r'(?=.*?[0-9])').hasMatch(password)) {
       return 'Password must have at least one digit';
     }
-    if (!RegExp(r'(?=.*?[!@#\$&*~])').hasMatch(password)) {
+    if (!RegExp(r'(?=.*?[!@#\\$&*~])').hasMatch(password)) {
       return 'Password must have at least one special character (!@#\\\$&*~)';
     }
     if (!RegExp(r'.{8,}').hasMatch(password)) {
