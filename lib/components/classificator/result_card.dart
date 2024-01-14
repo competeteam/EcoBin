@@ -1,18 +1,22 @@
+import 'package:dinacom_2024/common/helper.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 
-class ManualClassificatorResultCard extends StatefulWidget {
-  const ManualClassificatorResultCard({super.key});
+class ClassificatorResultCard extends StatefulWidget {
+  final String result;
+
+  const ClassificatorResultCard(this.result, {super.key});
 
   @override
-  State<ManualClassificatorResultCard> createState() =>
-      _ManualClassificatorResultCardState();
+  State<ClassificatorResultCard> createState() =>
+      _ClassificatorResultCardState();
 }
 
-class _ManualClassificatorResultCardState
-    extends State<ManualClassificatorResultCard> {
+class _ClassificatorResultCardState extends State<ClassificatorResultCard> {
   @override
   Widget build(BuildContext context) {
+    String result = capitalize(widget.result);
+
     return Scaffold(
         backgroundColor: const Color(0xFF222222),
         body: Container(
@@ -39,10 +43,9 @@ class _ManualClassificatorResultCardState
                 const SizedBox(
                   height: 15,
                 ),
-                // TODO: Result Text Classifier
-                const Text(
-                  'Recyclable',
-                  style: TextStyle(
+                Text(
+                  result,
+                  style: const TextStyle(
                     color: Colors.white,
                     fontSize: 35,
                   ),

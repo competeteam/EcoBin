@@ -22,6 +22,7 @@ void main() async {
     }
   });
 
+  GoRouter.optionURLReflectsImperativeAPIs = true;
   runApp(const MyApp());
 }
 

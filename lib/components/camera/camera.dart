@@ -15,8 +15,7 @@ class _CameraState extends State<Camera> {
   late CameraController cameraController;
   bool _isCameraInitiated = false;
   bool _isTakingPicture = false;
-  bool _isCameraOn = true;
-
+  
   @override
   void initState() {
     startCamera();
@@ -90,7 +89,7 @@ class _CameraState extends State<Camera> {
       await cameraController.pausePreview();
 
       // ignore: use_build_context_synchronously
-      context.push('/camera/preview', extra: picture);
+      context.pushReplacement('/camera/preview', extra: picture);
     } on CameraException catch (e) {
       debugPrint("Error occurred while taking picture: $e");
       return null;
@@ -118,7 +117,7 @@ class _CameraState extends State<Camera> {
                   padding: const EdgeInsets.only(top: 30, left: 20),
                   child: MaterialButton(
                       onPressed: () {
-                        GoRouter.of(context).pop();
+                        GoRouter.of(context).go('/classificator');
                       },
                       padding: const EdgeInsets.only(left: 9),
                       shape: const CircleBorder(),

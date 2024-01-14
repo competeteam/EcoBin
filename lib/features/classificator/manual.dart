@@ -1,5 +1,4 @@
-import 'package:dinacom_2024/components/classificator/manual_question_card.dart';
-import 'package:dinacom_2024/components/classificator/manual_result_card.dart';
+import 'package:dinacom_2024/components/classificator/result_card.dart';
 import 'package:flutter/material.dart';
 
 class ManualClassificator extends StatefulWidget {
@@ -12,6 +11,6 @@ class ManualClassificator extends StatefulWidget {
 class _ManualClassificatorState extends State<ManualClassificator> {
   @override
   Widget build(BuildContext context) {
-    return const ManualClassificatorResultCard();
+    return const ClassificatorResultCard('');
   }
 }

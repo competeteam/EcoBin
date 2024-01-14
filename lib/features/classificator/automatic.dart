@@ -1,11 +1,12 @@
 import 'dart:io';
 
-import 'package:camera/camera.dart';
+import 'package:dinacom_2024/components/classificator/result_card.dart';
+import 'package:dinacom_2024/components/loading/loading.dart';
 import 'package:flutter/material.dart';
 import 'package:tflite/tflite.dart';
 
 class AutomaticClassificator extends StatefulWidget {
-  final XFile file;
+  final File file;
   const AutomaticClassificator(this.file, {super.key});
 
   @override
@@ -24,6 +25,7 @@ class _AutomaticClassificatorState extends State<AutomaticClassificator> {
       setState(() {
         _loading = false;
       });
+      classifyImage(widget.file);
     });
   }
 
@@ -54,9 +56,9 @@ class _AutomaticClassificatorState extends State<AutomaticClassificator> {
   Widget build(BuildContext context) {
     return Scaffold(
       body: Center(
-        child: Text(
-          '${_output[0]['label']}'.replaceAll(RegExp(r'[0-9]'), '')
-        ),
+        child: !_loading
+        ? ClassificatorResultCard('${_output[0]['label']}'.replaceAll(RegExp(r'[0-9]'), ''))
+        : const Loading(),
       ),
     );
   }
