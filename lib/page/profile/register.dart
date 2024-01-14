@@ -222,7 +222,9 @@ class _RegisterState extends State<Register> {
                                 loading = false;
                               });
                             } else {
-                              GoRouter.of(context).go('/profile');
+                              if (context.mounted) {
+                                GoRouter.of(context).go('/profile');
+                              }
                             }
                           }
                         },

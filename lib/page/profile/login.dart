@@ -153,7 +153,9 @@ class _LoginState extends State<Login> {
                                 loading = false;
                               });
                             } else {
-                              GoRouter.of(context).go('/profile');
+                              if (context.mounted) {
+                                GoRouter.of(context).go('/profile');
+                              }
                             }
                           }
                         },
