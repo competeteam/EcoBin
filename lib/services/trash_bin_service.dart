@@ -7,7 +7,7 @@ class TrashBinService {
   TrashBinService({this.uid});
 
   final CollectionReference collectionReference =
-  FirebaseFirestore.instance.collection('trash-bins');
+      FirebaseFirestore.instance.collection('trash-bins');
 
   Future<void> addTrashBin({
     required DateTime createdAt,
@@ -48,9 +48,10 @@ class TrashBinService {
     }
   }
 
-  Future<void> updateTrashBin({required String tid,
-    required String createdLocation,
-    required List<TrashBinType> types}) async {
+  Future<void> updateTrashBin(
+      {required String tid,
+      required String createdLocation,
+      required List<TrashBinType> types}) async {
     try {
       final docRef = collectionReference.doc(tid).withConverter(
           fromFirestore: TrashBinModel.fromFirestore,
@@ -104,6 +105,40 @@ class TrashBinService {
     return trashBins;
   }
 
+  Future<List<TrashBinModel?>> getAllTrashCan() async {
+    try {
+      final querySnapshot = await collectionReference
+          .get();
+
+      List<TrashBinModel> trashBins = querySnapshot.docs.map((doc) {
+        Map<String, dynamic> data = doc.data()! as Map<String, dynamic>;
+
+        return TrashBinModel(
+            deletedAt: DateTime.parse(data['deletedAt']),
+            createdAt: DateTime.parse(data['createdAt']),
+            uid: data['uid'],
+            tid: data['tid'],
+            createdLocation: data['createdLocation'],
+            xCoord: data['xCoord'],
+            yCoord: data['yCoord'],
+            imagePath: data['imagePath'],
+            fillCount: data['fillCount'],
+            isFull: data['isFull'],
+            types: List<TrashBinType>.from(
+              data['types'].map((type) =>
+                  TrashBinType.values.firstWhere((e) => e.toString() == type)),
+            ));
+      }).toList();
+
+      print(trashBins);
+      print("herreeee");
+      return trashBins;
+    } catch (e) {
+      print(e);
+      print('hereee');
+      return List.empty();
+    }
+  }
 // TODO: Get trash can by location
 // TODO: Get trash can by type
 // TODO: Get trash can by both
