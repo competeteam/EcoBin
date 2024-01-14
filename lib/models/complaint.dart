@@ -5,7 +5,7 @@ enum ComplaintType {
   full,
   damaged,
   unusualOdor,
-  improperlyDorted,
+  improperlySorted,
   noLabel,
   notFound,
   others
