@@ -43,8 +43,6 @@ class _TrashBinState extends State<TrashBin> {
                 padding: const EdgeInsets.only(top: 20.0, right: 30.0),
                 child: TextButton(
                   onPressed: () async {
-                    print(_formKey.currentState!.validate());
-
                     if (!isOrganicChecked &&
                         !isPaperChecked &&
                         !isChemicalChecked &&
