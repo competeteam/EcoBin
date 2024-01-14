@@ -15,10 +15,12 @@ class _GuideState extends State<Guide> {
   static List<GuideContent> contents = <GuideContent>[
 
   ];
-  _GuideState();
+  _GuideState() {
+    _replaceALlGuide();
+  }
   List<GuideCard> cards = [];
 
-  void replaceALlGuide() async {
+  Future<void> _replaceALlGuide() async {
     contents = await GuideService().getAllGuides() ?? [];
     setState(() {
       int p = 0;
@@ -31,34 +33,35 @@ class _GuideState extends State<Guide> {
 
   @override
   Widget build(BuildContext context) {
-    replaceALlGuide();
-
     return Scaffold(
       backgroundColor: const Color.fromRGBO(34, 34, 34, 0.98),
-      body: ListView(
-        padding: const EdgeInsets.only(left: 30, right: 30, top: 70, bottom: 40),
-        children: <Widget>[
-          const Text(
-            'Guides',
-            style: TextStyle(
-              color: Colors.white,
-              fontSize: 40,
-              fontWeight: FontWeight.normal
+      body: RefreshIndicator(
+        onRefresh: _replaceALlGuide,
+        child: ListView(
+          padding: const EdgeInsets.only(left: 30, right: 30, top: 70, bottom: 40),
+          children: <Widget>[
+            const Text(
+              'Guides',
+              style: TextStyle(
+                color: Colors.white,
+                fontSize: 40,
+                fontWeight: FontWeight.normal
+              ),
             ),
-          ),
-          const Text(
-            'Read our latest blogs!',
-            style: TextStyle(
-              color: Colors.white,
-              fontSize: 15,
-              fontWeight: FontWeight.w100
+            const Text(
+              'Read our latest blogs!',
+              style: TextStyle(
+                color: Colors.white,
+                fontSize: 15,
+                fontWeight: FontWeight.w100
+              ),
             ),
-          ),
-          const Padding(padding: EdgeInsets.only(top: 50)),
-          Column(
-            children: cards,
-          ),
-        ],
+            const Padding(padding: EdgeInsets.only(top: 50)),
+            Column(
+              children: cards,
+            ),
+          ],
+        ),
       ),
     );
   }
