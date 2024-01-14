@@ -54,8 +54,7 @@ class AppNavigation {
                   GoRoute(
                       name: 'Guide Content',
                       path: '/guide/:id',
-                      builder: (context, state) => const GuideArticle()
-                  )
+                      builder: (context, state) => const GuideArticle())
                 ]),
 
             // Classificator
@@ -92,13 +91,15 @@ class AppNavigation {
                     builder: (context, state) => const Garbages(),
                     routes: [
                       GoRoute(
-                        path: 'addbin/:adrs',
+                        path: 'addbin',
                         name: 'addbin',
                         pageBuilder: (context, state) =>
                             CustomTransitionPage<void>(
                           key: state.pageKey,
-                          child:
-                              AddBinPage(adrs: state.pathParameters['adrs']),
+                          child: AddBinPage(
+                            lat: state.uri.queryParameters['lat'],
+                            lng: state.uri.queryParameters['lng'],
+                          ),
                           transitionsBuilder: (context, animation,
                                   secondaryAnimation, child) =>
                               FadeTransition(opacity: animation, child: child),
@@ -110,7 +111,8 @@ class AppNavigation {
                         pageBuilder: (context, state) =>
                             CustomTransitionPage<void>(
                           key: state.pageKey,
-                          child: ComplaintPage(adrs: state.pathParameters['adrs']),
+                          child:
+                              ComplaintPage(adrs: state.pathParameters['adrs']),
                           transitionsBuilder: (context, animation,
                                   secondaryAnimation, child) =>
                               FadeTransition(opacity: animation, child: child),
