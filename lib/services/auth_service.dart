@@ -1,7 +1,6 @@
+import 'package:dinacom_2024/models/user_model.dart';
 import 'package:dinacom_2024/services/user_service.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-
-import '../models/user.dart';
 
 class AuthService {
   final FirebaseAuth _authService = FirebaseAuth.instance;
@@ -17,6 +16,11 @@ class AuthService {
             displayName: user.displayName ?? '',
             email: user.email ?? '',
             photoURL: user.photoURL ?? '',
+            city: '',
+            province: '',
+            totalEmissionReduced: 0,
+            trashBinCount: 0,
+            totalTrashBinFillCount: 0,
             isEmailVerified: user.emailVerified,
             isAnonymous: user.isAnonymous,
             type: UserType.user);
