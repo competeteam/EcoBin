@@ -1,7 +1,10 @@
 import 'package:dinacom_2024/components/error_page.dart';
 import 'package:dinacom_2024/components/loading.dart';
+import 'package:dinacom_2024/components/profile/complaint_card.dart';
 import 'package:dinacom_2024/components/profile/trash_bin_card.dart';
+import 'package:dinacom_2024/models/complaint.dart';
 import 'package:dinacom_2024/models/trash_bin_model.dart';
+import 'package:dinacom_2024/services/complaint_service.dart';
 import 'package:dinacom_2024/services/trash_bin_service.dart';
 import 'package:dinacom_2024/services/user_service.dart';
 import 'package:flutter/material.dart';
@@ -20,6 +23,11 @@ class UserProfile extends StatefulWidget {
 }
 
 class _UserProfileState extends State<UserProfile> {
+  int _pageIndex = 0;
+
+  bool isTrashBinsTabSelected = true;
+  bool isComplaintsTabSelected = false;
+
   @override
   Widget build(BuildContext context) {
     final user = Provider.of<UserModel?>(context);
@@ -31,17 +39,17 @@ class _UserProfileState extends State<UserProfile> {
     String totalTrashBinFillCount;
     String totalEmissionReduced;
 
-    List<Map<String, dynamic>> trashBinsInfo = [];
-
     return FutureBuilder(
       future: Future.wait([
         UserService(uid: widget.user.uid).userModel,
         TrashBinService(uid: widget.user.uid).trashBinModels,
+        ComplaintService(uid: widget.user.uid).complaintModels
       ]),
       builder: (context, snapshot) {
         if (snapshot.connectionState == ConnectionState.waiting) {
           return const Loading();
         }
+
         if (snapshot.hasError) {
           return const ErrorPage();
         }
@@ -58,9 +66,11 @@ class _UserProfileState extends State<UserProfile> {
         trashBinCount = userModel.trashBinCount.toString();
         totalTrashBinFillCount = userModel.totalTrashBinFillCount.toString();
         totalEmissionReduced = userModel.totalEmissionReduced.toString();
-        
+
         List<TrashBinModel?> trashBinModels =
             snapshot.data![1] as List<TrashBinModel?>;
+
+        List<Map<String, dynamic>> trashBinsInfo = [];
 
         for (TrashBinModel? trashBinModel in trashBinModels) {
           trashBinsInfo.add({
@@ -73,6 +83,43 @@ class _UserProfileState extends State<UserProfile> {
             'isFull': trashBinModel.isFull,
           });
         }
+
+        List<TrashBinCard> userTrashBins = trashBinsInfo
+            .map((trashBinInfo) => TrashBinCard(
+                  tid: trashBinInfo['tid'],
+                  imagePath: trashBinInfo['imagePath'],
+                  types: trashBinInfo['types'],
+                  createdLocation: trashBinInfo['createdLocation'],
+                  fillCount: trashBinInfo['fillCount'],
+                  createdAt: trashBinInfo['createdAt'],
+                  isFull: trashBinInfo['isFull'],
+                ))
+            .toList();
+
+        List<Complaint?> complaints = snapshot.data![2] as List<Complaint?>;
+
+        List<Map<String, dynamic>> complaintsInfo = [];
+
+        for (Complaint? complaint in complaints) {
+          complaintsInfo.add({
+            'cid': complaint!.cid,
+            'type': complaint.type,
+            'location': complaint.location,
+            'createdAt': complaint.createdAt,
+            'content': complaint.content,
+            'isResolved': complaint.isResolved
+          });
+        }
+
+        List<ComplaintCard> userComplaints = complaintsInfo
+            .map((complaintInfo) => ComplaintCard(
+                createdAt: complaintInfo['createdAt'],
+                cid: complaintInfo['cid'],
+                location: complaintInfo['location'],
+                content: complaintInfo['content'],
+                isResolved: complaintInfo['isResolved'],
+                type: complaintInfo['type']))
+            .toList();
 
         return Scaffold(
           appBar: AppBar(
@@ -129,9 +176,10 @@ class _UserProfileState extends State<UserProfile> {
                           shape: BoxShape.circle,
                         ),
                         child: Image(
-                          image: AssetImage(displayPictureImagePath),
-                            height: 150.0, width: 150.0, fit: BoxFit.cover
-                        ),
+                            image: AssetImage(displayPictureImagePath),
+                            height: 150.0,
+                            width: 150.0,
+                            fit: BoxFit.cover),
                       ),
                       const SizedBox(height: 20.0),
                       Text(displayName,
@@ -168,22 +216,95 @@ class _UserProfileState extends State<UserProfile> {
                               totalEmissionReduced, 'Emission\nReduced'),
                         ],
                       )),
-                  const SizedBox(height: 25.0),
-                  const Text('Trash Bins',
-                      style: TextStyle(color: Colors.white, fontSize: 20.0)),
-                  const SizedBox(height: 20.0),
+                  const SizedBox(height: 15.0),
                   Column(
-                    children: trashBinsInfo
-                        .map((trashBinInfo) => TrashBinCard(
-                              tid: trashBinInfo['tid'],
-                              imagePath: trashBinInfo['imagePath'],
-                              types: trashBinInfo['types'],
-                              createdLocation: trashBinInfo['createdLocation'],
-                              fillCount: trashBinInfo['fillCount'],
-                              createdAt: trashBinInfo['createdAt'],
-                              isFull: trashBinInfo['isFull'],
-                            ))
-                        .toList(),
+                    crossAxisAlignment: CrossAxisAlignment.stretch,
+                    children: <Widget>[
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Expanded(
+                            child: Container(
+                              decoration: isTrashBinsTabSelected ? const BoxDecoration(
+                                border: Border(
+                                  bottom: BorderSide(width: 1.0, color: Color(0xFF75BC7B)),
+                                )
+                              ) : null,
+                              child: FilledButton(
+                                style: FilledButton.styleFrom(
+                                  elevation: 0,
+                                  shape: const BeveledRectangleBorder(),
+                                  backgroundColor: const Color(0xFF222222),
+                                ),
+                                onPressed: () {
+                                  setState(() {
+                                    _pageIndex = 0;
+                                    isTrashBinsTabSelected = true;
+                                    isComplaintsTabSelected = false;
+                                  });
+                                },
+                                child: const Center(
+                                    child: Text('Trash Bins',
+                                        style: TextStyle(
+                                            color: Colors.white,
+                                            fontSize: 20.0))),
+                              ),
+                            ),
+                          ),
+                          Expanded(
+                            child: Container(
+                              decoration: isComplaintsTabSelected ? const BoxDecoration(
+                                  border: Border(
+                                    bottom: BorderSide(width: 1.0, color: Color(0xFF75BC7B)),
+                                  )
+                              ) : null,
+                              child: FilledButton(
+                                style: FilledButton.styleFrom(
+                                  elevation: 0,
+                                  shape: const BeveledRectangleBorder(),
+                                  backgroundColor: const Color(0xFF222222),
+                                ),
+                                onPressed: () {
+                                  setState(() {
+                                    _pageIndex = 1;
+                                    isTrashBinsTabSelected = false;
+                                    isComplaintsTabSelected = true;
+                                  });
+                                },
+                                child: const Center(
+                                    child: Text('Complaints',
+                                        style: TextStyle(
+                                            color: Colors.white,
+                                            fontSize: 20.0))),
+                              ),
+                            ),
+                          ),
+                        ],
+                      ),
+                      const SizedBox(height: 20.0),
+                      Column(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: <Widget>[
+                            IndexedStack(index: _pageIndex, children: <Widget>[
+                              SizedBox(
+                                height: _pageIndex == 0 ? null : 1,
+                                child: Column(
+                                    mainAxisAlignment: MainAxisAlignment.center,
+                                    children: userTrashBins),
+                              ),
+                              SizedBox(
+                                height: _pageIndex == 1 ? null : 1,
+                                child: Column(
+                                    mainAxisAlignment: MainAxisAlignment.center,
+                                    children: userComplaints),
+                              ),
+                            ]
+                                // children: _pageIndex == 0
+                                //     ? userTrashBins
+                                //     : userComplaints,
+                                )
+                          ]),
+                    ],
                   ),
                 ],
               )),
