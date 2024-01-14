@@ -1,5 +1,6 @@
 import 'package:dinacom_2024/home.dart';
 import 'package:dinacom_2024/models/guide_content.dart';
+import 'package:dinacom_2024/services/guide_service.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 
@@ -12,26 +13,25 @@ class Guide extends StatefulWidget {
 
 class _GuideState extends State<Guide> {
   static List<GuideContent> contents = <GuideContent>[
-    GuideContent(
-      title: 'Trial title',
-      content: 'Trial content',
-    ),
-    GuideContent(
-      title: 'Trial title 2',
-      content: 'Trial content 2'
-    )
-  ];
-  // TODO replace with getAll from service
-  _GuideState();
 
+  ];
+  _GuideState();
+  List<GuideCard> cards = [];
+
+  void replaceALlGuide() async {
+    contents = await GuideService().getAllGuides() ?? [];
+    setState(() {
+      int p = 0;
+      cards = contents.map((e) => GuideCard(
+        title: e.title ?? '',
+        subtitle: e.content ?? '',
+        id: p++,)).toList();
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
-    int p = 0;
-    final cards = contents.map((e) => GuideCard(
-      title: e.title ?? '',
-      subtitle: e.content ?? '',
-      id: p++,)).toList();
+    replaceALlGuide();
 
     return Scaffold(
       backgroundColor: const Color.fromRGBO(34, 34, 34, 0.98),
@@ -54,7 +54,7 @@ class _GuideState extends State<Guide> {
               fontWeight: FontWeight.w100
             ),
           ),
-          Padding(padding: EdgeInsets.only(top: 50)),
+          const Padding(padding: EdgeInsets.only(top: 50)),
           Column(
             children: cards,
           ),
