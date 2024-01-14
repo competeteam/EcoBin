@@ -4,13 +4,18 @@ import 'model.dart';
 
 enum UserType { user, admin }
 
-class UserModel implements Model {
+class UserModel {
   final DateTime deletedAt;
   final DateTime createdAt;
   final String uid;
   final String displayName;
   final String email;
   final String photoURL;
+  final String city;
+  final String province;
+  final int trashBinCount;
+  final int totalTrashBinFillCount;
+  final int totalEmissionReduced;
   final bool isEmailVerified;
   final bool isAnonymous;
   final UserType type;
@@ -22,6 +27,11 @@ class UserModel implements Model {
     required this.displayName,
     required this.email,
     required this.photoURL,
+    required this.city,
+    required this.province,
+    required this.totalEmissionReduced,
+    required this.trashBinCount,
+    required this.totalTrashBinFillCount,
     required this.isEmailVerified,
     required this.isAnonymous,
     required this.type,
@@ -40,6 +50,11 @@ class UserModel implements Model {
       displayName: data['displayName'],
       email: data['email'],
       photoURL: data['photoURL'],
+      city: data['city'],
+      province: data['province'],
+      trashBinCount: data['trashBinCount'],
+      totalTrashBinFillCount: data['totalTrashBinFillCount'],
+      totalEmissionReduced: data['totalEmissionReduced'],
       isEmailVerified: data['isEmailVerified'],
       isAnonymous: data['isAnonymous'],
       type: UserType.values
@@ -47,10 +62,7 @@ class UserModel implements Model {
     );
   }
 
-  @override
   Map<String, dynamic> toFirestore() {
-    print(deletedAt.toString());
-
     return {
       "deletedAt": deletedAt.toString(),
       "createdAt": createdAt.toString(),
@@ -58,6 +70,11 @@ class UserModel implements Model {
       "displayName": displayName,
       "email": email,
       "photoURL": photoURL,
+      "city": city,
+      "province": province,
+      "trashBinCount": trashBinCount,
+      "totalTrashBinFillCount": totalTrashBinFillCount,
+      "totalEmissionReduced": totalEmissionReduced,
       "isEmailVerified": isEmailVerified,
       "isAnonymous": isAnonymous,
       "type": type.toString().split('.').last,
