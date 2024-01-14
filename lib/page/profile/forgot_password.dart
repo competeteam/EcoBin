@@ -97,7 +97,7 @@ class _ForgotPasswordState extends State<ForgotPassword> {
                         ),
                         onPressed: () async {
                           if (_formKey.currentState!.validate()) {
-                            print(email);
+                            // TODO: Implement sending email
                           }
                         },
                         child: const Text(
