@@ -1,10 +1,8 @@
 import 'package:dinacom_2024/components/camera/camera.dart';
 import 'package:dinacom_2024/features/classificator/automatic.dart';
 import 'package:dinacom_2024/features/classificator/manual.dart';
-import 'package:dinacom_2024/page/addbin.dart';
 import 'package:dinacom_2024/page/calculator.dart';
 import 'package:dinacom_2024/page/classificator.dart';
-import 'package:dinacom_2024/page/complaint.dart';
 import 'package:dinacom_2024/page/garbages.dart';
 import 'package:dinacom_2024/page/guide.dart';
 import 'package:dinacom_2024/page/profile/forgot_password.dart';
@@ -50,11 +48,6 @@ class AppNavigation {
                     name: 'Guides',
                     path: '/guides',
                     builder: (context, state) => const Guide(),
-                  ),
-                  GoRoute(
-                      name: 'Guide Content',
-                      path: '/guide/:id',
-                      builder: (context, state) => const GuideArticle()
                   )
                 ]),
 
@@ -90,33 +83,6 @@ class AppNavigation {
                     name: 'Garbage',
                     path: '/garbage',
                     builder: (context, state) => const Garbages(),
-                    routes: [
-                      GoRoute(
-                        path: 'addbin/:adrs',
-                        name: 'addbin',
-                        pageBuilder: (context, state) =>
-                            CustomTransitionPage<void>(
-                          key: state.pageKey,
-                          child:
-                              AddBinPage(adrs: state.pathParameters['adrs']),
-                          transitionsBuilder: (context, animation,
-                                  secondaryAnimation, child) =>
-                              FadeTransition(opacity: animation, child: child),
-                        ),
-                      ),
-                      GoRoute(
-                        path: 'complaint/:adrs',
-                        name: 'complaint',
-                        pageBuilder: (context, state) =>
-                            CustomTransitionPage<void>(
-                          key: state.pageKey,
-                          child: ComplaintPage(adrs: state.pathParameters['adrs']),
-                          transitionsBuilder: (context, animation,
-                                  secondaryAnimation, child) =>
-                              FadeTransition(opacity: animation, child: child),
-                        ),
-                      ),
-                    ],
                   )
                 ]),
 
@@ -128,7 +94,7 @@ class AppNavigation {
                     name: 'Calculator',
                     path: '/calculator',
                     builder: (context, state) => const Calculator(),
-                  ),
+                  )
                 ]),
 
             // Profile
