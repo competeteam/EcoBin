@@ -18,13 +18,15 @@ class TrashCanService {
         createdAt: Timestamp.now(),
         xCoord: xCoord,
         yCoord: yCoord,
-        type: type,
+        createdBy: createdBy
       );
 
       DocumentReference<TrashCan> addedDocRef = await docRef.add(trashCan);
-
+      
       return addedDocRef.id;
     } catch (e) {
+      print("HERRREEEE");
+      print(e.toString());
       return "";
     }
   }
@@ -68,6 +70,17 @@ class TrashCanService {
       // TODO: Throw exception
     }
   }
+  Future<List<TrashCan?>> getAllTrashCan() async {
+    final querySnapshot = await db.collection('trash-cans').withConverter(
+              fromFirestore: TrashCan.fromFirestore,
+              toFirestore: (TrashCan trashCan, options) => trashCan.toFirestore()
+            ).get();
+
+    final allData = querySnapshot.docs.map((e) => e.data()).toList();
+    print(allData);
+    return allData;
+  }
+  
 
 // TODO: Get trash can by location
 // TODO: Get trash can by type
