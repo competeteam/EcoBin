@@ -1,4 +1,4 @@
-import 'package:dinacom_2024/components/profile/profile_form_field.dart';
+import 'package:dinacom_2024/components/profile/title_form_field.dart';
 import 'package:dinacom_2024/components/common/checbox.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
@@ -134,7 +134,7 @@ class _TrashBinState extends State<TrashBin> {
                     Column(
                       crossAxisAlignment: CrossAxisAlignment.stretch,
                       children: <Widget>[
-                        ProfileFormField(
+                        TitleFormField(
                             formTitle: 'Location',
                             formValue: trashBinLocation,
                             validatorFunction: (val) => val!.trim().isEmpty
