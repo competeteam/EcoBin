@@ -4,10 +4,19 @@ import 'package:dinacom_2024/models/complaint.dart';
 class ComplaintService {
   FirebaseFirestore db = FirebaseFirestore.instance;
 
-  Future<String> addComplaint(
-      {required String trashCanID,
-      required String createdBy,
-      required String complaintContent}) async {
+  Future<String> addComplaint({
+    required DateTime deletedAt,
+    required DateTime createdAt,
+    required String uid,
+    required String cid,
+    required String content,
+    required String location,
+    bool isResolved = false,
+    DateTime? resolvedAt,
+    required ComplaintType type,
+    required String createdBy,
+    String resolvedBy = "",
+  }) async {
     try {
       final docRef = db.collection("complaints").withConverter(
           fromFirestore: Complaint.fromFirestore,
@@ -15,10 +24,17 @@ class ComplaintService {
               complaint.toFirestore());
 
       Complaint complaint = Complaint(
-          createdAt: Timestamp.now(),
-          trashCanID: trashCanID,
+          deletedAt: deletedAt,
+          createdAt: createdAt,
+          uid: uid,
+          cid: cid,
+          content: content,
+          location: location,
+          isResolved: isResolved,
+          resolvedAt: resolvedAt ?? DateTime.utc(0),
+          type: type,
           createdBy: createdBy,
-          complaintContent: complaintContent);
+          resolvedBy: resolvedBy);
 
       DocumentReference<Complaint> addedDocRef = await docRef.add(complaint);
 
