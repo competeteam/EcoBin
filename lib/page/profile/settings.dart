@@ -4,7 +4,6 @@ import 'package:dinacom_2024/components/profile/title_form_field.dart';
 import 'package:dinacom_2024/models/user_model.dart';
 import 'package:dinacom_2024/services/user_service.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_svg/svg.dart';
 import 'package:go_router/go_router.dart';
 
 class Settings extends StatefulWidget {
@@ -147,6 +146,7 @@ class _SettingsState extends State<Settings> {
                       Center(
                         child: Stack(
                             children: <Widget>[
+                            // TODO: Fix image to circle
                             Container(
                             width: 150.0,
                             height: 150.0,
