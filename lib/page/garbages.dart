@@ -1,7 +1,6 @@
 import 'dart:async';
 import 'dart:convert';
 
-import 'package:dinacom_2024/components/loading_dialog.dart';
 import 'package:dinacom_2024/components/prediction_place_ui.dart';
 import 'package:dinacom_2024/models/prediction_model.dart';
 import 'package:dinacom_2024/services/trash_bin_service.dart';

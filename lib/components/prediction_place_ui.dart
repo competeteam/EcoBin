@@ -1,6 +1,5 @@
 import 'dart:convert';
 
-import 'package:dinacom_2024/components/loading_dialog.dart';
 import 'package:dinacom_2024/models/prediction_model.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
