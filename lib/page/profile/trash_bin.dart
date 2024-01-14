@@ -16,7 +16,7 @@ class TrashBin extends StatefulWidget {
 class _TrashBinState extends State<TrashBin> {
   final _formKey = GlobalKey<FormState>();
 
-  String trashBinPictureImagePath = 'assets/images/google_logo.svg';
+  String trashBinPictureImagePath = 'assets/logos/google_logo.svg';
   String fillCount = '999';
   String trashBinLocation = 'Jl. Ganesha No. 9';
 
@@ -156,7 +156,7 @@ class _TrashBinState extends State<TrashBin> {
                               crossAxisAlignment: CrossAxisAlignment.center,
                               children: [
                                 SvgPicture.asset(
-                                    'assets/images/google_logo.svg',
+                                    'assets/logos/organic_type.svg',
                                     height: 16.0,
                                     width: 16.0),
                                 const SizedBox(width: 5.0),
@@ -175,7 +175,7 @@ class _TrashBinState extends State<TrashBin> {
                               crossAxisAlignment: CrossAxisAlignment.center,
                               children: [
                                 SvgPicture.asset(
-                                    'assets/images/google_logo.svg',
+                                    'assets/logos/paper_type.svg',
                                     height: 16.0,
                                     width: 16.0),
                                 const SizedBox(width: 5.0),
@@ -194,7 +194,7 @@ class _TrashBinState extends State<TrashBin> {
                               crossAxisAlignment: CrossAxisAlignment.center,
                               children: [
                                 SvgPicture.asset(
-                                    'assets/images/google_logo.svg',
+                                    'assets/logos/chemical_type.svg',
                                     height: 16.0,
                                     width: 16.0),
                                 const SizedBox(width: 5.0),
@@ -213,7 +213,7 @@ class _TrashBinState extends State<TrashBin> {
                               crossAxisAlignment: CrossAxisAlignment.center,
                               children: [
                                 SvgPicture.asset(
-                                    'assets/images/google_logo.svg',
+                                    'assets/logos/plastic_type.svg',
                                     height: 16.0,
                                     width: 16.0),
                                 const SizedBox(width: 5.0),
@@ -232,7 +232,7 @@ class _TrashBinState extends State<TrashBin> {
                               crossAxisAlignment: CrossAxisAlignment.center,
                               children: [
                                 SvgPicture.asset(
-                                    'assets/images/google_logo.svg',
+                                    'assets/images/glass_type.svg',
                                     height: 16.0,
                                     width: 16.0),
                                 const SizedBox(width: 5.0),
@@ -251,7 +251,7 @@ class _TrashBinState extends State<TrashBin> {
                               crossAxisAlignment: CrossAxisAlignment.center,
                               children: [
                                 SvgPicture.asset(
-                                    'assets/images/google_logo.svg',
+                                    'assets/images/metal_type.svg',
                                     height: 16.0,
                                     width: 16.0),
                                 const SizedBox(width: 5.0),
@@ -270,7 +270,7 @@ class _TrashBinState extends State<TrashBin> {
                               crossAxisAlignment: CrossAxisAlignment.center,
                               children: [
                                 SvgPicture.asset(
-                                    'assets/images/google_logo.svg',
+                                    'assets/images/ewaste_type.svg',
                                     height: 16.0,
                                     width: 16.0),
                                 const SizedBox(width: 5.0),

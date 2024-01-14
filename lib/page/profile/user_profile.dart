@@ -51,7 +51,7 @@ class _UserProfileState extends State<UserProfile> {
 
         displayPictureImagePath = userModel!.photoURL.isNotEmpty
             ? userModel.photoURL
-            : 'assets/images/google_logo.svg';
+            : 'assets/images/default_profile_picture.png';
         displayName = userModel.displayName;
         location = userModel.city != '' && userModel.province != ''
             ? '${userModel.city}, ${userModel.province}'

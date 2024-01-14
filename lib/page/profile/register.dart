@@ -248,7 +248,7 @@ class _RegisterState extends State<Register> {
                             crossAxisAlignment: CrossAxisAlignment.center,
                             children: <Widget>[
                               SvgPicture.asset(
-                                'assets/images/google_logo.svg',
+                                'assets/logos/google_logo.svg',
                                 height: 28.0,
                                 width: 28.0,
                               ),
