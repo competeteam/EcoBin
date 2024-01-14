@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:camera/camera.dart';
 import 'package:dinacom_2024/components/camera/camera.dart';
 import 'package:dinacom_2024/components/camera/camera_result_preview.dart';
@@ -77,7 +79,7 @@ class AppNavigation {
                           name: 'Automatic Classificator',
                           path: 'automatic',
                           builder: (context, state) {
-                            XFile file = state.extra as XFile;
+                            File file = state.extra as File;
                             return AutomaticClassificator(file);
                           },
                         )

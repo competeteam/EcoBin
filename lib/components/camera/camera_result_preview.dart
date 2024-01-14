@@ -35,7 +35,7 @@ class _CameraShootPreviewState extends State<CameraShootPreview> {
                 padding: const EdgeInsets.only(top: 30, left: 20),
                 child: MaterialButton(
                     onPressed: () {
-                      GoRouter.of(context).pop();
+                      GoRouter.of(context).pushReplacement('/camera');
                     },
                     padding: const EdgeInsets.only(left: 9),
                     shape: const CircleBorder(),
@@ -55,21 +55,23 @@ class _CameraShootPreviewState extends State<CameraShootPreview> {
                 padding: const EdgeInsets.only(bottom: 30, left: 9, right: 9),
                 child: Center(
                   child: MaterialButton(
-                          onPressed: () {},
-                          shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(50),
-                          ),
-                          padding: const EdgeInsets.all(20),
-                          color: Colors.white,
-                          child: const Text(
-                            'Generate',
-                            style: TextStyle(
-                              fontSize: 20,
-                              fontWeight: FontWeight.w400,
-                              color: Colors.black,
-                            ),
-                          )
+                      onPressed: () {
+                        GoRouter.of(context)
+                            .go('/classificator/automatic', extra: picture);
+                      },
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(50),
+                      ),
+                      padding: const EdgeInsets.all(20),
+                      color: Colors.white,
+                      child: const Text(
+                        'Generate',
+                        style: TextStyle(
+                          fontSize: 20,
+                          fontWeight: FontWeight.w400,
+                          color: Colors.black,
                         ),
+                      )),
                 ),
               )
             ],
