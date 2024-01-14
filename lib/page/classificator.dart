@@ -1,5 +1,3 @@
-import 'package:dinacom_2024/features/classificator/manual.dart';
-import 'package:dinacom_2024/router/app_navigation.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 

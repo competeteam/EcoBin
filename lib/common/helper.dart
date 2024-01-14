@@ -1,3 +1,3 @@
-String capitalize(String s) {
-  return s[1].toUpperCase() + s.substring(2);
+String capitalize(String s, int index) {
+  return s[index].toUpperCase() + s.substring(2);
 }

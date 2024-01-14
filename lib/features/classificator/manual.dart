@@ -1,3 +1,4 @@
+import 'package:dinacom_2024/components/classificator/question_card.dart';
 import 'package:dinacom_2024/components/classificator/result_card.dart';
 import 'package:flutter/material.dart';
 
@@ -19,6 +20,7 @@ class ManualClassificator extends StatefulWidget {
 class _ManualClassificatorState extends State<ManualClassificator> {
   late List<String> questions;
   late Question questionTree;
+  late String result = '';
 
   @override
   void initState() {
@@ -33,36 +35,56 @@ class _ManualClassificatorState extends State<ManualClassificator> {
       'Is your waste made of electronic components?',
     ];
 
-    questionTree =
-        Question(
-          questions[0], 
-          yes: Question(
-            questions[1],
-            yes: Question('Paper'),
-            no: Question('Organic'),
-          ), 
-          no: Question(
-            questions[2],
-            yes: Question('Chemical'),
-            no: Question(
-              questions[3],
+    questionTree = Question(
+      questions[0],
+      yes: Question(
+        questions[1],
+        yes: Question('Paper'),
+        no: Question('Organic'),
+      ),
+      no: Question(questions[2],
+          yes: Question('Chemical'),
+          no: Question(questions[3],
               yes: Question('Plastic'),
-              no: Question(
-                questions[4],
-                yes: Question('Glass'),
-                no: Question(
-                  questions[5],
-                  yes: Question('EWaste'),
-                  no: Question('Metal'),
-                )
-              )
-            )
-          ),
-        );
+              no: Question(questions[4],
+                  yes: Question('Glass'),
+                  no: Question(
+                    questions[5],
+                    yes: Question('EWaste'),
+                    no: Question('Metal'),
+                  )))),
+    );
+  }
+
+  void handleResponse(bool response) {
+    Question? nextQuestion;
+    if (response) {
+      nextQuestion = questionTree.yes;
+    } else {
+      nextQuestion = questionTree.no;
+    }
+
+    print('This is next question ${nextQuestion?.text}');
+
+    if (nextQuestion != null) {
+      setState(() {
+        questionTree = nextQuestion!;
+      });
+    } 
+
+    if(questionTree.yes == null && questionTree.no == null) {
+      setState(() {
+        result = questionTree.text;
+      });
+    }
   }
 
   @override
   Widget build(BuildContext context) {
-    return const ClassificatorResultCard('');
+    print('This is the result $result');
+    return result == ''
+        ? ClassificatorQuestionCard(
+            questionTree.text, handleResponse)
+        : ClassificatorResultCard(result);
   }
 }

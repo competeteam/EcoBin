@@ -1,5 +1,6 @@
 import 'dart:io';
 
+import 'package:dinacom_2024/common/helper.dart';
 import 'package:dinacom_2024/components/classificator/result_card.dart';
 import 'package:dinacom_2024/components/loading/loading.dart';
 import 'package:flutter/material.dart';
@@ -57,7 +58,7 @@ class _AutomaticClassificatorState extends State<AutomaticClassificator> {
     return Scaffold(
       body: Center(
         child: !_loading
-        ? ClassificatorResultCard('${_output[0]['label']}'.replaceAll(RegExp(r'[0-9]'), ''))
+        ? ClassificatorResultCard(capitalize('${_output[0]['label']}'.replaceAll(RegExp(r'[0-9]'), ''), 1))
         : const Loading(),
       ),
     );
