@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:dinacom_2024/home.dart';
 import 'package:dinacom_2024/models/guide_content.dart';
 import 'package:dinacom_2024/services/guide_service.dart';
@@ -27,6 +29,7 @@ class _GuideState extends State<Guide> {
       cards = contents.map((e) => GuideCard(
         title: e.title ?? '',
         subtitle: e.content ?? '',
+        imagePath: e.imagePath,
         id: p++,)).toList();
     });
   }
@@ -71,14 +74,14 @@ class _GuideState extends State<Guide> {
 class GuideCard extends StatelessWidget {
   final String title;
   final String subtitle;
-  final String content;
+  final String? imagePath;
   final int id;
   const GuideCard({super.key,
     this.title = "Lorem Ipsum",
     this.subtitle = "Lorem ipsum dolor sit amet, consectetur adipiscing elit. "
         "Cras et euismod justo, id dapibus est. "
         "Etiam auctor sem nec nisl rhoncus, a malesuada odio fringilla.",
-    this.content = "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Cras et euismod justo, id dapibus est. Etiam auctor sem nec nisl rhoncus, a malesuada odio fringilla. Praesent tempus turpis sem, a egestas lacus rutrum eget. Curabitur vulputate, velit ut faucibus interdum, lacus leo egestas risus, a congue ipsum erat et arcu. In id commodo arcu. Donec vel metus sapien. Phasellus lobortis risus felis. In congue nisi a nulla viverra, quis tristique lacus egestas. Ut molestie auctor erat, non aliquam risus consequat vel. Ut convallis nibh eget ultricies luctus. Cras lacinia malesuada hendrerit.\n\nVestibulum bibendum nulla vitae nibh blandit tincidunt. Nulla lorem eros, rutrum vel tristique et, dictum non velit. Duis a imperdiet nisl, ut varius sem. Quisque rutrum pellentesque malesuada. Nulla id bibendum justo, id laoreet ipsum. Donec sed nulla dapibus, pharetra velit a, vulputate augue. Phasellus nec mi nec mauris venenatis volutpat. Etiam ultricies, lorem quis porta accumsan, arcu nibh pharetra elit, eget tincidunt purus lorem eu ipsum. Cras dapibus et nisl eget tristique. Vestibulum ut tempus lectus. Cras vitae sem commodo, venenatis ante vel, vulputate purus. Suspendisse hendrerit risus diam, quis convallis risus lacinia a. In pretium porttitor dui non laoreet. Mauris vitae eleifend felis. Nulla facilisi.",
+    this.imagePath,
     this.id = -1,
   });
 
@@ -121,10 +124,13 @@ class GuideCard extends StatelessWidget {
                   height: 0,
                 ),
               ),
-              trailing: const SizedBox(
+              trailing: SizedBox(
                   height: 80,
                   width: 80,
-                  child: Placeholder()
+                  child: imagePath != null ? Image(
+                    image: AssetImage(imagePath!),
+                    errorBuilder: (context, error, stackTrace) => const Placeholder(),
+                  ): const Placeholder()
               ),
               contentPadding: EdgeInsets.zero,
               minVerticalPadding: 0,
@@ -169,10 +175,11 @@ class GuideArticle extends StatelessWidget {
                 fontWeight: FontWeight.w500,
                 height: 0,
               ),),
-            const SizedBox(
+            guideContent.imagePath != null ? SizedBox(
                 height: 170,
-                child: Placeholder()
-            ),
+                child: Image(image: AssetImage(guideContent.imagePath!),
+                  errorBuilder: (context, error, stackTrace) => const Placeholder(),)
+            ) : const SizedBox(height: 20,),
             Text(id.toString()),
             Padding(
               padding: const EdgeInsets.only(top: 17),
