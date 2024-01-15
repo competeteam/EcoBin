@@ -50,6 +50,7 @@ dependencies:
   geolocator:
   geocoder2:
   flutter_speed_dial:
+  country_picker_plus: ^2.0.2
 
 dev_dependencies:
   flutter_test:
