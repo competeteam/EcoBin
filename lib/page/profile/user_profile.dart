@@ -67,6 +67,14 @@ class _UserProfileState extends State<UserProfile> {
         totalTrashBinFillCount = userModel.totalTrashBinFillCount.toString();
         totalEmissionReduced = userModel.totalEmissionReduced.toString();
 
+        ImageProvider image;
+
+        if (userModel.photoURL != '') {
+          image = NetworkImage(userModel.photoURL);
+        } else {
+          image = const AssetImage('assets/images/default_profile_picture.png');
+        }
+
         List<TrashBinModel?> trashBinModels =
             snapshot.data![1] as List<TrashBinModel?>;
 
@@ -175,11 +183,7 @@ class _UserProfileState extends State<UserProfile> {
                           ],
                           shape: BoxShape.circle,
                         ),
-                        child: Image(
-                            image: AssetImage(displayPictureImagePath),
-                            height: 150.0,
-                            width: 150.0,
-                            fit: BoxFit.cover),
+                        child: CircleAvatar(backgroundImage: image),
                       ),
                       const SizedBox(height: 20.0),
                       Text(displayName,
@@ -225,11 +229,13 @@ class _UserProfileState extends State<UserProfile> {
                         children: [
                           Expanded(
                             child: Container(
-                              decoration: isTrashBinsTabSelected ? const BoxDecoration(
-                                border: Border(
-                                  bottom: BorderSide(width: 1.0, color: Color(0xFF75BC7B)),
-                                )
-                              ) : null,
+                              decoration: isTrashBinsTabSelected
+                                  ? const BoxDecoration(
+                                      border: Border(
+                                      bottom: BorderSide(
+                                          width: 1.0, color: Color(0xFF75BC7B)),
+                                    ))
+                                  : null,
                               child: FilledButton(
                                 style: FilledButton.styleFrom(
                                   elevation: 0,
@@ -253,11 +259,13 @@ class _UserProfileState extends State<UserProfile> {
                           ),
                           Expanded(
                             child: Container(
-                              decoration: isComplaintsTabSelected ? const BoxDecoration(
-                                  border: Border(
-                                    bottom: BorderSide(width: 1.0, color: Color(0xFF75BC7B)),
-                                  )
-                              ) : null,
+                              decoration: isComplaintsTabSelected
+                                  ? const BoxDecoration(
+                                      border: Border(
+                                      bottom: BorderSide(
+                                          width: 1.0, color: Color(0xFF75BC7B)),
+                                    ))
+                                  : null,
                               child: FilledButton(
                                 style: FilledButton.styleFrom(
                                   elevation: 0,
