@@ -51,6 +51,9 @@ dependencies:
   geocoder2:
   flutter_speed_dial:
   country_picker_plus: ^2.0.2
+  image_picker: ^1.0.7
+  firebase_storage: ^11.6.0
+  image: ^4.1.4
 
 dev_dependencies:
   flutter_test:
