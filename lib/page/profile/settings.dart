@@ -3,6 +3,7 @@ import 'package:dinacom_2024/components/error_page.dart';
 import 'package:dinacom_2024/components/loading.dart';
 import 'package:dinacom_2024/components/profile/title_form_field.dart';
 import 'package:dinacom_2024/models/user_model.dart';
+import 'package:dinacom_2024/services/select_image_service.dart';
 import 'package:dinacom_2024/services/user_service.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
@@ -22,6 +23,7 @@ class _SettingsState extends State<Settings> {
   final _formKey = GlobalKey<FormState>();
 
   final UserService _userService = UserService();
+  final SelectImageService _selectImageService = SelectImageService();
 
   // TODO: CHANGE PICTURE
   String _displayPictureImagePath = '';
@@ -55,6 +57,9 @@ class _SettingsState extends State<Settings> {
       required String oldProvince}) async {
     setState(() => loading = true);
 
+    print('WHAT');
+    print(_displayPictureImagePath);
+
     if (_displayPictureImagePath == '') {
       _displayPictureImagePath = oldDisplayPictureImagePath;
     }
@@ -71,6 +76,7 @@ class _SettingsState extends State<Settings> {
     try {
       await _userService.updateUser(
         uid: widget.user.uid,
+        photoURL: _displayPictureImagePath,
         displayName: _displayName,
         city: _city,
         province: _province,
@@ -126,6 +132,16 @@ class _SettingsState extends State<Settings> {
               }
 
               UserModel? userModel = snapshot.data;
+
+              ImageProvider image;
+
+              if (_displayPictureImagePath != '') {
+                image = NetworkImage(_displayPictureImagePath);
+              } else if (userModel!.photoURL != '') {
+                image = NetworkImage(userModel.photoURL);
+              } else {
+                image = const AssetImage('assets/images/default_profile_picture.png');
+              }
 
               return Form(
                 key: _formKey,
@@ -184,15 +200,7 @@ class _SettingsState extends State<Settings> {
                                       ],
                                       shape: BoxShape.circle,
                                     ),
-                                    child: Image(
-                                      image: AssetImage(userModel!
-                                              .photoURL.isNotEmpty
-                                          ? userModel.photoURL
-                                          : 'assets/images/default_profile_picture.png'),
-                                      width: 150.0,
-                                      height: 150.0,
-                                      fit: BoxFit.cover,
-                                    ),
+                                    child: CircleAvatar(backgroundImage: image),
                                   ),
                                   Positioned(
                                       bottom: 0,
@@ -205,7 +213,19 @@ class _SettingsState extends State<Settings> {
                                         child: IconButton(
                                           icon: const Icon(Icons.edit),
                                           color: const Color(0xFF2897ED),
-                                          onPressed: () {},
+                                          onPressed: () async {
+                                            setState(() {
+                                              loading = true;
+                                            });
+                                            String downloadURL =
+                                                await _selectImageService
+                                                    .selectImage();
+                                            setState(() {
+                                              _displayPictureImagePath =
+                                                  downloadURL;
+                                              loading = false;
+                                            });
+                                          },
                                         ),
                                       )))
                                 ],
@@ -214,7 +234,7 @@ class _SettingsState extends State<Settings> {
                             const SizedBox(height: 30.0),
                             TitleFormField(
                                 formTitle: 'Name',
-                                formValue: userModel.displayName,
+                                formValue: userModel!.displayName,
                                 validatorFunction: (val) => val!.trim().isEmpty
                                     ? 'Name cannot be empty'
                                     : null,
