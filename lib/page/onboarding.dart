@@ -74,6 +74,11 @@ class _OnboardingState extends State<Onboarding> {
                     children: [
                       Expanded(
                         child: PageView(
+                          onPageChanged: (int page) {
+                            setState(() {
+                              lastPage = page == 4;
+                            });
+                          },
                           controller: controller,
                           children: const [
                             OnboardingPage(
@@ -120,11 +125,6 @@ class _OnboardingState extends State<Onboarding> {
                                     milliseconds: 500,
                                   ),
                                   curve: Curves.easeInOut);
-                              if (controller.page == 3) {
-                                setState(() {
-                                  lastPage = true;
-                                });
-                              }
                             }
                           },
                           shape: RoundedRectangleBorder(
