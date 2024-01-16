@@ -51,6 +51,8 @@ dependencies:
   geocoder2:
   flutter_speed_dial:
   tflite: ^1.1.2
+  shared_preferences: ^2.2.2
+  smooth_page_indicator: ^1.1.0
 
 dev_dependencies:
   flutter_test:
