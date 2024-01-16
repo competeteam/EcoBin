@@ -154,7 +154,7 @@ class _TrashBinState extends State<TrashBin> {
                               crossAxisAlignment: CrossAxisAlignment.center,
                               children: [
                                 SvgPicture.asset(
-                                    'assets/logos/organic_type.svg',
+                                    'assets/logos/type_trash_bin_organic.svg',
                                     height: 16.0,
                                     width: 16.0),
                                 const SizedBox(width: 5.0),
@@ -173,7 +173,7 @@ class _TrashBinState extends State<TrashBin> {
                               crossAxisAlignment: CrossAxisAlignment.center,
                               children: [
                                 SvgPicture.asset(
-                                    'assets/logos/paper_type.svg',
+                                    'assets/logos/type_trash_bin_paper.svg',
                                     height: 16.0,
                                     width: 16.0),
                                 const SizedBox(width: 5.0),
@@ -192,7 +192,7 @@ class _TrashBinState extends State<TrashBin> {
                               crossAxisAlignment: CrossAxisAlignment.center,
                               children: [
                                 SvgPicture.asset(
-                                    'assets/logos/chemical_type.svg',
+                                    'assets/logos/type_trash_bin_chemical.svg',
                                     height: 16.0,
                                     width: 16.0),
                                 const SizedBox(width: 5.0),
@@ -211,7 +211,7 @@ class _TrashBinState extends State<TrashBin> {
                               crossAxisAlignment: CrossAxisAlignment.center,
                               children: [
                                 SvgPicture.asset(
-                                    'assets/logos/plastic_type.svg',
+                                    'assets/logos/type_trash_bin_plastic.svg',
                                     height: 16.0,
                                     width: 16.0),
                                 const SizedBox(width: 5.0),
@@ -230,7 +230,7 @@ class _TrashBinState extends State<TrashBin> {
                               crossAxisAlignment: CrossAxisAlignment.center,
                               children: [
                                 SvgPicture.asset(
-                                    'assets/images/glass_type.svg',
+                                    'assets/logos/type_trash_bin_glass.svg',
                                     height: 16.0,
                                     width: 16.0),
                                 const SizedBox(width: 5.0),
@@ -249,7 +249,7 @@ class _TrashBinState extends State<TrashBin> {
                               crossAxisAlignment: CrossAxisAlignment.center,
                               children: [
                                 SvgPicture.asset(
-                                    'assets/images/metal_type.svg',
+                                    'assets/logos/type_trash_bin_metal.svg',
                                     height: 16.0,
                                     width: 16.0),
                                 const SizedBox(width: 5.0),
@@ -268,7 +268,7 @@ class _TrashBinState extends State<TrashBin> {
                               crossAxisAlignment: CrossAxisAlignment.center,
                               children: [
                                 SvgPicture.asset(
-                                    'assets/images/ewaste_type.svg',
+                                    'assets/logos/type_trash_bin_ewaste.svg',
                                     height: 16.0,
                                     width: 16.0),
                                 const SizedBox(width: 5.0),
