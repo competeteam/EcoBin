@@ -4,7 +4,7 @@ import 'package:dinacom_2024/common/helper.dart';
 import 'package:dinacom_2024/components/classificator/result_card.dart';
 import 'package:dinacom_2024/components/loading/loading.dart';
 import 'package:flutter/material.dart';
-import 'package:tflite/tflite.dart';
+import 'package:flutter_tflite/flutter_tflite.dart';
 
 class AutomaticClassificator extends StatefulWidget {
   final File file;
