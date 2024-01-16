@@ -1,6 +1,8 @@
 import 'package:dinacom_2024/models/user_model.dart';
+import 'package:dinacom_2024/services/user_service.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
 
 class Calculator extends StatefulWidget {
@@ -11,6 +13,28 @@ class Calculator extends StatefulWidget {
 }
 
 class _CalculatorState extends State<Calculator> {
+  final UserService _userService = UserService();
+  final List<CalculatorInputField> _inputFields = [
+    CalculatorInputField(
+      wasteType: "Organic Waste",
+    ),
+    CalculatorInputField(
+      wasteType: "Plastic Waste",
+    ),
+    CalculatorInputField(
+      wasteType: "Paper Waste",
+    ),
+    CalculatorInputField(
+      wasteType: "Metal Waste",
+    ),
+    CalculatorInputField(
+      wasteType: "E Waste",
+    ),
+    CalculatorInputField(
+      wasteType: "Glass Waste",
+    )
+  ];
+
   String annualCarbonFootprint = "?";
   String measurementUnit = "\ntonnes";
   double inputCarbonFootprint = 0;
@@ -28,6 +52,9 @@ class _CalculatorState extends State<Calculator> {
     "Glass Waste"   : 0.02  / 907.18,     // glass
   };
 
+  _CalculatorState();
+
+
   void updateInputCarbonFootprint() {
     double tempInputCarbonFootprint = 0;
     carbonFootprintPerWaste.forEach((key, value) {
@@ -38,12 +65,22 @@ class _CalculatorState extends State<Calculator> {
     });
   }
 
+  Future<void> getUserEmission(UserModel user) async {
+    final UserModel? userData = await UserService(uid: user.uid).userModel;
+    annualCarbonFootprint = userData!.totalCarbonFootprint.toStringAsFixed(2);
+  }
+
   @override
   Widget build(BuildContext context) {
     final user = Provider.of<UserModel?>(context);
     if (user != null) {
-
+      getUserEmission(user);
     }
+    WidgetsBinding.instance.addPostFrameCallback((timeStamp) {setState(() {
+
+    });});
+
+
     return Scaffold(
       backgroundColor: const Color(0xF9212121),
       body: NotificationListener<CalculatorInputFieldChanged>(
@@ -198,28 +235,30 @@ class _CalculatorState extends State<Calculator> {
             ),
             const Divider(),
         
-            const CalculatorInputField(
-              wasteType: "Organic Waste",
-            ),
-            const CalculatorInputField(
-              wasteType: "Plastic Waste",
-            ),
-            const CalculatorInputField(
-              wasteType: "Paper Waste",
-            ),
-            const CalculatorInputField(
-              wasteType: "Metal Waste",
-            ),
-            const CalculatorInputField(
-              wasteType: "E Waste",
-            ),
-            const CalculatorInputField(
-              wasteType: "Glass Waste",
+            for (int i = 0; i < _inputFields.length; i++)
+              _inputFields[i],
+        
+            if (user != null) ElevatedButton(
+              onPressed: () {
+                updateInputCarbonFootprint();
+                _userService.addCarbonFootprint(user.uid, inputCarbonFootprint);
+                for (var element in _inputFields) {element.removeText();}
+                setState(() {
+                  carbonFootprintPerWaste.clear();
+                });
+              },
+              child: const Text(
+                'Submit input',
+                style: TextStyle(
+                  fontSize: 18,
+                  fontFamily: 'Inter',
+                  fontWeight: FontWeight.w400,
+                  height: 0,
+                ),
+              ),
             ),
         
-        
-        
-        
+
         
           ],
         ),
@@ -237,10 +276,15 @@ class CalculatorInputFieldChanged extends Notification {
 
 class CalculatorInputField extends StatefulWidget {
   final String wasteType;
-  const CalculatorInputField({
+  final TextEditingController controller = TextEditingController();
+  CalculatorInputField({
     super.key,
     this.wasteType = "",
   });
+
+  void removeText() {
+    controller.clear();
+  }
 
   @override
   State<CalculatorInputField> createState() => _CalculatorInputFieldState();
@@ -248,7 +292,6 @@ class CalculatorInputField extends StatefulWidget {
 
 class _CalculatorInputFieldState extends State<CalculatorInputField> {
   final FocusNode _focus = FocusNode();
-  final TextEditingController _controller = TextEditingController();
   Color labelColor = const Color(0xFF77777A);
 
   @override
@@ -261,17 +304,17 @@ class _CalculatorInputFieldState extends State<CalculatorInputField> {
   void dispose() {
     _focus.removeListener(_onFocusChange);
     _focus.dispose();
-    _controller.dispose();
+    widget.controller.dispose();
     super.dispose();
   }
 
   double getDoubleValue() {
     // special case if text is empty
-    if (_controller.text == '') {
+    if (widget.controller.text == '') {
       return 0;
     }
 
-    double? poss = double.tryParse(_controller.text);
+    double? poss = double.tryParse(widget.controller.text);
     if (poss == null) {
       throw Exception("Non numeric input detected at ${widget.wasteType} label.");
     }
@@ -312,7 +355,7 @@ class _CalculatorInputFieldState extends State<CalculatorInputField> {
           ),
           keyboardType: TextInputType.number,
           focusNode: _focus,
-          controller: _controller,
+          controller: widget.controller,
           inputFormatters: [
             FilteringTextInputFormatter.digitsOnly,
           ],
