@@ -25,13 +25,32 @@ class _SettingsState extends State<Settings> {
   final UserService _userService = UserService();
   final SelectImageService _selectImageService = SelectImageService();
 
-  // TODO: CHANGE PICTURE
   String _displayPictureImagePath = '';
   String _displayName = '';
   String _city = '';
   String _province = '';
 
   bool loading = false;
+
+  var fieldDecoration = CPPFDecoration(
+    requiredErrorMessage: 'Province not selected',
+    labelStyle: const TextStyle(color: Color(0xFF9D9D9D), fontSize: 14.0),
+    hintStyle: const TextStyle(color: Colors.white, fontSize: 14.0),
+    textStyle: const TextStyle(color: Colors.white, fontSize: 14.0),
+    suffixColor: Colors.white,
+    focusedBorder: OutlineInputBorder(
+      borderRadius: BorderRadius.circular(10.0),
+      borderSide: const BorderSide(color: Color(0xFF646464)),
+    ),
+    errorBorder: OutlineInputBorder(
+      borderRadius: BorderRadius.circular(10.0),
+      borderSide: BorderSide(color: Colors.red.shade900),
+    ),
+    border: OutlineInputBorder(
+      borderRadius: BorderRadius.circular(10.0),
+      borderSide: const BorderSide(color: Color(0xFF646464)),
+    ),
+  );
 
   @override
   void initState() {
@@ -57,36 +76,25 @@ class _SettingsState extends State<Settings> {
       required String oldProvince}) async {
     setState(() => loading = true);
 
-    print('WHAT');
-    print(_displayPictureImagePath);
-
-    if (_displayPictureImagePath == '') {
-      _displayPictureImagePath = oldDisplayPictureImagePath;
-    }
-    if (_displayName == '') {
-      _displayName = oldDisplayName;
-    }
-    if (_city == '') {
-      _city = oldCity;
-    }
-    if (_province == '') {
-      _province = oldProvince;
-    }
-
     try {
       await _userService.updateUser(
         uid: widget.user.uid,
-        photoURL: _displayPictureImagePath,
-        displayName: _displayName,
-        city: _city,
-        province: _province,
+        photoURL: _displayPictureImagePath != ''
+            ? _displayPictureImagePath
+            : oldDisplayPictureImagePath,
+        displayName: _displayName != '' ? _displayName : oldDisplayName,
+        city: _city != '' ? _city : oldCity,
+        province: _province != '' ? _province : oldProvince,
       );
 
       if (context.mounted) {
         GoRouter.of(context).pop({
-          "displayName": _displayName,
-          "city": _city,
-          "province": _province,
+          "displayPictureImagePath": _displayPictureImagePath != ''
+              ? _displayPictureImagePath
+              : oldDisplayPictureImagePath,
+          "displayName": _displayName != '' ? _displayName : oldDisplayName,
+          "city": _city != '' ? _city : oldCity,
+          "province": _province != '' ? _province : oldProvince,
         });
       }
     } catch (e) {
@@ -95,26 +103,6 @@ class _SettingsState extends State<Settings> {
 
     setState(() => loading = false);
   }
-
-  var fieldDecoration = CPPFDecoration(
-    requiredErrorMessage: 'Province not selected',
-    labelStyle: const TextStyle(color: Color(0xFF9D9D9D), fontSize: 14.0),
-    hintStyle: const TextStyle(color: Colors.white, fontSize: 14.0),
-    textStyle: const TextStyle(color: Colors.white, fontSize: 14.0),
-    suffixColor: Colors.white,
-    focusedBorder: OutlineInputBorder(
-      borderRadius: BorderRadius.circular(10.0),
-      borderSide: const BorderSide(color: Color(0xFF646464)),
-    ),
-    errorBorder: OutlineInputBorder(
-      borderRadius: BorderRadius.circular(10.0),
-      borderSide: BorderSide(color: Colors.red.shade900),
-    ),
-    border: OutlineInputBorder(
-      borderRadius: BorderRadius.circular(10.0),
-      borderSide: const BorderSide(color: Color(0xFF646464)),
-    ),
-  );
 
   @override
   Widget build(BuildContext context) {
@@ -140,7 +128,8 @@ class _SettingsState extends State<Settings> {
               } else if (userModel!.photoURL != '') {
                 image = NetworkImage(userModel.photoURL);
               } else {
-                image = const AssetImage('assets/images/default_profile_picture.png');
+                image = const AssetImage(
+                    'assets/images/default_profile_picture.png');
               }
 
               return Form(
@@ -256,7 +245,10 @@ class _SettingsState extends State<Settings> {
                                         : 'Select Province',
                                 decoration: fieldDecoration,
                                 onSelected: (val) {
-                                  setState(() => _province = val);
+                                  setState(() {
+                                    _province = val;
+                                    _city = '';
+                                  });
                                 }),
                             const SizedBox(height: 5.0),
                             _province != '' || userModel.province != ''
