@@ -41,56 +41,51 @@ class ComplaintCard extends StatelessWidget {
         color: Color(0xFF3B3B3B),
         borderRadius: BorderRadius.all(Radius.circular(20.0)),
       ),
-      child: InkWell(
-        onTap: () async {
-          print('Hello');
-        },
-        child: Row(children: <Widget>[
-          Expanded(
-              child: Padding(
-                  padding: const EdgeInsets.symmetric(
-                      horizontal: 20.0, vertical: 15.0),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: <Widget>[
-                      Row(
-                        crossAxisAlignment: CrossAxisAlignment.center,
-                        children: [
-                          _complaintCardHeaderLogo(type),
-                          const SizedBox(width: 10.0),
-                          Text(location,
-                              style: const TextStyle(
-                                  color: Colors.white, fontSize: 16.0)),
-                        ],
-                      ),
-                      const SizedBox(height: 5.0),
-                      Text(
-                          "${createdAt.hour}:${createdAt.minute} ${createdAt.day}-${createdAt.month}-${createdAt.year}",
-                          style: const TextStyle(
-                              color: Color(0xFFD9D9D9), fontSize: 14.0)),
-                      const SizedBox(height: 10.0),
-                      Text(content,
-                          style: const TextStyle(
-                              color: Colors.white, fontSize: 16.0)),
-                      const SizedBox(height: 10.0),
-                      Row(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          const Text('Status: ',
-                              style: TextStyle(
-                                  color: Colors.white, fontSize: 16.0)),
-                          Text(isResolved ? 'Resolved' : 'Waiting',
-                              style: TextStyle(
-                                  color: isResolved
-                                      ? const Color(0xFF75BC7B)
-                                      : const Color(0xFFEBEF26),
-                                  fontSize: 16.0))
-                        ],
-                      )
-                    ],
-                  )))
-        ]),
-      ),
+      child: Row(children: <Widget>[
+        Expanded(
+            child: Padding(
+                padding: const EdgeInsets.symmetric(
+                    horizontal: 20.0, vertical: 15.0),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: <Widget>[
+                    Row(
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      children: [
+                        _complaintCardHeaderLogo(type),
+                        const SizedBox(width: 10.0),
+                        Text(location,
+                            style: const TextStyle(
+                                color: Colors.white, fontSize: 16.0)),
+                      ],
+                    ),
+                    const SizedBox(height: 5.0),
+                    Text(
+                        "${createdAt.hour}:${createdAt.minute} ${createdAt.day}-${createdAt.month}-${createdAt.year}",
+                        style: const TextStyle(
+                            color: Color(0xFFD9D9D9), fontSize: 14.0)),
+                    const SizedBox(height: 10.0),
+                    Text(content,
+                        style: const TextStyle(
+                            color: Colors.white, fontSize: 16.0)),
+                    const SizedBox(height: 10.0),
+                    Row(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        const Text('Status: ',
+                            style:
+                                TextStyle(color: Colors.white, fontSize: 16.0)),
+                        Text(isResolved ? 'Resolved' : 'Waiting',
+                            style: TextStyle(
+                                color: isResolved
+                                    ? const Color(0xFF75BC7B)
+                                    : const Color(0xFFEBEF26),
+                                fontSize: 16.0))
+                      ],
+                    )
+                  ],
+                )))
+      ]),
     );
   }
 
