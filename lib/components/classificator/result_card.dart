@@ -12,6 +12,17 @@ class ClassificatorResultCard extends StatefulWidget {
 }
 
 class _ClassificatorResultCardState extends State<ClassificatorResultCard> {
+  Map<String, String> images = {
+    'Paper' : 'assets/images/paper_image.png',
+    'Organic' : 'assets/images/organic_image.png',
+    'Chemical' : 'assets/images/chemical_image.png',
+    'Glass' : 'assets/images/glass_image.png',
+    'E Waste' : 'assets/images/ewaste_image.png',
+    'Metal' : 'assets/images/metal_image.png',
+    'Battery' : 'assets/images/battery_image.png',
+    'Plastic' : 'assets/images/plastic_image.png',
+  };
+
   @override
   Widget build(BuildContext context) {
     String result = widget.result;
@@ -33,9 +44,8 @@ class _ClassificatorResultCardState extends State<ClassificatorResultCard> {
                 const SizedBox(
                   height: 50,
                 ),
-                // TODO: Result Image Classifier
                 Image.asset(
-                  'assets/images/Aset4removebgpreview1.png',
+                  images[result]!,
                   width: 200,
                   height: 250,
                 ),
