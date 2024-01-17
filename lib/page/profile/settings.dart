@@ -203,9 +203,7 @@ class _SettingsState extends State<Settings> {
                                           icon: const Icon(Icons.edit),
                                           color: const Color(0xFF2897ED),
                                           onPressed: () async {
-                                            setState(() {
-                                              loading = true;
-                                            });
+                                            setState(() => loading = true);
                                             String downloadURL =
                                                 await _selectImageService
                                                     .selectImage();
