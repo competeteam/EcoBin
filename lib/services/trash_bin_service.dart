@@ -3,11 +3,12 @@ import 'package:dinacom_2024/models/trash_bin_model.dart';
 
 class TrashBinService {
   String? uid;
+  String? tid;
 
-  TrashBinService({this.uid});
+  TrashBinService({this.uid, this.tid});
 
   final CollectionReference collectionReference =
-      FirebaseFirestore.instance.collection('trash-bins');
+  FirebaseFirestore.instance.collection('trash-bins');
 
   Future<void> addTrashBin({
     required DateTime createdAt,
@@ -26,7 +27,8 @@ class TrashBinService {
       final docRef = collectionReference.withConverter(
           fromFirestore: TrashBinModel.fromFirestore,
           toFirestore: (TrashBinModel trashBin, options) =>
-              trashBin.toFirestore());
+              trashBin.toFirestore())
+          .doc(tid);
 
       TrashBinModel trashBin = TrashBinModel(
           deletedAt: deletedAt ?? DateTime.utc(0),
@@ -41,16 +43,16 @@ class TrashBinService {
           isFull: isFull,
           types: types);
 
-      await docRef.add(trashBin);
+      await docRef.set(trashBin);
     } catch (e) {
       // TODO: Throw error
     }
   }
 
-  Future<void> updateTrashBin(
-      {required String tid,
-      required String createdLocation,
-      required List<TrashBinType> types}) async {
+  Future<void> updateTrashBin({required String tid,
+    required String imagePath,
+    required String createdLocation,
+    required List<TrashBinType> types}) async {
     try {
       final docRef = collectionReference.doc(tid).withConverter(
           fromFirestore: TrashBinModel.fromFirestore,
@@ -58,6 +60,7 @@ class TrashBinService {
               trashBin.toFirestore());
 
       await docRef.update({
+        'imagePath': imagePath,
         'createdLocation': createdLocation,
         'types': types.map((type) => type.toString())
       });
@@ -102,6 +105,19 @@ class TrashBinService {
     }).toList();
 
     return trashBins;
+  }
+
+  Future<TrashBinModel?> get trashBinModel async {
+    final docRef = collectionReference.doc(tid).withConverter(
+        fromFirestore: TrashBinModel.fromFirestore,
+        toFirestore: (TrashBinModel trashBin, options) => trashBin.toFirestore());
+
+    final docSnap = await docRef.get();
+
+    print('OK');
+    print(docSnap);
+
+    return docSnap.data();
   }
 
   Future<List<TrashBinModel?>> getAllTrashCan() async {
