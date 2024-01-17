@@ -183,7 +183,7 @@ class AppNavigation {
         name: 'Trash Bin',
         path: '/trash-bin/:id',
         builder: (context, state) =>
-            TrashBin(trashBinID: state.pathParameters['id'] ?? '1'),
+            TrashBin(trashBinID: state.pathParameters['id']!),
       )
     ],
   );
