@@ -50,7 +50,7 @@ class _ManualClassificatorState extends State<ManualClassificator> {
                   yes: Question('Glass'),
                   no: Question(
                     questions[5],
-                    yes: Question('EWaste'),
+                    yes: Question('E Waste'),
                     no: Question('Metal'),
                   )))),
     );

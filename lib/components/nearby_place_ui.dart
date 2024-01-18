@@ -1,27 +1,29 @@
 import 'dart:convert';
 
-import 'package:dinacom_2024/models/prediction_model.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 
-class PredictionPlaceUI extends StatefulWidget
+class NearbyPlaceUI extends StatefulWidget
 {
-  PredictionModel? predictedPlaceData;
+  double? lat;
+  double? lng;
+  String? adrs;
+  String? sec;
   Function? func;
-  PredictionPlaceUI({super.key, this.predictedPlaceData, this.func});
+  NearbyPlaceUI({super.key, this.lat, this.lng, this.adrs, this.sec, this.func});
 
   @override
-  State<PredictionPlaceUI> createState() => _PredictionPlaceUIState();
+  State<NearbyPlaceUI> createState() => _NearbyPlaceUIState();
 }
 
-class _PredictionPlaceUIState extends State<PredictionPlaceUI> {  
+class _NearbyPlaceUIState extends State<NearbyPlaceUI> {
 
   @override
   Widget build(BuildContext context) {
     return ElevatedButton(
       onPressed: (){
-        widget.func!(
-            widget.predictedPlaceData!.place_id.toString());
+        widget.func!(widget.lat, widget.lng, widget.adrs
+            );
       },
       style: ElevatedButton.styleFrom(
         backgroundColor: Colors.white,
@@ -49,7 +51,7 @@ class _PredictionPlaceUIState extends State<PredictionPlaceUI> {
                     children: [
 
                       Text(
-                        widget.predictedPlaceData!.main_text.toString(),
+                        widget.adrs!,
                         overflow: TextOverflow.ellipsis,
                         style: const TextStyle(
                           fontSize: 16,
@@ -60,7 +62,7 @@ class _PredictionPlaceUIState extends State<PredictionPlaceUI> {
                       const SizedBox(height: 3,),
 
                       Text(
-                        widget.predictedPlaceData!.secondary_text.toString(),
+                        widget.sec!,
                         overflow: TextOverflow.ellipsis,
                         style: const TextStyle(
                           fontSize: 12,

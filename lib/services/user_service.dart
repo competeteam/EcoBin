@@ -57,6 +57,7 @@ class UserService {
 
   Future<void> updateUser(
       {required String uid,
+      required String photoURL,
       required String displayName,
       required String city,
       required String province}) async {
@@ -66,6 +67,7 @@ class UserService {
           toFirestore: (UserModel user, options) => user.toFirestore());
 
       await docRef.update({
+        "photoURL": photoURL,
         "displayName": displayName,
         "city": city,
         "province": province,

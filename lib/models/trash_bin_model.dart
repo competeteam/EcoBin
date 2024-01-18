@@ -1,7 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 
-import 'model.dart';
-
 enum TrashBinType { organic, paper, chemical, plastic, glass, metal, eWaste }
 
 class TrashBinModel {
@@ -35,6 +33,11 @@ class TrashBinModel {
       DocumentSnapshot snapshot, SnapshotOptions? options) {
     Map<String, dynamic> data = snapshot.data()! as Map<String, dynamic>;
 
+    List<TrashBinType> trashBinTypes = List<String>.from(data['types'])
+        .map((type) =>
+            TrashBinType.values.firstWhere((e) => e.toString() == type))
+        .toList();
+
     return TrashBinModel(
       deletedAt: DateTime.parse(data['deletedAt']),
       createdAt: DateTime.parse(data['createdAt']),
@@ -46,12 +49,10 @@ class TrashBinModel {
       imagePath: data['imagePath'],
       fillCount: data['fillCount'],
       isFull: data['isFull'],
-      types: data['types'].map((type) => TrashBinType.values
-          .firstWhere((e) => e.toString() == 'TrashBinType.$type')),
+      types: trashBinTypes,
     );
   }
 
-  @override
   Map<String, dynamic> toFirestore() {
     return {
       "deletedAt": deletedAt.toString(),
