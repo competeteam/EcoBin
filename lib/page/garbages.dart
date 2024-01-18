@@ -7,6 +7,7 @@ import 'package:dinacom_2024/components/nearby_place_ui.dart';
 import 'package:dinacom_2024/components/prediction_place_ui.dart';
 import 'package:dinacom_2024/models/address_model.dart';
 import 'package:dinacom_2024/models/prediction_model.dart';
+import 'package:dinacom_2024/models/user_model.dart';
 import 'package:dinacom_2024/services/map_launcher.dart';
 import 'package:dinacom_2024/services/trash_bin_service.dart';
 import 'package:easy_debounce/easy_debounce.dart';
@@ -18,6 +19,7 @@ import 'package:geolocator/geolocator.dart';
 import 'package:go_router/go_router.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:http/http.dart' as http;
+import 'package:provider/provider.dart';
 
 class Garbages extends StatefulWidget {
   const Garbages({super.key});
@@ -50,8 +52,8 @@ class _GarbagesState extends State<Garbages> {
 
   Position? currentPositionOfUser;
   LatLng? destLocation;
-  double? lat;
-  double? lng;
+  double lat = 37.42796133580664;
+  double lng = -122.085749655962;
   String? _address = "225 Bill Graham Pkwy, Mountain View, CA 94043, USA";
 
   goToBin(double latt, double lngg, String adrs) async {
@@ -255,6 +257,8 @@ class _GarbagesState extends State<Garbages> {
         currentPositionOfUser!.latitude, currentPositionOfUser!.longitude);
 
     destLocation = positionOfUserInLatLng;
+    lat = destLocation!.latitude;
+    lng = destLocation!.longitude;
 
     CameraPosition cameraPosition =
         CameraPosition(target: positionOfUserInLatLng, zoom: 15);
@@ -345,7 +349,7 @@ class _GarbagesState extends State<Garbages> {
                       'lat': lat.toString(),
                       'lng': lng.toString(),
                       'adrs': _address
-                    });
+                    }, extra: Provider.of<UserModel?>(context) as UserModel);
                   },
                   child: const Text(
                     'Add complaint',
