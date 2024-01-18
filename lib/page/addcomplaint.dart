@@ -1,13 +1,13 @@
 import 'package:dinacom_2024/components/profile/title_form_field.dart';
-import 'package:dinacom_2024/models/complaint.dart';
+import 'package:dinacom_2024/models/complaint_model.dart';
 import 'package:dinacom_2024/models/trash_bin_model.dart';
 import 'package:dinacom_2024/services/complaint_service.dart';
+import 'package:dinacom_2024/services/select_image_service.dart';
 import 'package:dinacom_2024/services/trash_bin_service.dart';
 import 'package:flutter/material.dart';
 import 'package:dinacom_2024/components/common/checbox.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:go_router/go_router.dart';
-import 'package:dinacom_2024/services/select_image_service2.dart';
 
 class AddComplaintPage extends StatefulWidget {
   String? lat;
@@ -139,7 +139,7 @@ class _AddComplaintPageState extends State<AddComplaintPage> {
                       style: TextStyle(color: Colors.white),
                     ),
                     leading: Radio<ComplaintType>(
-                      value: ComplaintType.improperlyDorted,
+                      value: ComplaintType.improperlySorted,
                       groupValue: _type,
                       onChanged: (ComplaintType? value) {
                         setState(() {

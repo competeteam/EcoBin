@@ -10,7 +10,6 @@ import 'package:dinacom_2024/page/addbin.dart';
 import 'package:dinacom_2024/page/addcomplaint.dart';
 import 'package:dinacom_2024/page/calculator.dart';
 import 'package:dinacom_2024/page/classificator.dart';
-import 'package:dinacom_2024/page/complaint.dart';
 import 'package:dinacom_2024/page/garbages.dart';
 import 'package:dinacom_2024/page/guide.dart';
 import 'package:dinacom_2024/page/onboarding.dart';

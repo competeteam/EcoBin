@@ -9,7 +9,6 @@ import 'package:flutter/material.dart';
 import 'package:dinacom_2024/components/common/checbox.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:go_router/go_router.dart';
-import 'package:dinacom_2024/services/select_image_service2.dart';
 
 class AddBinPage extends StatefulWidget {
   final UserModel user;
@@ -45,22 +44,9 @@ class _AddBinPageState extends State<AddBinPage> {
 
   bool _loading = false;
 
-  getAddressFromLatLng() async {
-    try {
-      GeoData data = await Geocoder2.getDataFromCoordinates(
-          latitude: double.parse(widget.lat),
-          longitude: double.parse(widget.lng),
-          // TODO : Move APIKey to dotenv
-          googleMapApiKey: "AIzaSyAo8mKGA9Lu3v77seiutfmPAP8ErsiRhiE");
-      setState(() => _trashBinLocation = data.address);
-    } catch (e) {
-      // TODO: Handle error
-    }
-  }
 
   @override
   Widget build(BuildContext context) {
-    getAddressFromLatLng();
 
     if (_loading) {
       return const Loading();
