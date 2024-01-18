@@ -15,8 +15,7 @@ class _CameraState extends State<Camera> {
   late CameraController cameraController;
   bool _isCameraInitiated = false;
   bool _isTakingPicture = false;
-  bool _isCameraOn = true;
-
+  
   @override
   void initState() {
     startCamera();
@@ -64,6 +63,7 @@ class _CameraState extends State<Camera> {
 
   @override
   void dispose() {
+    print('Dispose camera page');
     cameraController.dispose();
     super.dispose();
   }
@@ -89,7 +89,7 @@ class _CameraState extends State<Camera> {
       await cameraController.pausePreview();
 
       // ignore: use_build_context_synchronously
-      context.go('/camera/preview', extra: picture);
+      context.pushReplacement('/camera/preview', extra: picture);
     } on CameraException catch (e) {
       debugPrint("Error occurred while taking picture: $e");
       return null;
@@ -99,7 +99,6 @@ class _CameraState extends State<Camera> {
   @override
   Widget build(BuildContext context) {
     if (!_isCameraInitiated) {
-      // TODO: Make progress loading
       return const Loading();
     }
 

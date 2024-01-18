@@ -1,21 +1,31 @@
+import 'dart:convert';
+
 import 'package:dinacom_2024/models/prediction_model.dart';
 import 'package:flutter/material.dart';
+import 'package:http/http.dart' as http;
 
 class PredictionPlaceUI extends StatefulWidget
 {
   PredictionModel? predictedPlaceData;
-
-  PredictionPlaceUI({super.key, this.predictedPlaceData,});
+  Function? func;
+  PredictionPlaceUI({super.key, this.predictedPlaceData, this.func});
 
   @override
   State<PredictionPlaceUI> createState() => _PredictionPlaceUIState();
 }
 
 class _PredictionPlaceUIState extends State<PredictionPlaceUI> {
+  String map_api_key = "AIzaSyAo8mKGA9Lu3v77seiutfmPAP8ErsiRhiE";
+
+  
+
   @override
   Widget build(BuildContext context) {
     return ElevatedButton(
-      onPressed: (){},
+      onPressed: (){
+        widget.func!(
+            widget.predictedPlaceData!.place_id.toString());
+      },
       style: ElevatedButton.styleFrom(
         backgroundColor: Colors.white,
         elevation: 5

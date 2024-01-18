@@ -7,6 +7,8 @@ import 'package:dinacom_2024/services/select_image_service.dart';
 import 'package:dinacom_2024/services/trash_bin_service.dart';
 import 'package:flutter/material.dart';
 import 'package:geocoder2/geocoder2.dart';
+import 'package:geolocator/geolocator.dart';
+import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:dinacom_2024/components/common/checbox.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:go_router/go_router.dart';

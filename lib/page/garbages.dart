@@ -3,7 +3,6 @@ import 'dart:convert';
 
 import 'package:dinacom_2024/components/prediction_place_ui.dart';
 import 'package:dinacom_2024/models/prediction_model.dart';
-import 'package:dinacom_2024/models/user_model.dart';
 import 'package:dinacom_2024/services/trash_bin_service.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_speed_dial/flutter_speed_dial.dart';
@@ -12,7 +11,6 @@ import 'package:geolocator/geolocator.dart';
 import 'package:go_router/go_router.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:http/http.dart' as http;
-import 'package:provider/provider.dart';
 
 class Garbages extends StatefulWidget {
   const Garbages({super.key});
@@ -34,14 +32,59 @@ class _GarbagesState extends State<Garbages> {
   double? lng;
   String? _address = "225 Bill Graham Pkwy, Mountain View, CA 94043, USA";
 
+  ///Place Details - Places API
+  fetchClickedPlaceDetails(String placeID) async {
+    // showDialog(
+    //   barrierDismissible: false,
+    //   context: context,
+    //   builder: (BuildContext context) =>
+    //       LoadingDialog(messageText: "Getting details..."),
+    // );
+
+    String urlPlaceDetailsAPI =
+        "https://maps.googleapis.com/maps/api/place/details/json?place_id=$placeID&key=$map_api_key";
+
+    var responseFromPlaceDetailsAPI =
+        await sendRequestToAPI(urlPlaceDetailsAPI);
+
+    if (responseFromPlaceDetailsAPI == "error") {
+      return;
+    }
+
+    if (responseFromPlaceDetailsAPI["status"] == "OK") {
+      _address = responseFromPlaceDetailsAPI["result"]["name"];
+      lat =
+          responseFromPlaceDetailsAPI["result"]["geometry"]["location"]["lat"];
+      lng =
+          responseFromPlaceDetailsAPI["result"]["geometry"]["location"]["lng"];
+      destLocation = LatLng(lat!, lng!);
+      CameraPosition cameraPosition =
+          CameraPosition(target: destLocation!, zoom: 15);
+
+      controllerGoogleMap!
+          .animateCamera(CameraUpdate.newCameraPosition(cameraPosition));
+    }
+  }
+
   Future<List<Marker>> getMarkers() async {
     final cans = await _trashBinService.getAllTrashCan();
     return List<Marker>.from(cans.map((e) => Marker(
+          icon: BitmapDescriptor.defaultMarkerWithHue(BitmapDescriptor.hueRed),
           markerId: MarkerId(e!.xCoord!),
           position: LatLng(double.parse(e.xCoord!), double.parse(e.yCoord!)),
         )));
   }
- sendRequestToAPI(String apiUrl) async {
+
+  void updateMarkers() async {
+    final ok = await getMarkers();
+    setState(() {
+      for (var marker in ok) {
+        markers.add(marker);
+      }
+    });
+  }
+
+  sendRequestToAPI(String apiUrl) async {
     http.Response responseFromAPI = await http.get(Uri.parse(apiUrl));
 
     try {
@@ -56,16 +99,16 @@ class _GarbagesState extends State<Garbages> {
       return "error";
     }
   }
+
   searchLocation(String locationName) async {
-    if(locationName == ""){
+    if (locationName == "") {
       dropOffPredictionsPlacesList = List.empty();
     }
     if (locationName.length > 1) {
       String apiPlacesUrl =
           "https://maps.googleapis.com/maps/api/place/autocomplete/json?input=$locationName&key=$map_api_key&components=country:id";
 
-      var responseFromPlacesAPI =
-          await sendRequestToAPI(apiPlacesUrl);
+      var responseFromPlacesAPI = await sendRequestToAPI(apiPlacesUrl);
 
       if (responseFromPlacesAPI == "error") {
         return;
@@ -132,8 +175,6 @@ class _GarbagesState extends State<Garbages> {
 
   @override
   Widget build(BuildContext context) {
-    final user = Provider.of<UserModel>(context);
-
     return Scaffold(
         floatingActionButton: SpeedDial(
           childrenButtonSize: const Size(60, 60),
@@ -149,10 +190,11 @@ class _GarbagesState extends State<Garbages> {
               onTap: () {
                 context.goNamed('addbin', queryParameters: {
                   'lat': lat.toString(),
-                  'lng': lng.toString()
-                }, extra: user);
+                  'lng': lng.toString(),
+                  'adrs': _address
+                });
               },
-              label: 'Add Bin',
+              label: 'Add bin here',
             ),
             SpeedDialChild(
               child: const Icon(Icons.message),
@@ -183,17 +225,8 @@ class _GarbagesState extends State<Garbages> {
                 }
               },
               markers: markers,
-              onTap: (latlng) async {
-                print(_address);
-
-                final ok = await getMarkers();
-                setState(() {
-                  for (var marker in ok) {
-                    markers.add(marker);
-                  }
-                });
-                setState(() {});
-                print(ok);
+              onTap: (latlng) {
+                updateMarkers();
               },
               onMapCreated: (GoogleMapController mapController) {
                 controllerGoogleMap = mapController;
@@ -201,6 +234,7 @@ class _GarbagesState extends State<Garbages> {
                 googleMapCompleterController.complete(controllerGoogleMap);
 
                 getCurrentLiveLocationOfUser();
+                updateMarkers();
               },
             ),
             const Align(
@@ -212,7 +246,7 @@ class _GarbagesState extends State<Garbages> {
             Align(
               alignment: Alignment.topCenter,
               child: Padding(
-                padding: EdgeInsets.only(top: 75,right: 20),
+                padding: EdgeInsets.only(top: 75, right: 20),
                 child: Row(
                   children: [
                     const SizedBox(
@@ -221,9 +255,9 @@ class _GarbagesState extends State<Garbages> {
                     Expanded(
                       child: Container(
                         decoration: BoxDecoration(
-                            color: const Color.fromARGB(255, 255, 255, 255),
+                            color: Color.fromARGB(255, 255, 255, 255),
                             borderRadius: BorderRadius.circular(50),
-                            boxShadow: const [
+                            boxShadow: [
                               BoxShadow(color: Colors.black, blurRadius: 3)
                             ]),
                         child: Padding(
@@ -236,7 +270,6 @@ class _GarbagesState extends State<Garbages> {
                             onTapOutside: (e) {
                               searchLocation("");
                             },
-                            
                             onChanged: (inputText) {
                               searchLocation(inputText);
                             },
@@ -261,7 +294,7 @@ class _GarbagesState extends State<Garbages> {
                     padding:
                         const EdgeInsets.symmetric(vertical: 8, horizontal: 16),
                     child: ListView.separated(
-                      padding: const EdgeInsets.only(top:130),
+                      padding: const EdgeInsets.only(top: 130),
                       itemBuilder: (context, index) {
                         return Card(
                           color: Colors.transparent,
@@ -269,6 +302,7 @@ class _GarbagesState extends State<Garbages> {
                           child: PredictionPlaceUI(
                             predictedPlaceData:
                                 dropOffPredictionsPlacesList[index],
+                            func: fetchClickedPlaceDetails,
                           ),
                         );
                       },

@@ -29,7 +29,7 @@ class SelectImageService {
 
     img.Image resizedImage = img.copyResize(modifiedImage!, width: width, height: height);
 
-    Uint8List compressedBytes = img.encodeJpg(resizedImage, quality: 85);
+    Uint8List compressedBytes = img.encodeJpg(resizedImage, quality: 85) as Uint8List;
 
     final imageRef = storageRef.child(
         "images/${DateTime.now().millisecondsSinceEpoch.toString()}-${_file!.name}");

@@ -1,17 +1,23 @@
 import 'package:flutter/material.dart';
 
-class ManualClassificatorQuestionCard extends StatefulWidget {
-  const ManualClassificatorQuestionCard({super.key});
+class ClassificatorQuestionCard extends StatefulWidget {
+  final String questions;
+  final Function(bool) handleResponse;
+
+  const ClassificatorQuestionCard(this.questions, this.handleResponse,
+      {super.key});
 
   @override
-  State<ManualClassificatorQuestionCard> createState() =>
-      _ManualClassificatorQuestionCardState();
+  State<ClassificatorQuestionCard> createState() =>
+      _ClassificatorQuestionCardState();
 }
 
-class _ManualClassificatorQuestionCardState
-    extends State<ManualClassificatorQuestionCard> {
+class _ClassificatorQuestionCardState
+    extends State<ClassificatorQuestionCard> {
   @override
   Widget build(BuildContext context) {
+    String question = widget.questions;
+
     return Scaffold(
         backgroundColor: const Color(0xFF222222),
         body: Container(
@@ -19,10 +25,10 @@ class _ManualClassificatorQuestionCardState
           child: Center(
             child:
                 Column(mainAxisAlignment: MainAxisAlignment.center, children: [
-              const Text(
-                "Is your waste made of plastic?",
-                style: TextStyle(
-                  fontSize: 40,
+              Text(
+                question,
+                style: const TextStyle(
+                  fontSize: 30,
                   color: Colors.white,
                   fontWeight: FontWeight.w500,
                 ),
@@ -40,8 +46,7 @@ class _ManualClassificatorQuestionCardState
                         borderRadius: BorderRadius.circular(50),
                       ),
                       onPressed: () {
-                        // ignore: avoid_print
-                        print('yes');
+                        widget.handleResponse(true);
                       },
                       child: const Text('Yes',
                           style: TextStyle(
@@ -59,7 +64,7 @@ class _ManualClassificatorQuestionCardState
                       ),
                       onPressed: () {
                         // ignore: avoid_print
-                        print('no');
+                        widget.handleResponse(false);
                       },
                       child: const Text('No',
                           style: TextStyle(
