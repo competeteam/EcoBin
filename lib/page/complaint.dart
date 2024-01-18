@@ -1,7 +1,4 @@
-import 'dart:async';
-
 import 'package:flutter/material.dart';
-import 'package:geocoder2/geocoder2.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 
@@ -16,6 +13,8 @@ class ComplaintPage extends StatefulWidget {
 class _ComplaintPageState extends State<ComplaintPage> {
   Position? currentPositionOfUser;
   LatLng? destLocation;
+  String title = '';
+  String password = '';
 
   @override
   Widget build(BuildContext context) {
@@ -26,79 +25,89 @@ class _ComplaintPageState extends State<ComplaintPage> {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: <Widget>[
-              Center(
+              const Center(
                 child: Text(
-                  widget.adrs!,
+                  'Add complaint',
                   style: TextStyle(
-                      color: Colors.white,
-                      fontSize: 24,
-                      fontFamily: 'Inter',
-                      fontWeight: FontWeight.w500,
-                      height: 0),
-                ),
-              ),
-              const Padding(
-                padding: EdgeInsets.only(top: 18),
-                child: SizedBox(
-                  height: 40,
-                  child: TextField(
-                    decoration: InputDecoration(
-                      border: OutlineInputBorder(
-                        borderRadius: BorderRadius.all(Radius.circular(5.0)),
-                      ),
-                      labelText: 'Title',
-                      labelStyle: TextStyle(
-                        color: Color(0xFF646464),
-                        fontSize: 12,
-                        fontFamily: 'Inter',
-                        fontWeight: FontWeight.w500,
-                        height: 0,
-                      ),
-                    ),
+                    color: Colors.white,
+                    fontSize: 24,
                   ),
                 ),
               ),
-              const Padding(
-                padding: EdgeInsets.only(top: 30),
-                child: SizedBox(
-                  height: 40,
-                  child: TextField(
-                    decoration: InputDecoration(
-                      border: OutlineInputBorder(
-                        borderRadius: BorderRadius.all(Radius.circular(5.0)),
-                      ),
-                      labelText: 'Description',
-                      labelStyle: TextStyle(
-                        color: Color(0xFF646464),
-                        fontSize: 12,
-                        fontFamily: 'Inter',
-                        fontWeight: FontWeight.w500,
-                        height: 0,
-                      ),
-                    ),
+              const SizedBox(height: 18),
+              TextFormField(
+                validator: (val) {
+                  if (val!.trim().isEmpty) {
+                    return 'Title cannot be empty';
+                  }
+                  return null;
+                },
+                onChanged: (val) {
+                  setState(() => title = val);
+                },
+                decoration: const InputDecoration(
+                  isDense: true,
+                  contentPadding: EdgeInsets.all(12.0),
+                  border: OutlineInputBorder(
+                    borderRadius: BorderRadius.all(Radius.circular(5.0)),
+                  ),
+                  labelText: 'Title',
+                  labelStyle: TextStyle(
+                    color: Color(0xFF646464),
+                    fontSize: 12,
+                  ),
+                ),
+                style: const TextStyle(
+                  color: Colors.white,
+                  fontSize: 16,
+                ),
+              ),
+              const SizedBox(height: 30),
+              TextFormField(
+                validator: (val) {
+                  if (val!.trim().isEmpty) {
+                    return 'Password cannot be empty';
+                  }
+                  return null;
+                },
+                onChanged: (val) {
+                  setState(() => password = val);
+                },
+                decoration: const InputDecoration(
+                  isDense: true,
+                  contentPadding: EdgeInsets.all(12.0),
+                  border: OutlineInputBorder(
+                    borderRadius: BorderRadius.all(Radius.circular(5.0)),
+                  ),
+                  labelText: 'Password',
+                  labelStyle: TextStyle(
+                    color: Color(0xFF646464),
+                    fontSize: 12,
+                  ),
+                ),
+                style: const TextStyle(
+                  color: Colors.white,
+                  fontSize: 16,
+                ),
+                obscureText: true,
+              ),
+              OutlinedButton(
+                        style: OutlinedButton.styleFrom(
+                          fixedSize: const Size.fromHeight(40.0),
+                          side:
+                              const BorderSide(width: 1.0, color: Colors.white),
+                        ),
+                        onPressed: () async {
+                        },
+                        child: const Text(
+                  'Add complaint',
+                  style: TextStyle(
+                    color: Colors.white,
+                    fontSize: 16,
                   ),
                 ),
               ),
-              Padding(
-                padding: const EdgeInsets.only(top: 9),
-                child: OutlinedButton(
-                  style: OutlinedButton.styleFrom(
-                    fixedSize: const Size.fromHeight(40.0),
-                    side: const BorderSide(width: 1.0, color: Colors.white),
-                  ),
-                  onPressed: () {},
-                  child: const Text(
-                    'Add Complaint',
-                    style: TextStyle(
-                      color: Colors.white,
-                      fontSize: 15,
-                      fontFamily: 'Inter',
-                      fontWeight: FontWeight.w500,
-                      height: 0,
-                    ),
-                  ),
-                ),
-              ),
+
             ],
           )),
     );
