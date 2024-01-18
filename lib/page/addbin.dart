@@ -14,9 +14,10 @@ class AddBinPage extends StatefulWidget {
   final UserModel user;
   final String lat;
   final String lng;
+  final String adrs;
 
   const AddBinPage(
-      {super.key, required this.user, required this.lat, required this.lng});
+      {super.key, required this.user, required this.lat, required this.lng, required this.adrs});
 
   @override
   State<AddBinPage> createState() => _AddBinPageState();
@@ -29,7 +30,7 @@ class _AddBinPageState extends State<AddBinPage> {
   final SelectImageService _selectImageService = SelectImageService();
 
   String _trashBinPictureImagePath = '';
-  String _trashBinLocation = '';
+  
   List<TrashBinType> _trashBinTypes = [];
 
   bool _isOrganicChecked = false;
@@ -84,7 +85,7 @@ class _AddBinPageState extends State<AddBinPage> {
                               createdAt: DateTime.now(),
                               uid: widget.user.uid,
                               tid: generateRandomString(28),
-                              createdLocation: _trashBinLocation,
+                              createdLocation: widget.adrs,
                               xCoord: widget.lat,
                               yCoord: widget.lng,
                               types: _trashBinTypes);
@@ -166,7 +167,7 @@ class _AddBinPageState extends State<AddBinPage> {
                       const Text('Location',
                           style:
                               TextStyle(color: Colors.white, fontSize: 16.0)),
-                      Text(_trashBinLocation,
+                      Text(widget.adrs,
                           style: const TextStyle(
                               color: Colors.white, fontSize: 16.0)),
                       const SizedBox(height: 15.0),

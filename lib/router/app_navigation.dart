@@ -109,6 +109,7 @@ class AppNavigation {
                           child: AddBinPage(
                             lat: state.uri.queryParameters['lat']!,
                             lng: state.uri.queryParameters['lng']!,
+                            adrs: state.uri.queryParameters['adrs']!,
                             user: state.extra! as UserModel,
                           ),
                           transitionsBuilder: (context, animation,
