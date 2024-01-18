@@ -399,6 +399,8 @@ class _GarbagesState extends State<Garbages> {
 
   @override
   Widget build(BuildContext context) {
+    final user = Provider.of<UserModel?>(context);
+
     return Scaffold(
         floatingActionButton: SpeedDial(
           childrenButtonSize: const Size(60, 60),
@@ -416,7 +418,7 @@ class _GarbagesState extends State<Garbages> {
                   'lat': lat.toString(),
                   'lng': lng.toString(),
                   'adrs': _address
-                });
+                }, extra: user);
               },
               label: 'Add bin here',
             ),
