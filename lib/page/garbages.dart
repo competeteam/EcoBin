@@ -3,6 +3,7 @@ import 'dart:convert';
 
 import 'package:dinacom_2024/components/prediction_place_ui.dart';
 import 'package:dinacom_2024/models/prediction_model.dart';
+import 'package:dinacom_2024/models/user_model.dart';
 import 'package:dinacom_2024/services/trash_bin_service.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_speed_dial/flutter_speed_dial.dart';
@@ -131,6 +132,7 @@ class _GarbagesState extends State<Garbages> {
 
   @override
   Widget build(BuildContext context) {
+    final user = Provider.of<UserModel>(context);
 
     return Scaffold(
         floatingActionButton: SpeedDial(
@@ -148,7 +150,7 @@ class _GarbagesState extends State<Garbages> {
                 context.goNamed('addbin', queryParameters: {
                   'lat': lat.toString(),
                   'lng': lng.toString()
-                });
+                }, extra: user);
               },
               label: 'Add Bin',
             ),
@@ -219,9 +221,9 @@ class _GarbagesState extends State<Garbages> {
                     Expanded(
                       child: Container(
                         decoration: BoxDecoration(
-                            color: Color.fromARGB(255, 255, 255, 255),
+                            color: const Color.fromARGB(255, 255, 255, 255),
                             borderRadius: BorderRadius.circular(50),
-                            boxShadow: [
+                            boxShadow: const [
                               BoxShadow(color: Colors.black, blurRadius: 3)
                             ]),
                         child: Padding(
