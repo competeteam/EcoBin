@@ -1,14 +1,10 @@
-import 'dart:async';
-
 import 'package:dinacom_2024/models/trash_bin_model.dart';
 import 'package:dinacom_2024/services/trash_bin_service.dart';
 import 'package:flutter/material.dart';
-import 'package:geocoder2/geocoder2.dart';
-import 'package:geolocator/geolocator.dart';
-import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:dinacom_2024/components/common/checbox.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:go_router/go_router.dart';
+import 'package:dinacom_2024/services/select_image_service2.dart';
 
 class AddBinPage extends StatefulWidget {
   String? lat;
@@ -24,8 +20,10 @@ class _AddBinPageState extends State<AddBinPage> {
   final _formKey = GlobalKey<FormState>();
 
   final TrashBinService _trashCanService = TrashBinService();
+  final SelectImageService _selectImageService = SelectImageService();
 
-  String trashBinPictureImagePath = 'assets/images/google_logo.svg';
+  String _displayPictureImagePath = 'null';
+  ImageProvider image = const AssetImage('assets/images/default_trash_bin.png');
   String fillCount = '999';
 
   bool isOrganicChecked = false;
@@ -49,7 +47,6 @@ class _AddBinPageState extends State<AddBinPage> {
               padding: const EdgeInsets.only(top: 20.0, right: 30.0),
               child: TextButton(
                 onPressed: () async {
-
                   if (!isOrganicChecked &&
                       !isPaperChecked &&
                       !isChemicalChecked &&
@@ -76,6 +73,7 @@ class _AddBinPageState extends State<AddBinPage> {
                           createdLocation: widget.adrs!,
                           xCoord: widget.lat!,
                           yCoord: widget.lng!,
+                          imagePath: _displayPictureImagePath,
                           types: types);
                     }
                     context.goNamed('Garbage');
@@ -118,8 +116,12 @@ class _AddBinPageState extends State<AddBinPage> {
                         ],
                         shape: BoxShape.circle,
                       ),
-                      child: SvgPicture.asset(trashBinPictureImagePath,
-                          height: 150.0, width: 150.0, fit: BoxFit.cover),
+                      child: CircleAvatar(
+                        backgroundImage: image,
+                        radius: 75,
+                      ),
+                      // SvgPicture.asset(_displayPictureImagePath,
+                      //     height: 150.0, width: 150.0, fit: BoxFit.cover),
                     ),
                     Positioned(
                         bottom: 0,
@@ -132,7 +134,14 @@ class _AddBinPageState extends State<AddBinPage> {
                           child: IconButton(
                             icon: const Icon(Icons.edit),
                             color: const Color(0xFF2897ED),
-                            onPressed: () {},
+                            onPressed: () async {
+                              String downloadURL =
+                                  await _selectImageService.selectImage();
+                              setState(() {
+                                _displayPictureImagePath = downloadURL;
+                                image = NetworkImage(_displayPictureImagePath);
+                              });
+                            },
                           ),
                         )))
                   ],
@@ -222,7 +231,7 @@ class _AddBinPageState extends State<AddBinPage> {
                     componentValue: Row(
                         crossAxisAlignment: CrossAxisAlignment.center,
                         children: [
-                          SvgPicture.asset('assets/images/glass_type.svg',
+                          SvgPicture.asset('assets/logos/glass_type.svg',
                               height: 16.0, width: 16.0),
                           const SizedBox(width: 5.0),
                           const Text('Glass',
@@ -239,7 +248,7 @@ class _AddBinPageState extends State<AddBinPage> {
                     componentValue: Row(
                         crossAxisAlignment: CrossAxisAlignment.center,
                         children: [
-                          SvgPicture.asset('assets/images/metal_type.svg',
+                          SvgPicture.asset('assets/logos/metal_type.svg',
                               height: 16.0, width: 16.0),
                           const SizedBox(width: 5.0),
                           const Text('Metal',
@@ -256,7 +265,7 @@ class _AddBinPageState extends State<AddBinPage> {
                     componentValue: Row(
                         crossAxisAlignment: CrossAxisAlignment.center,
                         children: [
-                          SvgPicture.asset('assets/images/ewaste_type.svg',
+                          SvgPicture.asset('assets/logos/ewaste_type.svg',
                               height: 16.0, width: 16.0),
                           const SizedBox(width: 5.0),
                           const Text('E Waste',
