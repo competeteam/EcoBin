@@ -119,13 +119,13 @@ class _SettingsState extends State<Settings> {
                 return const ErrorPage();
               }
 
-              UserModel? userModel = snapshot.data;
+              UserModel userModel = snapshot.data!;
 
               ImageProvider image;
 
               if (_displayPictureImagePath != '') {
                 image = NetworkImage(_displayPictureImagePath);
-              } else if (userModel!.photoURL != '') {
+              } else if (userModel.photoURL != '') {
                 image = NetworkImage(userModel.photoURL);
               } else {
                 image = const AssetImage(
@@ -221,7 +221,7 @@ class _SettingsState extends State<Settings> {
                             const SizedBox(height: 30.0),
                             TitleFormField(
                                 formTitle: 'Name',
-                                formValue: userModel!.displayName,
+                                formValue: userModel.displayName,
                                 validatorFunction: (val) => val!.trim().isEmpty
                                     ? 'Name cannot be empty'
                                     : null,
