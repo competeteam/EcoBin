@@ -1,17 +1,16 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:dinacom_2024/models/model.dart';
 
 enum ComplaintType {
   full,
   damaged,
   unusualOdor,
-  improperlyDorted,
+  improperlySorted,
   noLabel,
   notFound,
   others
 }
 
-class Complaint implements Model {
+class ComplaintModel {
   final DateTime deletedAt;
   final DateTime createdAt;
   final String uid;
@@ -24,7 +23,7 @@ class Complaint implements Model {
   final String createdBy;
   final String resolvedBy;
 
-  Complaint(
+  ComplaintModel(
       {required this.deletedAt,
       required this.createdAt,
       required this.uid ,
@@ -39,13 +38,13 @@ class Complaint implements Model {
       
       });
 
-  factory Complaint.fromFirestore(
+  factory ComplaintModel.fromFirestore(
     DocumentSnapshot<Map<String, dynamic>> snapshot,
     SnapshotOptions? options,
   ) {
     final data = snapshot.data();
 
-    return Complaint(
+    return ComplaintModel(
       deletedAt: data?['deletedAt'],
       createdAt: data?['createdAt'],
       uid: data?['uid'],
@@ -60,7 +59,6 @@ class Complaint implements Model {
     );
   }
 
-  @override
   Map<String, dynamic> toFirestore() {
     return {
       "deletedAt": deletedAt.toString(),

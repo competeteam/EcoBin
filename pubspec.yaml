@@ -50,6 +50,10 @@ dependencies:
   geolocator:
   geocoder2:
   flutter_speed_dial:
+  country_picker_plus: ^2.0.2
+  image_picker: ^0.8.5+3
+  firebase_storage: ^11.6.0
+  image: ^3.2.0
   shared_preferences: ^2.2.2
   smooth_page_indicator: ^1.1.0
   flutter_tflite: ^1.0.1

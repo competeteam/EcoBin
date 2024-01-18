@@ -18,13 +18,12 @@ import 'package:dinacom_2024/page/profile/forgot_password.dart';
 import 'package:dinacom_2024/page/profile/login.dart';
 import 'package:dinacom_2024/page/profile/register.dart';
 import 'package:dinacom_2024/page/profile/settings.dart';
+import 'package:dinacom_2024/page/profile/trash_bin.dart';
 import 'package:dinacom_2024/page/profile/user_profile.dart';
 import 'package:dinacom_2024/wrapper.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-
-import '../page/profile/trash_bin.dart';
 
 class AppNavigation {
   // Private navigators
@@ -43,11 +42,10 @@ class AppNavigation {
   static final _router = GoRouter(
     debugLogDiagnostics: true,
     navigatorKey: _rootNavigatorKey,
-    initialLocation: '/garbage',
+    initialLocation: '/profile',
     routes: <RouteBase>[
       StatefulShellRoute.indexedStack(
           builder: (context, state, navigationShell) {
-            print('This is route file state ${state.uri.path}');
             return Wrapper(navigationShell: navigationShell);
           },
           branches: <StatefulShellBranch>[
@@ -59,6 +57,11 @@ class AppNavigation {
                     name: 'Guides',
                     path: '/guides',
                     builder: (context, state) => const Guide(),
+                  ),
+                  GoRoute(
+                      name: 'Guide Content',
+                      path: '/guide/:id',
+                      builder: (context, state) => const GuideArticle()
                   )
                 ]),
 
@@ -104,9 +107,9 @@ class AppNavigation {
                             CustomTransitionPage<void>(
                           key: state.pageKey,
                           child: AddBinPage(
-                            lat: state.uri.queryParameters['lat'],
-                            lng: state.uri.queryParameters['lng'],
-                            adrs: state.uri.queryParameters['adrs'],
+                            lat: state.uri.queryParameters['lat']!,
+                            lng: state.uri.queryParameters['lng']!,
+                            user: state.extra! as UserModel,
                           ),
                           transitionsBuilder: (context, animation,
                                   secondaryAnimation, child) =>
@@ -138,7 +141,7 @@ class AppNavigation {
                     name: 'Calculator',
                     path: '/calculator',
                     builder: (context, state) => const Calculator(),
-                  )
+                  ),
                 ]),
 
             // Profile
@@ -211,7 +214,7 @@ class AppNavigation {
         name: 'Trash Bin',
         path: '/trash-bin/:id',
         builder: (context, state) =>
-            TrashBin(trashBinID: state.pathParameters['id'] ?? '1'),
+            TrashBin(trashBinID: state.pathParameters['id']!),
       ),
 
       GoRoute(
