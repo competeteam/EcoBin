@@ -1,7 +1,5 @@
 import 'package:flutter/material.dart';
-import 'dart:io';
 
-import 'package:dinacom_2024/home.dart';
 import 'package:dinacom_2024/models/guide_content.dart';
 import 'package:dinacom_2024/services/guide_service.dart';
 import 'package:go_router/go_router.dart';

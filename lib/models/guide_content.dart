@@ -1,7 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:dinacom_2024/models/model.dart';
 
-class GuideContent implements Model {
+class GuideContent{
   final String? title;
   final String? content;
   final String? imagePath;
@@ -26,7 +25,6 @@ class GuideContent implements Model {
     );
   }
 
-  @override
   Map<String, dynamic> toFirestore() {
     if (title == null) {
       throw Exception("Guide content should have title");
