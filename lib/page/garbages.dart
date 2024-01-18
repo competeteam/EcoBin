@@ -7,6 +7,7 @@ import 'package:dinacom_2024/components/nearby_place_ui.dart';
 import 'package:dinacom_2024/components/prediction_place_ui.dart';
 import 'package:dinacom_2024/models/address_model.dart';
 import 'package:dinacom_2024/models/prediction_model.dart';
+import 'package:dinacom_2024/models/user_model.dart';
 import 'package:dinacom_2024/services/map_launcher.dart';
 import 'package:dinacom_2024/services/trash_bin_service.dart';
 import 'package:easy_debounce/easy_debounce.dart';
@@ -18,6 +19,7 @@ import 'package:geolocator/geolocator.dart';
 import 'package:go_router/go_router.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:http/http.dart' as http;
+import 'package:provider/provider.dart';
 
 class Garbages extends StatefulWidget {
   const Garbages({super.key});
@@ -395,6 +397,8 @@ class _GarbagesState extends State<Garbages> {
 
   @override
   Widget build(BuildContext context) {
+    final user = Provider.of<UserModel?>(context);
+
     return Scaffold(
         floatingActionButton: SpeedDial(
           childrenButtonSize: const Size(60, 60),
@@ -412,7 +416,7 @@ class _GarbagesState extends State<Garbages> {
                   'lat': lat.toString(),
                   'lng': lng.toString(),
                   'adrs': _address
-                });
+                }, extra: user);
               },
               label: 'Add bin here',
             ),
