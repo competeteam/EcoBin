@@ -91,134 +91,131 @@ class _SettingsState extends State<Settings> {
     return loading
         ? const Loading()
         : FutureBuilder<UserModel?>(
-        future: _future,
-        builder: (context, snapshot) {
-          if (snapshot.connectionState == ConnectionState.waiting) {
-            return const Loading();
-          }
+            future: _future,
+            builder: (context, snapshot) {
+              if (snapshot.connectionState == ConnectionState.waiting) {
+                return const Loading();
+              }
 
-          if (snapshot.hasError) {
-            return const ErrorPage();
-          }
+              if (snapshot.hasError) {
+                return const ErrorPage();
+              }
 
-          UserModel? userModel = snapshot.data;
+              UserModel? userModel = snapshot.data;
 
-          return Form(
-            key: _formKey,
-            child: Scaffold(
-                appBar: AppBar(
-                  actions: [
-                    Padding(
-                      padding:
-                      const EdgeInsets.only(top: 20.0, right: 30.0),
-                      child: TextButton(
-                        onPressed: () async {
-                          saveDataOnPressed(
-                              userModel!.photoURL,
-                              userModel.displayName,
-                              userModel.city,
-                              userModel.province
-                          );
-                        },
-                        child: const Text('Done',
-                            style: TextStyle(
-                                color: Color(0xFF75BC7B), fontSize: 16.0)),
+              return Form(
+                key: _formKey,
+                child: Scaffold(
+                    appBar: AppBar(
+                      actions: [
+                        Padding(
+                          padding:
+                              const EdgeInsets.only(top: 20.0, right: 30.0),
+                          child: TextButton(
+                            onPressed: () async {
+                              saveDataOnPressed(
+                                  userModel!.photoURL,
+                                  userModel.displayName,
+                                  userModel.city,
+                                  userModel.province);
+                            },
+                            child: const Text('Done',
+                                style: TextStyle(
+                                    color: Color(0xFF75BC7B), fontSize: 16.0)),
+                          ),
+                        ),
+                      ],
+                      title: const Padding(
+                        padding: EdgeInsets.only(top: 20.0),
+                        child: Text('Edit Profile',
+                            style:
+                                TextStyle(color: Colors.white, fontSize: 20.0)),
                       ),
+                      backgroundColor: const Color(0xFF222222),
+                      automaticallyImplyLeading: false,
+                      centerTitle: true,
                     ),
-                  ],
-                  title: const Padding(
-                    padding: EdgeInsets.only(top: 20.0),
-                    child: Text('Edit Profile',
-                        style:
-                        TextStyle(color: Colors.white, fontSize: 20.0)),
-                  ),
-                  backgroundColor: const Color(0xFF222222),
-                  automaticallyImplyLeading: false,
-                  centerTitle: true,
-                ),
-                backgroundColor: const Color(0xFF222222),
-                body: SingleChildScrollView(
-                  padding: const EdgeInsets.symmetric(
-                      horizontal: 30.0, vertical: 10.0),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.stretch,
-                    children: <Widget>[
-                      Center(
-                        child: Stack(
-                            children: <Widget>[
-                            // TODO: Fix image to circle
-                            Container(
-                            width: 150.0,
-                            height: 150.0,
-                            decoration: BoxDecoration(
-                              boxShadow: [
-                                BoxShadow(
-                                  spreadRadius: 2,
-                                  blurRadius: 10,
-                                  color: Colors.black.withOpacity(0.1),
-                                )
-                              ],
-                              shape: BoxShape.circle,
+                    backgroundColor: const Color(0xFF222222),
+                    body: SingleChildScrollView(
+                      padding: const EdgeInsets.symmetric(
+                          horizontal: 30.0, vertical: 10.0),
+                      child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.stretch,
+                          children: <Widget>[
+                            Center(
+                              child: Stack(
+                                children: <Widget>[
+                                  // TODO: Fix image to circle
+                                  Container(
+                                    width: 150.0,
+                                    height: 150.0,
+                                    decoration: BoxDecoration(
+                                      boxShadow: [
+                                        BoxShadow(
+                                          spreadRadius: 2,
+                                          blurRadius: 10,
+                                          color: Colors.black.withOpacity(0.1),
+                                        )
+                                      ],
+                                      shape: BoxShape.circle,
+                                    ),
+                                    child: Image(
+                                      image: AssetImage(userModel!
+                                              .photoURL.isNotEmpty
+                                          ? userModel.photoURL
+                                          : 'assets/images/default_profile_picture.png'),
+                                      width: 150.0,
+                                      height: 150.0,
+                                      fit: BoxFit.cover,
+                                    ),
+                                  ),
+                                  Positioned(
+                                      bottom: 0,
+                                      right: 0,
+                                      child: ClipOval(
+                                          child: Container(
+                                        width: 40,
+                                        height: 40,
+                                        color: Colors.white,
+                                        child: IconButton(
+                                          icon: const Icon(Icons.edit),
+                                          color: const Color(0xFF2897ED),
+                                          onPressed: () {},
+                                        ),
+                                      )))
+                                ],
+                              ),
                             ),
-                            child: Image(
-                              image: AssetImage(userModel!.photoURL.isNotEmpty
-                                  ? userModel.photoURL
-                                  : 'assets/images/default_profile_picture.png'),
-                              width: 150.0,
-                              height: 150.0,
-                              fit: BoxFit.cover,
-                            ),
-                      ),
-                      Positioned(
-                          bottom: 0,
-                          right: 0,
-                          child: ClipOval(
-                              child: Container(
-                                width: 40,
-                                height: 40,
-                                color: Colors.white,
-                                child: IconButton(
-                                  icon: const Icon(Icons.edit),
-                                  color: const Color(0xFF2897ED),
-                                  onPressed: () {},
-                                ),
-                              )))
-                    ],
-                  ),
-                ),
-                const SizedBox(height: 30.0),
-                TitleFormField(
-                    formTitle: 'Name',
-                    formValue: userModel.displayName,
-                    validatorFunction: (val) =>
-                    val!.trim().isEmpty
-                        ? 'Name cannot be empty'
-                        : null,
-                    onChangedFunction: (val) =>
-                        setState(() => _displayName = val.trim())),
-                const SizedBox(height: 15.0),
-                TitleFormField(
-                    formTitle: 'City',
-                    formValue: userModel.city,
-                    validatorFunction: (val) =>
-                    val!.trim().isEmpty
-                        ? 'City cannot be empty'
-                        : null,
-                    onChangedFunction: (val) =>
-                        setState(() => _city = val.trim())),
-                const SizedBox(height: 15.0),
-                TitleFormField(
-                    formTitle: 'Province',
-                    formValue: userModel.province,
-                    validatorFunction: (val) =>
-                    val!.trim().isEmpty
-                        ? 'Province cannot be empty'
-                        : null,
-                    onChangedFunction: (val) =>
-                        setState(() => _province = val.trim())),
-                ]),
-          )),
-          );
-        });
+                            const SizedBox(height: 30.0),
+                            TitleFormField(
+                                formTitle: 'Name',
+                                formValue: userModel.displayName,
+                                validatorFunction: (val) => val!.trim().isEmpty
+                                    ? 'Name cannot be empty'
+                                    : null,
+                                onChangedFunction: (val) =>
+                                    setState(() => _displayName = val.trim())),
+                            const SizedBox(height: 15.0),
+                            TitleFormField(
+                                formTitle: 'City',
+                                formValue: userModel.city,
+                                validatorFunction: (val) => val!.trim().isEmpty
+                                    ? 'City cannot be empty'
+                                    : null,
+                                onChangedFunction: (val) =>
+                                    setState(() => _city = val.trim())),
+                            const SizedBox(height: 15.0),
+                            TitleFormField(
+                                formTitle: 'Province',
+                                formValue: userModel.province,
+                                validatorFunction: (val) => val!.trim().isEmpty
+                                    ? 'Province cannot be empty'
+                                    : null,
+                                onChangedFunction: (val) =>
+                                    setState(() => _province = val.trim())),
+                          ]),
+                    )),
+              );
+            });
   }
 }
