@@ -106,8 +106,7 @@ class TrashBinService {
 
   Future<List<TrashBinModel?>> getAllTrashCan() async {
     try {
-      final querySnapshot = await collectionReference
-          .get();
+      final querySnapshot = await collectionReference.get();
 
       List<TrashBinModel> trashBins = querySnapshot.docs.map((doc) {
         Map<String, dynamic> data = doc.data()! as Map<String, dynamic>;
@@ -129,12 +128,8 @@ class TrashBinService {
             ));
       }).toList();
 
-      print(trashBins);
-      print("herreeee");
       return trashBins;
     } catch (e) {
-      print(e);
-      print('hereee');
       return List.empty();
     }
   }
