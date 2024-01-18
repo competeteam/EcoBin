@@ -62,7 +62,7 @@ class TrashBinService {
       await docRef.update({
         'imagePath': imagePath,
         'createdLocation': createdLocation,
-        'types': types.map((type) => type.toString())
+        'types': types.map((type) => type.toString()).toList()
       });
     } catch (e) {
       // TODO: Throw error
@@ -113,9 +113,6 @@ class TrashBinService {
         toFirestore: (TrashBinModel trashBin, options) => trashBin.toFirestore());
 
     final docSnap = await docRef.get();
-
-    print('OK');
-    print(docSnap);
 
     return docSnap.data();
   }
