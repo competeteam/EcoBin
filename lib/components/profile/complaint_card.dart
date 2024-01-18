@@ -1,4 +1,4 @@
-import 'package:dinacom_2024/models/complaint.dart';
+import 'package:dinacom_2024/models/complaint_model.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 
