@@ -1,6 +1,3 @@
-import 'dart:io';
-
-import 'package:camera/camera.dart';
 import 'package:dinacom_2024/components/camera/camera.dart';
 import 'package:dinacom_2024/components/camera/camera_result_preview.dart';
 import 'package:dinacom_2024/features/classificator/automatic.dart';
@@ -18,13 +15,12 @@ import 'package:dinacom_2024/page/profile/forgot_password.dart';
 import 'package:dinacom_2024/page/profile/login.dart';
 import 'package:dinacom_2024/page/profile/register.dart';
 import 'package:dinacom_2024/page/profile/settings.dart';
+import 'package:dinacom_2024/page/profile/trash_bin.dart';
 import 'package:dinacom_2024/page/profile/user_profile.dart';
 import 'package:dinacom_2024/wrapper.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-
-import '../page/profile/trash_bin.dart';
 
 class AppNavigation {
   // Private navigators
@@ -47,7 +43,6 @@ class AppNavigation {
     routes: <RouteBase>[
       StatefulShellRoute.indexedStack(
           builder: (context, state, navigationShell) {
-            print('This is route file state ${state.uri.path}');
             return Wrapper(navigationShell: navigationShell);
           },
           branches: <StatefulShellBranch>[
