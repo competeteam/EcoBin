@@ -95,8 +95,9 @@ class AppNavigation {
                             CustomTransitionPage<void>(
                           key: state.pageKey,
                           child: AddBinPage(
-                            lat: state.uri.queryParameters['lat'],
-                            lng: state.uri.queryParameters['lng'],
+                            lat: state.uri.queryParameters['lat']!,
+                            lng: state.uri.queryParameters['lng']!,
+                            user: state.extra! as UserModel,
                           ),
                           transitionsBuilder: (context, animation,
                                   secondaryAnimation, child) =>
