@@ -48,8 +48,13 @@ dependencies:
   google_maps_flutter:
   permission_handler:
   geolocator:
-  geocoder2:
   flutter_speed_dial:
+  image_picker: ^1.0.7
+  firebase_storage: ^11.6.0
+  image: ^4.1.4
+  url_launcher:
+  geocoding:
+  easy_debounce:
 
 dev_dependencies:
   flutter_test:
