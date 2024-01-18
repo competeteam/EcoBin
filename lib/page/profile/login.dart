@@ -20,43 +20,31 @@ class _LoginState extends State<Login> {
 
   String email = '';
   String password = '';
-
   String errorMessage = '';
-
-  String? validatePassword(password) {
-    if (!RegExp(r'(?=.*[A-Z])').hasMatch(password)) {
-      return 'Password must have at least one upper case';
-    }
-    if (!RegExp(r'(?=.*[a-z])').hasMatch(password)) {
-      return 'Password must have at least one lower case';
-    }
-    if (!RegExp(r'(?=.*?[0-9])').hasMatch(password)) {
-      return 'Password must have at least one digit';
-    }
-    if (!RegExp(r'(?=.*?[!@#\$&*~])').hasMatch(password)) {
-      return 'Password must have at least one special character (!@#\\\$&*~)';
-    }
-    if (!RegExp(r'.{8,}').hasMatch(password)) {
-      return 'Password must be at least 8 characters in length';
-    }
-    return null;
-  }
 
   bool loading = false;
 
   @override
   Widget build(BuildContext context) {
     return loading
-        ? Loading()
+        ? const Loading()
         : Scaffold(
             backgroundColor: const Color(0xFF222222),
             body: SingleChildScrollView(
-                padding: const EdgeInsets.fromLTRB(30.0, 150.0, 30.0, 0.0),
+                padding: const EdgeInsets.fromLTRB(30.0, 60.0, 30.0, 0.0),
                 child: Form(
                   key: _formKey,
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.stretch,
                     children: <Widget>[
+                      const Center(
+                        child: Image(
+                          image: AssetImage('assets/images/app_logo.png'),
+                          width: 160.0,
+                          height: 160.0,
+                          fit: BoxFit.cover,
+                        ),
+                      ),
                       const Center(
                         child: Text(
                           'Login to Your Account',
@@ -105,7 +93,7 @@ class _LoginState extends State<Login> {
                             return 'Password cannot be empty';
                           }
 
-                          return validatePassword(val);
+                          return null;
                         },
                         onChanged: (val) {
                           setState(() => password = val);
@@ -131,7 +119,9 @@ class _LoginState extends State<Login> {
                       ),
                       const SizedBox(height: 16),
                       TextButton(
-                        onPressed: () {},
+                        onPressed: () {
+                          GoRouter.of(context).push('/forgot-password');
+                        },
                         child: const Align(
                           alignment: Alignment.centerLeft,
                           child: Text(
@@ -162,6 +152,10 @@ class _LoginState extends State<Login> {
                                 errorMessage = 'Incorrect email or password';
                                 loading = false;
                               });
+                            } else {
+                              if (context.mounted) {
+                                GoRouter.of(context).go('/profile');
+                              }
                             }
                           }
                         },
@@ -195,7 +189,7 @@ class _LoginState extends State<Login> {
                             crossAxisAlignment: CrossAxisAlignment.center,
                             children: <Widget>[
                               SvgPicture.asset(
-                                'assets/images/google_logo.svg',
+                                'assets/logos/google_logo.svg',
                                 height: 28.0,
                                 width: 28.0,
                               ),
@@ -222,7 +216,7 @@ class _LoginState extends State<Login> {
                           ),
                           TextButton(
                             onPressed: () {
-                              GoRouter.of(context).go('/profile/register');
+                              GoRouter.of(context).go('/register');
                             },
                             child: const Text(
                               'Register',

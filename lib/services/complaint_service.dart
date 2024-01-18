@@ -1,26 +1,49 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:dinacom_2024/models/complaint.dart';
+import 'package:dinacom_2024/models/complaint_model.dart';
 
 class ComplaintService {
+  String? uid;
+
+  ComplaintService({this.uid});
+
+  final CollectionReference collectionReference =
+      FirebaseFirestore.instance.collection("complaints");
+
   FirebaseFirestore db = FirebaseFirestore.instance;
 
-  Future<String> addComplaint(
-      {required String trashCanID,
-      required String createdBy,
-      required String complaintContent}) async {
+  Future<String> addComplaint({
+    required DateTime deletedAt,
+    required DateTime createdAt,
+    required String uid,
+    required String cid,
+    required String content,
+    required String location,
+    bool isResolved = false,
+    DateTime? resolvedAt,
+    required ComplaintType type,
+    required String createdBy,
+    String resolvedBy = "",
+  }) async {
     try {
       final docRef = db.collection("complaints").withConverter(
-          fromFirestore: Complaint.fromFirestore,
-          toFirestore: (Complaint complaint, options) =>
+          fromFirestore: ComplaintModel.fromFirestore,
+          toFirestore: (ComplaintModel complaint, options) =>
               complaint.toFirestore());
 
-      Complaint complaint = Complaint(
-          createdAt: Timestamp.now(),
-          trashCanID: trashCanID,
+      ComplaintModel complaint = ComplaintModel(
+          deletedAt: deletedAt,
+          createdAt: createdAt,
+          uid: uid,
+          cid: cid,
+          content: content,
+          location: location,
+          isResolved: isResolved,
+          resolvedAt: resolvedAt ?? DateTime.utc(0),
+          type: type,
           createdBy: createdBy,
-          complaintContent: complaintContent);
+          resolvedBy: resolvedBy);
 
-      DocumentReference<Complaint> addedDocRef = await docRef.add(complaint);
+      DocumentReference<ComplaintModel> addedDocRef = await docRef.add(complaint);
 
       return addedDocRef.id;
     } catch (e) {
@@ -30,24 +53,50 @@ class ComplaintService {
 
   void updateComplaint(String complaintID, Map<String, dynamic> data) async {
     final docRef = db.collection("complaints").doc(complaintID).withConverter(
-        fromFirestore: Complaint.fromFirestore,
-        toFirestore: (Complaint complaint, options) => complaint.toFirestore());
+        fromFirestore: ComplaintModel.fromFirestore,
+        toFirestore: (ComplaintModel complaint, options) => complaint.toFirestore());
 
     await docRef.update(data);
   }
 
   void deleteComplaint(String complaintID) async {
     final docRef = db.collection("complaints").doc(complaintID).withConverter(
-        fromFirestore: Complaint.fromFirestore,
-        toFirestore: (Complaint complaint, options) => complaint.toFirestore());
+        fromFirestore: ComplaintModel.fromFirestore,
+        toFirestore: (ComplaintModel complaint, options) => complaint.toFirestore());
 
     await docRef.update({"deletedAt": Timestamp.now().seconds});
   }
 
-  Future<Complaint?> getComplaintByComplaintID(String complaintID) async {
+  Future<List<ComplaintModel?>> get complaintModels async {
+    final docRef = collectionReference.where("uid", isEqualTo: uid);
+
+    final docSnap = await docRef.get();
+
+    List<ComplaintModel> complaints = docSnap.docs.map((doc) {
+      Map<String, dynamic> data = doc.data()! as Map<String, dynamic>;
+
+      return ComplaintModel(
+          deletedAt: DateTime.parse(data['deletedAt']),
+          createdAt: DateTime.parse(data['createdAt']),
+          uid: data['uid'],
+          cid: data['cid'],
+          content: data['content'],
+          location: data['location'],
+          isResolved: data['isResolved'],
+          resolvedAt: DateTime.parse(data['resolvedAt']),
+          type: ComplaintType.values
+              .firstWhere((e) => e.toString() == data['type']),
+          createdBy: data['createdBy'],
+          resolvedBy: data['resolvedBy']);
+    }).toList();
+
+    return complaints;
+  }
+
+  Future<ComplaintModel?> getComplaintByComplaintID(String complaintID) async {
     final docRef = db.collection("complaints").doc(complaintID).withConverter(
-        fromFirestore: Complaint.fromFirestore,
-        toFirestore: (Complaint complaint, options) => complaint.toFirestore());
+        fromFirestore: ComplaintModel.fromFirestore,
+        toFirestore: (ComplaintModel complaint, options) => complaint.toFirestore());
 
     final docSnap = await docRef.get();
 

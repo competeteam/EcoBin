@@ -34,7 +34,7 @@ class _RegisterState extends State<Register> {
     if (!RegExp(r'(?=.*?[0-9])').hasMatch(password)) {
       return 'Password must have at least one digit';
     }
-    if (!RegExp(r'(?=.*?[!@#\$&*~])').hasMatch(password)) {
+    if (!RegExp(r'(?=.*?[!@#\\$&*~])').hasMatch(password)) {
       return 'Password must have at least one special character (!@#\\\$&*~)';
     }
     if (!RegExp(r'.{8,}').hasMatch(password)) {
@@ -52,12 +52,20 @@ class _RegisterState extends State<Register> {
         : Scaffold(
             backgroundColor: const Color(0xFF222222),
             body: SingleChildScrollView(
-                padding: const EdgeInsets.fromLTRB(30.0, 150.0, 30.0, 0.0),
+                padding: const EdgeInsets.fromLTRB(30.0, 60.0, 30.0, 0.0),
                 child: Form(
                   key: _formKey,
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.stretch,
                     children: <Widget>[
+                      const Center(
+                        child: Image(
+                          image: AssetImage('assets/images/app_logo.png'),
+                          width: 160.0,
+                          height: 160.0,
+                          fit: BoxFit.cover,
+                        ),
+                      ),
                       const Center(
                         child: Text(
                           'Create Your Account',
@@ -213,6 +221,10 @@ class _RegisterState extends State<Register> {
                                 errorMessage = 'Email address already in use';
                                 loading = false;
                               });
+                            } else {
+                              if (context.mounted) {
+                                GoRouter.of(context).go('/profile');
+                              }
                             }
                           }
                         },
@@ -246,7 +258,7 @@ class _RegisterState extends State<Register> {
                             crossAxisAlignment: CrossAxisAlignment.center,
                             children: <Widget>[
                               SvgPicture.asset(
-                                'assets/images/google_logo.svg',
+                                'assets/logos/google_logo.svg',
                                 height: 28.0,
                                 width: 28.0,
                               ),
@@ -273,7 +285,7 @@ class _RegisterState extends State<Register> {
                           ),
                           TextButton(
                             onPressed: () {
-                              GoRouter.of(context).go('/profile/login');
+                              GoRouter.of(context).go('/login');
                             },
                             child: const Text(
                               'Login',

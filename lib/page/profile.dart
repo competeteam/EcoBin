@@ -1,22 +1,21 @@
+import 'package:dinacom_2024/page/profile/login.dart';
+import 'package:dinacom_2024/page/profile/user_profile.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
-class Profile extends StatefulWidget {
+import 'package:dinacom_2024/models/user_model.dart';
+
+class Profile extends StatelessWidget {
   const Profile({super.key});
 
   @override
-  State<Profile> createState() => _ProfileState();
-}
-
-class _ProfileState extends State<Profile> {
-  @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: const Text('Profile'),
-      ),
-      body: const Center(
-        child: Text('Profile'),
-      ),
-    );
+    final user = Provider.of<UserModel?>(context);
+
+    if (user == null) {
+      return const Login();
+    } else {
+      return UserProfile(user: user);
+    }
   }
 }
