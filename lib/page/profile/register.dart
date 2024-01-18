@@ -1,4 +1,4 @@
-import 'package:dinacom_2024/components/loading/loading.dart';
+import 'package:dinacom_2024/components/loading.dart';
 import 'package:dinacom_2024/services/auth_service.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
