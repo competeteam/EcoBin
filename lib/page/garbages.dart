@@ -18,7 +18,6 @@ import 'package:geolocator/geolocator.dart';
 import 'package:go_router/go_router.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:http/http.dart' as http;
-import 'package:provider/provider.dart';
 
 class Garbages extends StatefulWidget {
   const Garbages({super.key});

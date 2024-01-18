@@ -1,4 +1,8 @@
+import 'dart:io';
+
+import 'package:camera/camera.dart';
 import 'package:dinacom_2024/components/camera/camera.dart';
+import 'package:dinacom_2024/components/camera/camera_result_preview.dart';
 import 'package:dinacom_2024/features/classificator/automatic.dart';
 import 'package:dinacom_2024/features/classificator/manual.dart';
 import 'package:dinacom_2024/models/user_model.dart';
@@ -9,17 +13,18 @@ import 'package:dinacom_2024/page/classificator.dart';
 import 'package:dinacom_2024/page/complaint.dart';
 import 'package:dinacom_2024/page/garbages.dart';
 import 'package:dinacom_2024/page/guide.dart';
+import 'package:dinacom_2024/page/onboarding.dart';
 import 'package:dinacom_2024/page/profile.dart';
 import 'package:dinacom_2024/page/profile/forgot_password.dart';
 import 'package:dinacom_2024/page/profile/login.dart';
 import 'package:dinacom_2024/page/profile/register.dart';
 import 'package:dinacom_2024/page/profile/settings.dart';
+import 'package:dinacom_2024/page/profile/trash_bin.dart';
 import 'package:dinacom_2024/page/profile/user_profile.dart';
 import 'package:dinacom_2024/wrapper.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
-
-import '../page/profile/trash_bin.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class AppNavigation {
   // Private navigators
@@ -53,6 +58,11 @@ class AppNavigation {
                     name: 'Guides',
                     path: '/guides',
                     builder: (context, state) => const Guide(),
+                  ),
+                  GoRoute(
+                      name: 'Guide Content',
+                      path: '/guide/:id',
+                      builder: (context, state) => const GuideArticle(),
                   )
                 ]),
 
@@ -74,8 +84,10 @@ class AppNavigation {
                         GoRoute(
                           name: 'Automatic Classificator',
                           path: 'automatic',
-                          builder: (context, state) =>
-                              const AutomaticClassificator(),
+                          builder: (context, state) {
+                            File file = state.extra as File;
+                            return AutomaticClassificator(file);
+                          },
                         )
                       ])
                 ]),
@@ -96,10 +108,9 @@ class AppNavigation {
                             CustomTransitionPage<void>(
                           key: state.pageKey,
                           child: AddBinPage(
-                            lat: state.uri.queryParameters['lat'],
-                            lng: state.uri.queryParameters['lng'],
-                            adrs: state.uri.queryParameters['adrs'],
-                            
+                            lat: state.uri.queryParameters['lat']!,
+                            lng: state.uri.queryParameters['lng']!,
+                            user: state.extra! as UserModel,
                           ),
                           transitionsBuilder: (context, animation,
                                   secondaryAnimation, child) =>
@@ -135,7 +146,7 @@ class AppNavigation {
                     name: 'Calculator',
                     path: '/calculator',
                     builder: (context, state) => const Calculator(),
-                  )
+                  ),
                 ]),
 
             // Profile
@@ -148,6 +159,23 @@ class AppNavigation {
                     builder: (context, state) => const Profile(),
                   )
                 ]),
+          ]),
+
+      GoRoute(
+          name: 'Camera',
+          path: '/camera',
+          builder: (context, state) {
+            return const Camera();
+          },
+          routes: [
+            GoRoute(
+              name: 'Camera Preview',
+              path: 'preview',
+              builder: (context, state) {
+                XFile file = state.extra as XFile;
+                return CameraShootPreview(file);
+              },
+            )
           ]),
 
       // Login
@@ -175,7 +203,8 @@ class AppNavigation {
       GoRoute(
         name: 'User Profile',
         path: '/user-profile',
-        builder: (context, state) => UserProfile(user: state.extra! as UserModel),
+        builder: (context, state) =>
+            UserProfile(user: state.extra! as UserModel),
       ),
 
       // Settings
@@ -190,12 +219,30 @@ class AppNavigation {
         name: 'Trash Bin',
         path: '/trash-bin/:id',
         builder: (context, state) =>
-            TrashBin(trashBinID: state.pathParameters['id'] ?? '1'),
+            TrashBin(trashBinID: state.pathParameters['id']!),
+      ),
+
+      GoRoute(
+        name: 'Onboarding',
+        path: '/onboarding',
+        builder: (context, state) => const Onboarding(),
       )
     ],
   );
 
+  static Future<void> checkOnboardingStatus() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    bool onboardingComplete = prefs.getBool('onboarding_completed') ?? false;
+
+    print('This is onboarding complete status $onboardingComplete');
+
+    if (!onboardingComplete) {
+      _router.go('/onboarding');
+    }
+  }
+
   static GoRouter getRouter() {
+    checkOnboardingStatus();
     return _router;
   }
 }

@@ -55,6 +55,10 @@ dependencies:
   url_launcher:
   geocoding:
   easy_debounce:
+  country_picker_plus: ^2.0.2
+  shared_preferences: ^2.2.2
+  smooth_page_indicator: ^1.1.0
+  flutter_tflite: ^1.0.1
 
 dev_dependencies:
   flutter_test:
@@ -81,6 +85,7 @@ flutter:
   assets:
     - assets/images/
     - assets/logos/
+    - assets/models/
 
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/assets-and-images/#resolution-aware

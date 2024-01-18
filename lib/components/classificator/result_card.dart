@@ -1,18 +1,32 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 
-class ManualClassificatorResultCard extends StatefulWidget {
-  const ManualClassificatorResultCard({super.key});
+class ClassificatorResultCard extends StatefulWidget {
+  final String result;
+
+  const ClassificatorResultCard(this.result, {super.key});
 
   @override
-  State<ManualClassificatorResultCard> createState() =>
-      _ManualClassificatorResultCardState();
+  State<ClassificatorResultCard> createState() =>
+      _ClassificatorResultCardState();
 }
 
-class _ManualClassificatorResultCardState
-    extends State<ManualClassificatorResultCard> {
+class _ClassificatorResultCardState extends State<ClassificatorResultCard> {
+  Map<String, String> images = {
+    'Paper' : 'assets/images/paper_image.png',
+    'Organic' : 'assets/images/organic_image.png',
+    'Chemical' : 'assets/images/chemical_image.png',
+    'Glass' : 'assets/images/glass_image.png',
+    'E Waste' : 'assets/images/ewaste_image.png',
+    'Metal' : 'assets/images/metal_image.png',
+    'Battery' : 'assets/images/battery_image.png',
+    'Plastic' : 'assets/images/plastic_image.png',
+  };
+
   @override
   Widget build(BuildContext context) {
+    String result = widget.result;
+
     return Scaffold(
         backgroundColor: const Color(0xFF222222),
         body: Container(
@@ -30,19 +44,17 @@ class _ManualClassificatorResultCardState
                 const SizedBox(
                   height: 50,
                 ),
-                // TODO: Result Image Classifier
                 Image.asset(
-                  'assets/images/Aset4removebgpreview1.png',
+                  images[result]!,
                   width: 200,
                   height: 250,
                 ),
                 const SizedBox(
                   height: 15,
                 ),
-                // TODO: Result Text Classifier
-                const Text(
-                  'Recyclable',
-                  style: TextStyle(
+                Text(
+                  result,
+                  style: const TextStyle(
                     color: Colors.white,
                     fontSize: 35,
                   ),

@@ -1,5 +1,3 @@
-import 'package:dinacom_2024/features/classificator/manual.dart';
-import 'package:dinacom_2024/router/app_navigation.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 
@@ -13,11 +11,10 @@ class Classificator extends StatefulWidget {
 class _ClassificatorState extends State<Classificator> {
   void classicatorFeature(int featureNum) {
     if (featureNum == 1) {
-      GoRouter.of(context).go('/classificator/manual');
+      GoRouter.of(context).push('/classificator/manual');
     } else if (featureNum == 2) {
-      
       GoRouter.of(context).go('/camera');
-    }
+    } 
   }
 
   @override
