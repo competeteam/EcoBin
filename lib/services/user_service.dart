@@ -23,6 +23,7 @@ class UserService {
       int totalEmissionReduced = 0,
       int trashBinCount = 0,
       int totalTrashBinFillCount = 0,
+      double totalCarbonFootprint = 0,
       UserType type = UserType.user}) async {
     try {
       final docRef = collectionReference
@@ -43,6 +44,7 @@ class UserService {
           trashBinCount: trashBinCount,
           totalTrashBinFillCount: totalTrashBinFillCount,
           totalEmissionReduced: totalEmissionReduced,
+          totalCarbonFootprint: totalCarbonFootprint,
           isEmailVerified: isEmailVerified,
           isAnonymous: isAnonymous,
           type: type);
@@ -75,6 +77,21 @@ class UserService {
     }
   }
 
+  Future<void> addCarbonFootprint(String userID, double addedCarbonFootprint) async {
+    final docRef = collectionReference.doc(userID).withConverter(
+        fromFirestore: UserModel.fromFirestore,
+        toFirestore: (UserModel user, options) => user.toFirestore());
+
+    final oldCarbonFootprint = await docRef.get().then((value) => value.data()!.totalCarbonFootprint);
+    if (oldCarbonFootprint + addedCarbonFootprint < 0.0) {
+      throw Exception("Cannot set carbon footprint to negatives");
+    }
+
+    await docRef.update({
+      "totalCarbonFootprint": oldCarbonFootprint + addedCarbonFootprint,
+    });
+  }
+
   // TODO: Fix deleteUser
   void deleteUser(String userID) async {
     final docRef = collectionReference.doc(userID).withConverter(
@@ -93,4 +110,5 @@ class UserService {
 
     return docSnap.data();
   }
+
 }

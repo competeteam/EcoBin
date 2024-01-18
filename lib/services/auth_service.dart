@@ -19,6 +19,7 @@ class AuthService {
             city: '',
             province: '',
             totalEmissionReduced: 0,
+            totalCarbonFootprint: 0,
             trashBinCount: 0,
             totalTrashBinFillCount: 0,
             isEmailVerified: user.emailVerified,

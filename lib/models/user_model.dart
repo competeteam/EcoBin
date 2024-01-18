@@ -14,6 +14,7 @@ class UserModel {
   final int trashBinCount;
   final int totalTrashBinFillCount;
   final int totalEmissionReduced;
+  final double totalCarbonFootprint;
   final bool isEmailVerified;
   final bool isAnonymous;
   final UserType type;
@@ -28,6 +29,7 @@ class UserModel {
     required this.city,
     required this.province,
     required this.totalEmissionReduced,
+    required this.totalCarbonFootprint,
     required this.trashBinCount,
     required this.totalTrashBinFillCount,
     required this.isEmailVerified,
@@ -53,6 +55,7 @@ class UserModel {
       trashBinCount: data['trashBinCount'],
       totalTrashBinFillCount: data['totalTrashBinFillCount'],
       totalEmissionReduced: data['totalEmissionReduced'],
+      totalCarbonFootprint: data['totalCarbonFootprint'],
       isEmailVerified: data['isEmailVerified'],
       isAnonymous: data['isAnonymous'],
       type: UserType.values
@@ -73,6 +76,7 @@ class UserModel {
       "trashBinCount": trashBinCount,
       "totalTrashBinFillCount": totalTrashBinFillCount,
       "totalEmissionReduced": totalEmissionReduced,
+      "totalCarbonFootprint": totalCarbonFootprint,
       "isEmailVerified": isEmailVerified,
       "isAnonymous": isAnonymous,
       "type": type.toString().split('.').last,
