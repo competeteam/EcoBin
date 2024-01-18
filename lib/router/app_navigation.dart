@@ -3,6 +3,7 @@ import 'package:dinacom_2024/features/classificator/automatic.dart';
 import 'package:dinacom_2024/features/classificator/manual.dart';
 import 'package:dinacom_2024/models/user_model.dart';
 import 'package:dinacom_2024/page/addbin.dart';
+import 'package:dinacom_2024/page/addcomplaint.dart';
 import 'package:dinacom_2024/page/calculator.dart';
 import 'package:dinacom_2024/page/classificator.dart';
 import 'package:dinacom_2024/page/complaint.dart';
@@ -106,18 +107,22 @@ class AppNavigation {
                         ),
                       ),
                       GoRoute(
-                        path: 'complaint/:adrs',
-                        name: 'complaint',
+                        path: 'addcomplaint',
+                        name: 'addcomplaint',
                         pageBuilder: (context, state) =>
                             CustomTransitionPage<void>(
                           key: state.pageKey,
-                          child:
-                              ComplaintPage(adrs: state.pathParameters['adrs']),
+                          child: AddComplaintPage(
+                            lat: state.uri.queryParameters['lat'],
+                            lng: state.uri.queryParameters['lng'],
+                            adrs: state.uri.queryParameters['adrs'],
+                          ),
                           transitionsBuilder: (context, animation,
                                   secondaryAnimation, child) =>
                               FadeTransition(opacity: animation, child: child),
                         ),
                       ),
+                      
                     ],
                   )
                 ]),
