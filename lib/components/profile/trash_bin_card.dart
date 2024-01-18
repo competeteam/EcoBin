@@ -3,37 +3,50 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:go_router/go_router.dart';
 
-class TrashBinCard extends StatelessWidget {
-  final String defaultTrashBinImagePath = 'assets/images/default_trash_bin.png';
-  final String organicTrashBinLogoPath = 'assets/logos/type_trash_bin_organic.svg';
+class TrashBinCard extends StatefulWidget {
+  final TrashBinModel trashBin;
+  final Future<void> fetch;
+
+  const TrashBinCard({required this.trashBin, required this.fetch, super.key});
+
+  @override
+  State<TrashBinCard> createState() => _TrashBinCardState();
+}
+
+class _TrashBinCardState extends State<TrashBinCard> {
+  final String organicTrashBinLogoPath =
+      'assets/logos/type_trash_bin_organic.svg';
+
   final String paperTrashBinLogoPath = 'assets/logos/type_trash_bin_paper.svg';
-  final String chemicalTrashBinLogoPath = 'assets/logos/type_trash_bin_chemical.svg';
-  final String plasticTrashBinLogoPath = 'assets/logos/type_trash_bin_plastic.svg';
+
+  final String chemicalTrashBinLogoPath =
+      'assets/logos/type_trash_bin_chemical.svg';
+
+  final String plasticTrashBinLogoPath =
+      'assets/logos/type_trash_bin_plastic.svg';
+
   final String glassTrashBinLogoPath = 'assets/logos/type_trash_bin_glass.svg';
+
   final String metalTrashBinLogoPath = 'assets/logos/type_trash_bin_metal.svg';
-  final String eWasteTrashBinLogoPath = 'assets/logos/type_trash_bin_ewaste.svg';
 
-  final DateTime createdAt;
-  final String tid;
-  final String imagePath;
-  final String createdLocation;
-  final int fillCount;
-  final bool isFull;
-  final List<TrashBinType> types;
-
-  const TrashBinCard({
-    super.key,
-    required this.createdAt,
-    required this.tid,
-    required this.imagePath,
-    required this.createdLocation,
-    required this.fillCount,
-    required this.isFull,
-    required this.types,
-  });
+  final String eWasteTrashBinLogoPath =
+      'assets/logos/type_trash_bin_ewaste.svg';
 
   @override
   Widget build(BuildContext context) {
+    DateTime createdAt = widget.trashBin.createdAt;
+    String fillCount = widget.trashBin.fillCount.toString();
+    String createdLocation = widget.trashBin.createdLocation;
+    List<TrashBinType> types = widget.trashBin.types;
+
+    ImageProvider image;
+
+    if (widget.trashBin.imagePath != '') {
+      image = NetworkImage(widget.trashBin.imagePath);
+    } else {
+      image = const AssetImage('assets/images/default_trash_bin.png');
+    }
+
     return Container(
       height: 70.0,
       margin: const EdgeInsets.only(bottom: 20.0),
@@ -43,7 +56,21 @@ class TrashBinCard extends StatelessWidget {
       ),
       child: InkWell(
         onTap: () async {
-          GoRouter.of(context).push('/trash-bin/$tid');
+          dynamic result = await GoRouter.of(context).push(
+              '/trash-bin/${widget.trashBin.tid}',
+              extra: widget.trashBin);
+
+          if (result != null) {
+            await widget.fetch;
+
+            setState(() {
+              image = NetworkImage(result['imagePath']);
+
+              createdLocation = result['createdLocation'];
+
+              types = result['types'];
+            });
+          }
         },
         child: Row(
           children: <Widget>[
@@ -53,10 +80,7 @@ class TrashBinCard extends StatelessWidget {
                 borderRadius: const BorderRadius.only(
                     topLeft: Radius.circular(10.0),
                     bottomLeft: Radius.circular(10.0)),
-                image: DecorationImage(
-                    image: AssetImage(imagePath != ''
-                        ? imagePath
-                        : defaultTrashBinImagePath)),
+                image: DecorationImage(image: image),
               ),
             ),
             Expanded(
@@ -73,19 +97,24 @@ class TrashBinCard extends StatelessWidget {
                                 .map((type) => _trashBinCardHeaderLogos(type))
                                 .expand((e) => [e, const SizedBox(width: 5.0)])
                                 .toList(),
-                            Text(createdLocation,
-                                style: const TextStyle(
-                                    color: Colors.white, fontSize: 16.0)),
+                            Expanded(
+                              child: Text(createdLocation,
+                                  overflow: TextOverflow.ellipsis,
+                                  style: const TextStyle(
+                                      color: Colors.white, fontSize: 16.0)),
+                            ),
                           ],
                         ),
                         const SizedBox(height: 5.0),
-                        Text('Filled ${fillCount.toString()} times',
+                        Text('Filled $fillCount times',
                             style: const TextStyle(
                               color: Color(0xFFD9D9D9),
                               fontSize: 14.0,
                             )),
                         const SizedBox(height: 5.0),
-                        Text("${createdAt.day}-${createdAt.month}-${createdAt.year}".toString(),
+                        Text(
+                            "${createdAt.day}-${createdAt.month}-${createdAt.year}"
+                                .toString(),
                             style: const TextStyle(
                               color: Color(0xFFD9D9D9),
                               fontSize: 12.0,
@@ -97,7 +126,7 @@ class TrashBinCard extends StatelessWidget {
                 child: Align(
                   alignment: Alignment.bottomCenter,
                   child: Text(
-                    isFull ? 'FULL!' : '',
+                    widget.trashBin.isFull ? 'FULL!' : '',
                     style: const TextStyle(
                       color: Color(0xFFE54335),
                       fontSize: 16.0,
