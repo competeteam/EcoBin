@@ -70,7 +70,7 @@ class Complaint implements Model {
       "content": content,
       "location": location,
       "isResolved": isResolved,
-      "resolvedAt": resolvedAt,
+      "resolvedAt": resolvedAt.toString(),
       "resolvedBy": resolvedBy.toString(),
       "createdBy": createdBy,
       "type": type.toString(),
