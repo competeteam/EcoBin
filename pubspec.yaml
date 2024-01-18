@@ -49,9 +49,9 @@ dependencies:
   permission_handler:
   geolocator:
   flutter_speed_dial:
-  image_picker: ^1.0.7
+  image_picker: ^0.8.5+3
   firebase_storage: ^11.6.0
-  image: ^4.1.4
+  image: ^3.2.0
   url_launcher:
   geocoding:
   easy_debounce:
