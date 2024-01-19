@@ -17,9 +17,9 @@ class _OnboardingState extends State<Onboarding> {
 
   Map<String, String> onboardingImages = {
     'classificator' : 'assets/images/onboarding_classificator.png',
-    'guide' : 'assets/images/onboarding_classificator.png',
-    'garbage' : 'assets/images/onboarding_classificator.png',
-    'calculator' : 'assets/images/onboarding_classificator.png',
+    'guide' : 'assets/images/onboarding_guide.png',
+    'garbage' : 'assets/images/onboarding_garbage.png',
+    'garbage func' : 'assets/images/garbagefunc_onboarding.png',
   };
 
   @override
@@ -89,13 +89,13 @@ class _OnboardingState extends State<Onboarding> {
                           controller: controller,
                           children: [
                             OnboardingPage(
-                              imagePath: onboardingImages['classificator']!,
+                              imagePath: onboardingImages['garbage']!,
                               title: 'Discovery New Bins',
                               subTitle:
                                   'Explore your surroundings to locate available trash bins effortlessly',
                             ),
                             OnboardingPage(
-                              imagePath: onboardingImages['classificator']!,
+                              imagePath: onboardingImages['garbage func']!,
                               title: 'Empower Green Living',
                               subTitle:
                                   'Be a part of the movement by providing new trash bins in your community, or reporting a full one',
@@ -107,7 +107,7 @@ class _OnboardingState extends State<Onboarding> {
                                   'Utilize AI technology to identify trash types easily and effortlessly',
                             ),
                             OnboardingPage(
-                              imagePath: onboardingImages['classificator']!,
+                              imagePath: onboardingImages['guide']!,
                               title: 'Knowledge at Your Fingertips',
                               subTitle:
                                   'Access insightful guides curated by professionals to stay informed about waste management',
