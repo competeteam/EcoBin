@@ -111,7 +111,7 @@ class AppNavigation {
                             lat: state.uri.queryParameters['lat']!,
                             lng: state.uri.queryParameters['lng']!,
                             adrs: state.uri.queryParameters['adrs']!,
-                            user: state.extra! as UserModel,
+                            uid: state.uri.queryParameters['uid']!,
                           ),
                           transitionsBuilder: (context, animation,
                                   secondaryAnimation, child) =>
@@ -129,7 +129,7 @@ class AppNavigation {
                             lng: state.uri.queryParameters['lng'],
                             adrs: state.uri.queryParameters['adrs'],
                             tid: state.uri.queryParameters['tid'],
-                            user: state.extra! as UserModel,
+                            uid: state.uri.queryParameters['uid']!,
                           ),
                           transitionsBuilder: (context, animation,
                                   secondaryAnimation, child) =>
@@ -145,7 +145,7 @@ class AppNavigation {
                           child: ComplaintList(
                             adrs: state.uri.queryParameters['adrs']!,
                             tid: state.uri.queryParameters['tid']!,
-                            user: state.extra! as UserModel,
+                            uid: state.uri.queryParameters['uid']!,
                           ),
                           transitionsBuilder: (context, animation,
                                   secondaryAnimation, child) =>

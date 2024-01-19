@@ -2,7 +2,6 @@ import 'dart:math';
 
 import 'package:dinacom_2024/components/loading.dart';
 import 'package:dinacom_2024/models/trash_bin_model.dart';
-import 'package:dinacom_2024/models/user_model.dart';
 import 'package:dinacom_2024/services/select_image_service.dart';
 import 'package:dinacom_2024/services/trash_bin_service.dart';
 import 'package:flutter/material.dart';
@@ -11,13 +10,13 @@ import 'package:flutter_svg/svg.dart';
 import 'package:go_router/go_router.dart';
 
 class AddBinPage extends StatefulWidget {
-  final UserModel user;
+  final String uid;
   final String lat;
   final String lng;
   final String adrs;
 
   const AddBinPage(
-      {super.key, required this.user, required this.lat, required this.lng, required this.adrs});
+      {super.key, required this.uid, required this.lat, required this.lng, required this.adrs});
 
   @override
   State<AddBinPage> createState() => _AddBinPageState();
@@ -83,7 +82,7 @@ class _AddBinPageState extends State<AddBinPage> {
                         if (_formKey.currentState!.validate()) {
                           _trashBinService.addTrashBin(
                               createdAt: DateTime.now(),
-                              uid: widget.user.uid,
+                              uid: widget.uid,
                               tid: generateRandomString(28),
                               createdLocation: widget.adrs,
                               xCoord: widget.lat,

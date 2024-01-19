@@ -9,10 +9,10 @@ import 'package:go_router/go_router.dart';
 
 class ComplaintList extends StatefulWidget {
   final String tid;
-  final UserModel? user;
+  final String uid;
   final String adrs;
   const ComplaintList(
-      {super.key, this.user, required this.adrs, required this.tid});
+      {super.key, required this.uid, required this.adrs, required this.tid});
 
   @override
   State<ComplaintList> createState() => _ComplaintListState();
@@ -42,7 +42,7 @@ class _ComplaintListState extends State<ComplaintList> {
                     imagePath: '',
                     id: p++,
                     cid: e.cid,
-                    uid: widget.user!.uid,
+                    uid: widget.uid,
                   ))
               .toList();
           resolvedcards = complaints
@@ -54,7 +54,7 @@ class _ComplaintListState extends State<ComplaintList> {
                     imagePath: '',
                     id: p++,
                     cid: e.cid,
-                    uid: widget.user!.uid,
+                    uid: widget.uid,
                   ))
               .toList();
         });

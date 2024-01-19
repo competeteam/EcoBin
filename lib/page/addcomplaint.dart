@@ -13,14 +13,14 @@ import 'package:flutter_svg/svg.dart';
 import 'package:go_router/go_router.dart';
 
 class AddComplaintPage extends StatefulWidget {
-  final UserModel user;
+  final String uid;
 
   String? lat;
   String? lng;
   String? adrs;
   String? tid;
   AddComplaintPage(
-      {super.key, this.lat, this.lng, this.adrs, this.tid, required this.user});
+      {super.key, this.lat, this.lng, this.adrs, this.tid, required this.uid});
 
   @override
   State<AddComplaintPage> createState() => _AddComplaintPageState();
@@ -71,13 +71,13 @@ class _AddComplaintPageState extends State<AddComplaintPage> {
                   await _complaintService.addComplaint(
                       deletedAt: DateTime.now(),
                       createdAt: DateTime.now(),
-                      uid: widget.user.uid,
+                      uid: widget.uid,
                       cid: generateRandomString(28),
                       tid: widget.tid!,
                       content: content,
                       location: widget.adrs!,
                       type: _type!,
-                      createdBy: widget.user.displayName);
+                      createdBy: widget.uid);
                   context.goNamed('Garbage');
                 },
                 child: const Text('Done',

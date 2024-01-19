@@ -336,7 +336,6 @@ class _GarbagesState extends State<Garbages> {
                 child: Row(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: <Widget>[
-                    
                     Column(
                       mainAxisSize: MainAxisSize.max,
                       crossAxisAlignment: CrossAxisAlignment.start,
@@ -464,14 +463,16 @@ class _GarbagesState extends State<Garbages> {
                         width: 1.0, color: Color.fromARGB(255, 233, 226, 226)),
                   ),
                   onPressed: () async {
-                    context.pushNamed('addcomplaint',
-                        queryParameters: {
-                          'lat': lat.toString(),
-                          'lng': lng.toString(),
-                          'adrs': _address,
-                          'tid': tid,
-                        },
-                        extra: user);
+                    context.pushNamed(
+                      'addcomplaint',
+                      queryParameters: {
+                        'lat': lat.toString(),
+                        'lng': lng.toString(),
+                        'adrs': _address,
+                        'tid': tid,
+                        'uid': user!.uid,
+                      },
+                    );
                   },
                   child: const Text(
                     'Add complaint',
@@ -491,14 +492,16 @@ class _GarbagesState extends State<Garbages> {
                         width: 1.0, color: Color.fromARGB(255, 238, 234, 234)),
                   ),
                   onPressed: () async {
-                    context.goNamed('showcomplaints',
-                        queryParameters: {
-                          'lat': lat.toString(),
-                          'lng': lng.toString(),
-                          'adrs': _address,
-                          'tid': tid,
-                        },
-                        extra: user);
+                    context.goNamed(
+                      'showcomplaints',
+                      queryParameters: {
+                        'lat': lat.toString(),
+                        'lng': lng.toString(),
+                        'adrs': _address,
+                        'tid': tid,
+                        'uid': user!.uid,
+                      },
+                    );
                   },
                   child: const Text(
                     'Show complaints',
@@ -546,15 +549,15 @@ class _GarbagesState extends State<Garbages> {
               child: const Icon(Icons.add),
               shape: CircleBorder(),
               onTap: () {
-                context
-                    .pushNamed('addbin',
-                        queryParameters: {
-                          'lat': lat.toString(),
-                          'lng': lng.toString(),
-                          'adrs': _address
-                        },
-                        extra: user)
-                    .whenComplete(() {
+                context.pushNamed(
+                  'addbin',
+                  queryParameters: {
+                    'lat': lat.toString(),
+                    'lng': lng.toString(),
+                    'adrs': _address,
+                    'uid': user!.uid
+                  },
+                ).whenComplete(() {
                   updateMarkers();
                   print("here lol it does get called");
                 });
