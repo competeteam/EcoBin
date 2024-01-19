@@ -10,6 +10,7 @@ import 'package:dinacom_2024/page/addbin.dart';
 import 'package:dinacom_2024/page/addcomplaint.dart';
 import 'package:dinacom_2024/page/calculator.dart';
 import 'package:dinacom_2024/page/classificator.dart';
+import 'package:dinacom_2024/page/complaintlist.dart';
 import 'package:dinacom_2024/page/garbages.dart';
 import 'package:dinacom_2024/page/guide.dart';
 import 'package:dinacom_2024/page/onboarding.dart';
@@ -127,6 +128,23 @@ class AppNavigation {
                             lat: state.uri.queryParameters['lat'],
                             lng: state.uri.queryParameters['lng'],
                             adrs: state.uri.queryParameters['adrs'],
+                            tid: state.uri.queryParameters['tid'],
+                            user: state.extra! as UserModel,
+                          ),
+                          transitionsBuilder: (context, animation,
+                                  secondaryAnimation, child) =>
+                              FadeTransition(opacity: animation, child: child),
+                        ),
+                      ),
+                      GoRoute(
+                        path: 'showcomplaints',
+                        name: 'showcomplaints',
+                        pageBuilder: (context, state) =>
+                            CustomTransitionPage<void>(
+                          key: state.pageKey,
+                          child: ComplaintList(
+                            adrs: state.uri.queryParameters['adrs']!,
+                            tid: state.uri.queryParameters['tid']!,
                             user: state.extra! as UserModel,
                           ),
                           transitionsBuilder: (context, animation,

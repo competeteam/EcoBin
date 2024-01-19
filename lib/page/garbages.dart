@@ -29,8 +29,15 @@ class Garbages extends StatefulWidget {
   State<Garbages> createState() => _GarbagesState();
 }
 
+extension StringExtension on String {
+  String capitalize() {
+    return "${this[0].toUpperCase()}${substring(1).toLowerCase()}";
+  }
+}
+
 class _GarbagesState extends State<Garbages> {
   final TrashBinService _trashBinService = TrashBinService();
+
   bool isFindNearby = true;
   TextEditingController destinationTextEditingController =
       TextEditingController();
@@ -57,7 +64,8 @@ class _GarbagesState extends State<Garbages> {
   double lng = -122.085749655962;
   String? _address = "225 Bill Graham Pkwy, Mountain View, CA 94043, USA";
 
-  goToBin(double latt, double lngg, String adrs, String types) async {
+  goToBin(
+      double latt, double lngg, String adrs, String types, String tid) async {
     _address = adrs;
     lat = latt;
     lng = lngg;
@@ -70,7 +78,7 @@ class _GarbagesState extends State<Garbages> {
     nearbyBinsList = [];
     isFindNearby = true;
 
-    _displayBottomSheet(context, adrs, '', latt, lngg, types);
+    _displayBottomSheet(context, adrs, '', latt, lngg, types, tid);
   }
 
   // fetchClickedPlaceDetails(String placeID) async {
@@ -144,7 +152,12 @@ class _GarbagesState extends State<Garbages> {
                     e.imagePath,
                     double.parse('${e.xCoord!}'),
                     double.parse('${e.yCoord!}'),
-                    e.types.toString());
+                    e.types
+                        .join(', ')
+                        .toString()
+                        .replaceAll("TrashBinType.", "")
+                        .capitalize(),
+                    e.tid);
               },
               position: LatLng(
                   double.parse('${e.xCoord!}'), double.parse('${e.yCoord!}')),
@@ -202,7 +215,12 @@ class _GarbagesState extends State<Garbages> {
               double.parse(e.xCoord),
               double.parse(e.yCoord),
             ),
-            types: e.types.toString()),
+            types: e.types
+                .join(", ")
+                .toString()
+                .replaceAll("TrashBinType.", "")
+                .capitalize(),
+            tid: e.tid),
       ),
     );
     dists.sort((a, b) => a.dist!.compareTo(b.dist!));
@@ -297,11 +315,12 @@ class _GarbagesState extends State<Garbages> {
   }
 
   Future _displayBottomSheet(BuildContext context, String adrs, String link,
-      double lat, double lng, String secondary) {
+      double lat, double lng, String secondary, String tid) {
     final user = Provider.of<UserModel?>(context, listen: false);
     String default_trash_bin =
         'https://firebasestorage.googleapis.com/v0/b/ecobin-9f4b9.appspot.com/o/images%2F1705400888863-images.jpg?alt=media&token=26b725b6-a238-4e1b-a732-bd61caf22bce';
     return showModalBottomSheet(
+      backgroundColor: Color.fromARGB(248, 35, 33, 33),
       context: context,
       shape: const RoundedRectangleBorder(
           borderRadius: BorderRadius.vertical(top: Radius.circular(30))),
@@ -311,49 +330,118 @@ class _GarbagesState extends State<Garbages> {
         child: Center(
           child: Column(
             children: [
-              ListTile(
-                title: Text(
-                  adrs,
-                  maxLines: 4,
-                  overflow: TextOverflow.ellipsis,
-                  style: const TextStyle(
-                    color: Colors.black,
-                    fontSize: 23,
-                    fontFamily: 'Inter',
-                    fontWeight: FontWeight.w500,
-                    height: 0,
-                  ),
+              Container(
+                width: MediaQuery.of(context).size.width,
+                color: Colors.transparent,
+                child: Row(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: <Widget>[
+                    
+                    Column(
+                      mainAxisSize: MainAxisSize.max,
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: <Widget>[
+                        Container(
+                          width: MediaQuery.of(context).size.width * 0.6,
+                          child: Padding(
+                            padding: const EdgeInsets.fromLTRB(10, 0, 0, 0),
+                            child: Text(
+                              adrs,
+                              maxLines: 4,
+                              overflow: TextOverflow.ellipsis,
+                              style: const TextStyle(
+                                color: Color.fromARGB(255, 231, 227, 227),
+                                fontSize: 21,
+                                fontFamily: 'Inter',
+                                fontWeight: FontWeight.w500,
+                                height: 0,
+                              ),
+                            ),
+                          ),
+                        ),
+                        Container(
+                          width: MediaQuery.of(context).size.width * 0.6,
+                          child: Padding(
+                            padding: const EdgeInsets.fromLTRB(10, 10, 0, 0),
+                            child: Text(
+                              secondary,
+                              maxLines: 4,
+                              overflow: TextOverflow.ellipsis,
+                              style: const TextStyle(
+                                color: Color.fromARGB(255, 238, 233, 233),
+                                fontSize: 16,
+                                fontFamily: 'Inter',
+                                fontWeight: FontWeight.w300,
+                                height: 0,
+                              ),
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
+                    Padding(
+                      padding: const EdgeInsets.all(2.0),
+                      child: ConstrainedBox(
+                        constraints: BoxConstraints(
+                          maxWidth: MediaQuery.of(context).size.width * 0.28,
+                          maxHeight: MediaQuery.of(context).size.width * 0.28,
+                        ),
+                        child: Image(
+                            image: NetworkImage(
+                                link == '' ? default_trash_bin : link),
+                            fit: BoxFit.fill),
+                      ),
+                    ),
+                  ],
                 ),
-                subtitle: Text(
-                  secondary,
-                  maxLines: 4,
-                  overflow: TextOverflow.ellipsis,
-                  style: const TextStyle(
-                    color: Colors.black,
-                    fontSize: 16,
-                    fontFamily: 'Inter',
-                    fontWeight: FontWeight.w300,
-                    height: 0,
-                  ),
-                ),
-                trailing: SizedBox(
-                  height: 120,
-                  width: 120,
-                  child: Image(
-                    image: NetworkImage(default_trash_bin),
-                    width: 200,
-                    height: 200,
-                  ),
-                ),
-                contentPadding: EdgeInsets.zero,
-                minVerticalPadding: 0,
               ),
+
+              // ListTile(
+              //   visualDensity: VisualDensity(vertical: 4),
+              //   title: Text(
+              //     adrs,
+              //     maxLines: 4,
+              //     overflow: TextOverflow.ellipsis,
+              //     style: const TextStyle(
+              //       color: Colors.black,
+              //       fontSize: 23,
+              //       fontFamily: 'Inter',
+              //       fontWeight: FontWeight.w500,
+              //       height: 0,
+              //     ),
+              //   ),
+              //   subtitle: Text(
+              //     secondary,
+              //     maxLines: 4,
+              //     overflow: TextOverflow.ellipsis,
+              //     style: const TextStyle(
+              //       color: Colors.black,
+              //       fontSize: 16,
+              //       fontFamily: 'Inter',
+              //       fontWeight: FontWeight.w300,
+              //       height: 0,
+              //     ),
+              //   ),
+              //   trailing: SizedBox(
+              //     height: 120,
+              //     width: 120,
+              //     child: Image(
+              //       fit: BoxFit.fill,
+              //       image: NetworkImage(link == '' ? default_trash_bin : link),
+              //       errorBuilder: (context, error, stackTrace) =>
+              //           const Placeholder(),
+              //     ),
+              //   ),
+              //   contentPadding: EdgeInsets.zero,
+              //   minVerticalPadding: 0,
+              // ),
               Padding(
                 padding: const EdgeInsets.only(top: 30),
                 child: OutlinedButton(
                   style: OutlinedButton.styleFrom(
                     fixedSize: const Size(190, 40),
-                    side: const BorderSide(width: 1.0, color: Colors.black),
+                    side: const BorderSide(
+                        width: 1.0, color: Color.fromARGB(255, 236, 230, 230)),
                   ),
                   onPressed: () async {
                     MapUtils.openMap(lat, lng);
@@ -361,7 +449,7 @@ class _GarbagesState extends State<Garbages> {
                   child: const Text(
                     'Open in Maps',
                     style: TextStyle(
-                      color: Colors.black,
+                      color: Color.fromARGB(255, 237, 231, 231),
                       fontSize: 16,
                     ),
                   ),
@@ -372,21 +460,23 @@ class _GarbagesState extends State<Garbages> {
                 child: OutlinedButton(
                   style: OutlinedButton.styleFrom(
                     fixedSize: const Size(190, 40),
-                    side: const BorderSide(width: 1.0, color: Colors.black),
+                    side: const BorderSide(
+                        width: 1.0, color: Color.fromARGB(255, 233, 226, 226)),
                   ),
                   onPressed: () async {
                     context.pushNamed('addcomplaint',
                         queryParameters: {
                           'lat': lat.toString(),
                           'lng': lng.toString(),
-                          'adrs': _address
+                          'adrs': _address,
+                          'tid': tid,
                         },
                         extra: user);
                   },
                   child: const Text(
                     'Add complaint',
                     style: TextStyle(
-                      color: Colors.black,
+                      color: Color.fromARGB(255, 239, 234, 234),
                       fontSize: 16,
                     ),
                   ),
@@ -397,13 +487,23 @@ class _GarbagesState extends State<Garbages> {
                 child: OutlinedButton(
                   style: OutlinedButton.styleFrom(
                     fixedSize: const Size(190, 40),
-                    side: const BorderSide(width: 1.0, color: Colors.black),
+                    side: const BorderSide(
+                        width: 1.0, color: Color.fromARGB(255, 238, 234, 234)),
                   ),
-                  onPressed: () async {},
+                  onPressed: () async {
+                    context.goNamed('showcomplaints',
+                        queryParameters: {
+                          'lat': lat.toString(),
+                          'lng': lng.toString(),
+                          'adrs': _address,
+                          'tid': tid,
+                        },
+                        extra: user);
+                  },
                   child: const Text(
                     'Show complaints',
                     style: TextStyle(
-                      color: Colors.black,
+                      color: Color.fromARGB(255, 241, 236, 236),
                       fontSize: 16,
                     ),
                   ),
@@ -643,7 +743,7 @@ class _GarbagesState extends State<Garbages> {
                                   crossAxisAlignment: CrossAxisAlignment.center,
                                   children: [
                                     SvgPicture.asset(
-                                        'assets/logos/organic_type.svg',
+                                        'assets/logos/type_trash_bin_organic.svg',
                                         height: 16.0,
                                         width: 16.0),
                                     const SizedBox(width: 5.0),
@@ -667,7 +767,7 @@ class _GarbagesState extends State<Garbages> {
                                   crossAxisAlignment: CrossAxisAlignment.center,
                                   children: [
                                     SvgPicture.asset(
-                                        'assets/logos/paper_type.svg',
+                                        'assets/logos/type_trash_bin_paper.svg',
                                         height: 16.0,
                                         width: 16.0),
                                     const SizedBox(width: 5.0),
@@ -689,7 +789,7 @@ class _GarbagesState extends State<Garbages> {
                                   crossAxisAlignment: CrossAxisAlignment.center,
                                   children: [
                                     SvgPicture.asset(
-                                        'assets/logos/chemical_type.svg',
+                                        'assets/logos/type_trash_bin_chemical.svg',
                                         height: 16.0,
                                         width: 16.0),
                                     const SizedBox(width: 5.0),
@@ -711,7 +811,7 @@ class _GarbagesState extends State<Garbages> {
                                   crossAxisAlignment: CrossAxisAlignment.center,
                                   children: [
                                     SvgPicture.asset(
-                                        'assets/logos/plastic_type.svg',
+                                        'assets/logos/type_trash_bin_plastic.svg',
                                         height: 16.0,
                                         width: 16.0),
                                     const SizedBox(width: 5.0),
@@ -733,7 +833,7 @@ class _GarbagesState extends State<Garbages> {
                                   crossAxisAlignment: CrossAxisAlignment.center,
                                   children: [
                                     SvgPicture.asset(
-                                        'assets/logos/glass_type.svg',
+                                        'assets/logos/type_trash_bin_glass.svg',
                                         height: 16.0,
                                         width: 16.0),
                                     const SizedBox(width: 5.0),
@@ -755,7 +855,7 @@ class _GarbagesState extends State<Garbages> {
                                   crossAxisAlignment: CrossAxisAlignment.center,
                                   children: [
                                     SvgPicture.asset(
-                                        'assets/logos/metal_type.svg',
+                                        'assets/logos/type_trash_bin_metal.svg',
                                         height: 16.0,
                                         width: 16.0),
                                     const SizedBox(width: 5.0),
@@ -777,7 +877,7 @@ class _GarbagesState extends State<Garbages> {
                                   crossAxisAlignment: CrossAxisAlignment.center,
                                   children: [
                                     SvgPicture.asset(
-                                        'assets/logos/ewaste_type.svg',
+                                        'assets/logos/type_trash_bin_ewaste.svg',
                                         height: 16.0,
                                         width: 16.0),
                                     const SizedBox(width: 5.0),
@@ -842,8 +942,12 @@ class _GarbagesState extends State<Garbages> {
                               lat: nearbyBinsList[index].latitudePosition,
                               lng: nearbyBinsList[index].longitudePosition,
                               adrs: nearbyBinsList[index].humanReadableAddress,
-                              sec: nearbyBinsList[index].humanReadableAddress,
+                              sec: nearbyBinsList[index]
+                                      .dist!
+                                      .toStringAsFixed(3) +
+                                  ' km from current location. ',
                               types: nearbyBinsList[index].types,
+                              tid: nearbyBinsList[index].tid,
                               func: goToBin),
                         );
                       },
