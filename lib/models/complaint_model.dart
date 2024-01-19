@@ -15,6 +15,7 @@ class ComplaintModel {
   final DateTime createdAt;
   final String uid;
   final String cid;
+  final String tid;
   final String content;
   final String location;
   final bool isResolved;
@@ -28,6 +29,7 @@ class ComplaintModel {
       required this.createdAt,
       required this.uid ,
       required this.cid ,
+      required this.tid ,
       required this.content ,
       required this.location ,
       required this.isResolved ,
@@ -49,6 +51,7 @@ class ComplaintModel {
       createdAt: data?['createdAt'],
       uid: data?['uid'],
       cid: data?['cid'],
+      tid: data?['tid'],
       content: data?['content'],
       location: data?['location'],
       isResolved: data?['isResolved'],
@@ -65,11 +68,12 @@ class ComplaintModel {
       "createdAt": createdAt.toString(),
       "uid": uid,
       "cid": cid,
+      "tid": tid,
       "content": content,
       "location": location,
       "isResolved": isResolved,
       "resolvedAt": resolvedAt.toString(),
-      "resolvedBy": resolvedBy.toString(),
+      "resolvedBy": resolvedBy,
       "createdBy": createdBy,
       "type": type.toString(),
     };

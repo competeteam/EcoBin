@@ -5,6 +5,7 @@ class AddressModel {
   double? longitudePosition;
   double? dist;
   String? types;
+  String? tid;
 
   AddressModel(
       {this.humanReadableAddress,
@@ -12,7 +13,8 @@ class AddressModel {
       this.longitudePosition,
       this.secondary_text,
       this.dist = 0,
-      this.types});
+      this.types,
+      this.tid});
 
   AddressModel.fromJson(Map<String, dynamic> json) {
     latitudePosition = json["properties"]["lat"];
