@@ -18,8 +18,9 @@ class AddComplaintPage extends StatefulWidget {
   String? lat;
   String? lng;
   String? adrs;
+  String? tid;
   AddComplaintPage(
-      {super.key, this.lat, this.lng, this.adrs, required this.user});
+      {super.key, this.lat, this.lng, this.adrs, this.tid, required this.user});
 
   @override
   State<AddComplaintPage> createState() => _AddComplaintPageState();
@@ -72,6 +73,7 @@ class _AddComplaintPageState extends State<AddComplaintPage> {
                       createdAt: DateTime.now(),
                       uid: widget.user.uid,
                       cid: generateRandomString(28),
+                      tid: widget.tid!,
                       content: content,
                       location: widget.adrs!,
                       type: _type!,
