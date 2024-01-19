@@ -15,6 +15,13 @@ class _OnboardingState extends State<Onboarding> {
   final controller = PageController();
   bool lastPage = false;
 
+  Map<String, String> onboardingImages = {
+    'classificator' : 'assets/images/onboarding_classificator.png',
+    'guide' : 'assets/images/onboarding_classificator.png',
+    'garbage' : 'assets/images/onboarding_classificator.png',
+    'calculator' : 'assets/images/onboarding_classificator.png',
+  };
+
   @override
   void dispose() {
     controller.dispose();
@@ -80,28 +87,32 @@ class _OnboardingState extends State<Onboarding> {
                             });
                           },
                           controller: controller,
-                          children: const [
+                          children: [
                             OnboardingPage(
+                              imagePath: onboardingImages['classificator']!,
                               title: 'Discovery New Bins',
                               subTitle:
                                   'Explore your surroundings to locate available trash bins effortlessly',
                             ),
                             OnboardingPage(
+                              imagePath: onboardingImages['classificator']!,
                               title: 'Empower Green Living',
                               subTitle:
                                   'Be a part of the movement by providing new trash bins in your community, or reporting a full one',
                             ),
                             OnboardingPage(
+                              imagePath: onboardingImages['classificator']!,
                               title: 'Smart Classification, Cleaner World',
                               subTitle:
                                   'Utilize AI technology to identify trash types easily and effortlessly',
                             ),
                             OnboardingPage(
+                              imagePath: onboardingImages['classificator']!,
                               title: 'Knowledge at Your Fingertips',
                               subTitle:
                                   'Access insightful guides curated by professionals to stay informed about waste management',
                             ),
-                            OnboardingPage(
+                            const OnboardingPage(
                               title:
                                   'Transforming Waste Management for a Greener Future!',
                               logoPath:
