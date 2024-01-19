@@ -238,7 +238,7 @@ class _GarbagesState extends State<Garbages> {
     );
     dists.sort((a, b) => a.dist!.compareTo(b.dist!));
     dropOffPredictionsPlacesList = [];
-    nearbyBinsList = dists.take(5).toList();
+    nearbyBinsList = dists.take(3).toList();
     isFiltering = true;
     setState(() {});
   }
