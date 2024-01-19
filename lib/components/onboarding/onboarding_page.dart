@@ -4,9 +4,14 @@ class OnboardingPage extends StatefulWidget {
   final String title;
   final String? logoPath;
   final String? subTitle;
+  final String? imagePath;
 
   const OnboardingPage(
-      {this.logoPath, this.subTitle, required this.title, super.key});
+      {this.logoPath,
+      this.subTitle,
+      required this.title,
+      this.imagePath,
+      super.key});
 
   @override
   State<OnboardingPage> createState() => _OnboardingPageState();
@@ -17,8 +22,23 @@ class _OnboardingPageState extends State<OnboardingPage> {
   Widget build(BuildContext context) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.center,
-      mainAxisAlignment: widget.logoPath != null? MainAxisAlignment.center : MainAxisAlignment.end,
+      mainAxisAlignment: widget.logoPath != null
+          ? MainAxisAlignment.center
+          : MainAxisAlignment.end,
       children: [
+        if (widget.imagePath != null)
+          Column(
+            children: [
+              Image.asset(
+                widget.imagePath!,
+                width: 300,
+                height: 300,
+              ),
+              const SizedBox(
+                height: 20,
+              ),
+            ],
+          ),
         if (widget.logoPath != null)
           Column(
             children: [
@@ -44,7 +64,8 @@ class _OnboardingPageState extends State<OnboardingPage> {
             color: Colors.white,
             fontWeight: FontWeight.w500,
           ),
-          textAlign: widget.logoPath != null ? TextAlign.center : TextAlign.left,
+          textAlign:
+              widget.logoPath != null ? TextAlign.center : TextAlign.left,
         ),
         if (widget.subTitle != null)
           const SizedBox(
