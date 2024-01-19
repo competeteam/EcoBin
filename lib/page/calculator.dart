@@ -246,6 +246,7 @@ class _CalculatorState extends State<Calculator> {
                 setState(() {
                   carbonFootprintPerWaste.clear();
                 });
+                updateInputCarbonFootprint();
               },
               style: const ButtonStyle(
                 backgroundColor: MaterialStatePropertyAll(Colors.black12),
