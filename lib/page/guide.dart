@@ -4,6 +4,8 @@ import 'package:dinacom_2024/models/guide_content.dart';
 import 'package:dinacom_2024/services/guide_service.dart';
 import 'package:go_router/go_router.dart';
 
+const placeholderImage = Image(image: AssetImage('assets/images/photo_unavailable_placeholder_basic.jpg'),);
+
 class Guide extends StatefulWidget {
   const Guide({super.key});
 
@@ -28,7 +30,7 @@ class _GuideState extends State<Guide> {
       "Plan your meals in advance: \nA lot of waste is generated from people throwing excess food away because they do not plan their meals in advance.\n"
       "\n"
       "Source: https://www.hdfc.com/blog/sustainability-at-hdfc/7-simple-ways-waste-management-home",
-      imagePath: "",
+      imagePath: "assets/images/three_rs.jpg",
     ),
     GuideContent(
       title: "Classifying Waste",
@@ -37,7 +39,8 @@ class _GuideState extends State<Guide> {
           "The non-recyclable waste includes hazardous waste, medical waste, electronic waste, organic waste, and general waste .\n\n"
           "It is important to follow the rules when disposing of waste. For example, green waste must not contain logs, stumps, palm logs, whole trees, mulched trees, golden cane trunks, soil, or turf. Branches must be under 13cm diameter. All green waste must stay under the top rail of the skip bin, with nothing poking up. General waste must not contain rocks, bricks, tiles, concrete, pavers, hard wood, paint, chemicals, tyres, carpet, mattress, soil, dirt, sand or hard fill. All general waste must stay under the top rail of the skip bin, with nothing poking up.\n\n"
           ""
-          "Source: https://4waste.com.au/rubbish-removal/5-types-waste-know/"
+          "Source: https://4waste.com.au/rubbish-removal/5-types-waste-know/",
+      imagePath: "assets/images/classify_waste_campaign.jpg"
     )
   ];
   static List<GuideContent> contents = <GuideContent>[
@@ -49,10 +52,18 @@ class _GuideState extends State<Guide> {
   List<GuideCard> cards = [];
 
   Future<void> _replaceALlGuide() async {
-    var onlineContent = await GuideService().getAllGuides() ?? [];
     contents.clear();
     contents.addAll(localContents);
-    contents.addAll(onlineContent);
+    try {
+      var onlineContent = await GuideService().getAllGuides() ?? [];
+      for (var element in onlineContent) {
+        element.cardColor = const Color(0xFF5A8A62);
+      }
+      contents.addAll(onlineContent);
+    }
+    catch (exception) {
+
+    }
 
     setState(() {
       int p = 0;
@@ -60,6 +71,7 @@ class _GuideState extends State<Guide> {
         title: e.title ?? '',
         subtitle: e.content ?? '',
         imagePath: e.imagePath,
+        cardColor: e.cardColor,
         id: p++,)).toList();
     });
   }
@@ -106,6 +118,7 @@ class GuideCard extends StatelessWidget {
   final String subtitle;
   final String? imagePath;
   final int id;
+  final Color cardColor;
   const GuideCard({super.key,
     this.title = "Lorem Ipsum",
     this.subtitle = "Lorem ipsum dolor sit amet, consectetur adipiscing elit. "
@@ -113,6 +126,7 @@ class GuideCard extends StatelessWidget {
         "Etiam auctor sem nec nisl rhoncus, a malesuada odio fringilla.",
     this.imagePath,
     this.id = -1,
+    this.cardColor = const Color(0xFF377EB5),
   });
 
   @override
@@ -124,7 +138,7 @@ class GuideCard extends StatelessWidget {
       child: Card(
         elevation: 10,
         margin: const EdgeInsets.only(top: 10, bottom: 10),
-        color: const Color(0xFF5A8A62),
+        color: cardColor,
         child: InkWell(
           onTap: () {
             GoRouter.of(context).push('/guide/${id}');
@@ -159,8 +173,9 @@ class GuideCard extends StatelessWidget {
                   width: 80,
                   child: imagePath != null ? Image(
                     image: AssetImage(imagePath!),
-                    errorBuilder: (context, error, stackTrace) => const Placeholder(),
-                  ): const Placeholder()
+                    errorBuilder: (context, error, stackTrace) => placeholderImage,
+                    fit: BoxFit.contain,
+                  ): placeholderImage
               ),
               contentPadding: EdgeInsets.zero,
               minVerticalPadding: 0,
@@ -204,10 +219,13 @@ class GuideArticle extends StatelessWidget {
                 fontWeight: FontWeight.w500,
                 height: 0,
               ),),
+            const SizedBox(height: 18,),
             guideContent.imagePath != null ? SizedBox(
                 height: 170,
                 child: Image(image: AssetImage(guideContent.imagePath!),
-                  errorBuilder: (context, error, stackTrace) => const Placeholder(),)
+                  errorBuilder: (context, error, stackTrace) => placeholderImage,
+                  fit: BoxFit.contain,
+                )
             ) : const SizedBox(height: 20,),
             Text(id.toString()),
             Padding(
