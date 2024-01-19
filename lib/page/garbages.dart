@@ -138,7 +138,8 @@ class _GarbagesState extends State<Garbages> {
                   element!.types.contains(TrashBinType.organic)) ||
               (isPaperChecked && element!.types.contains(TrashBinType.paper)) ||
               (isPlasticChecked &&
-                  element!.types.contains(TrashBinType.plastic)))
+                  element!.types.contains(TrashBinType.plastic))
+                  )
           .map(
             (e) => Marker(
               consumeTapEvents: true,
@@ -204,7 +205,19 @@ class _GarbagesState extends State<Garbages> {
   searchNearby() async {
     final cans = await _trashBinService.getAllTrashCan();
     List<AddressModel> dists = List<AddressModel>.from(
-      cans.map(
+      cans.where((element) => 
+      (isChemicalChecked &&
+                  element!.types.contains(TrashBinType.chemical)) ||
+              (isEWasteChecked &&
+                  element!.types.contains(TrashBinType.eWaste)) ||
+              (isGlassChecked && element!.types.contains(TrashBinType.glass)) ||
+              (isMetalChecked && element!.types.contains(TrashBinType.metal)) ||
+              (isOrganicChecked &&
+                  element!.types.contains(TrashBinType.organic)) ||
+              (isPaperChecked && element!.types.contains(TrashBinType.paper)) ||
+              (isPlasticChecked &&
+                  element!.types.contains(TrashBinType.plastic))
+      ).map(
         (e) => AddressModel(
             humanReadableAddress: e!.createdLocation,
             latitudePosition: double.parse(e.xCoord),
