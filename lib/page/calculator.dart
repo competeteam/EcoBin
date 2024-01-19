@@ -247,6 +247,11 @@ class _CalculatorState extends State<Calculator> {
                   carbonFootprintPerWaste.clear();
                 });
               },
+              style: const ButtonStyle(
+                backgroundColor: MaterialStatePropertyAll(Colors.black12),
+                foregroundColor: MaterialStatePropertyAll(Colors.white60),
+                overlayColor: MaterialStatePropertyAll(Color(0xFF5B8A62)),
+              ),
               child: const Text(
                 'Submit input',
                 style: TextStyle(
@@ -255,10 +260,11 @@ class _CalculatorState extends State<Calculator> {
                   fontWeight: FontWeight.w400,
                   height: 0,
                 ),
+
               ),
             ),
         
-
+            const SizedBox(height: 18,),
         
           ],
         ),
