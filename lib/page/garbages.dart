@@ -298,7 +298,7 @@ class _GarbagesState extends State<Garbages> {
 
   Future _displayBottomSheet(BuildContext context, String adrs, String link,
       double lat, double lng, String secondary) {
-        final user = Provider.of<UserModel?>(context, listen: false);
+    final user = Provider.of<UserModel?>(context, listen: false);
     String default_trash_bin =
         'https://firebasestorage.googleapis.com/v0/b/ecobin-9f4b9.appspot.com/o/images%2F1705400888863-images.jpg?alt=media&token=26b725b6-a238-4e1b-a732-bd61caf22bce';
     return showModalBottomSheet(
@@ -516,14 +516,16 @@ class _GarbagesState extends State<Garbages> {
                     Expanded(
                       child: Container(
                         decoration: BoxDecoration(
-                            color: Color.fromARGB(255, 255, 255, 255),
-                            borderRadius: BorderRadius.circular(50),
-                            boxShadow: [
-                              BoxShadow(color: Colors.black, blurRadius: 3)
-                            ]),
+                          color: Color.fromARGB(248, 54, 51, 51),
+                          borderRadius: BorderRadius.circular(50),
+                          // boxShadow: [
+                          //   BoxShadow(color: Colors.black, blurRadius: 3)
+                          // ],
+                        ),
                         child: Padding(
                           padding: const EdgeInsets.all(3),
                           child: TextField(
+                            style: TextStyle(color: Colors.white),
                             onTap: () {
                               isFiltering = true;
                               isFindNearby = true;
@@ -545,12 +547,14 @@ class _GarbagesState extends State<Garbages> {
                             },
                             decoration: const InputDecoration(
                                 hintText: "Location search",
-                                fillColor: Colors.white12,
-                                filled: true,
+                                hintStyle: TextStyle(
+                                    color: Color.fromARGB(255, 199, 192, 192)),
+                                // fillColor: Color.fromARGB(31, 255, 255, 255),
+                                // filled: true,
                                 border: InputBorder.none,
                                 isDense: true,
                                 contentPadding: EdgeInsets.only(
-                                    left: 11, top: 9, bottom: 9)),
+                                    left: 15, top: 9, bottom: 9)),
                           ),
                         ),
                       ),
@@ -580,7 +584,7 @@ class _GarbagesState extends State<Garbages> {
                         style: OutlinedButton.styleFrom(
                             fixedSize: Size(170, 40),
                             backgroundColor: isFindNearby
-                                ? Colors.white
+                                ? const Color.fromARGB(248, 76, 73, 73)
                                 : const Color(0xFF5A8A62),
                             shadowColor: Colors.black,
                             elevation: 5),
@@ -588,8 +592,8 @@ class _GarbagesState extends State<Garbages> {
                           'Show nearby bins',
                           style: TextStyle(
                               color: isFindNearby
-                                  ? const Color(0xFF5A8A62)
-                                  : Colors.white),
+                                  ? const Color.fromARGB(255, 220, 229, 222)
+                                  : const Color.fromARGB(255, 220, 229, 222)),
                         ),
                       ),
                     ),
@@ -606,7 +610,7 @@ class _GarbagesState extends State<Garbages> {
                         style: OutlinedButton.styleFrom(
                             fixedSize: Size(160, 40),
                             backgroundColor: isFiltering
-                                ? Colors.white
+                                ? const Color.fromARGB(248, 76, 73, 73)
                                 : const Color(0xFF5A8A62),
                             shadowColor: Colors.black,
                             elevation: 5),
@@ -614,8 +618,8 @@ class _GarbagesState extends State<Garbages> {
                           'Filter bin type',
                           style: TextStyle(
                               color: isFiltering
-                                  ? const Color(0xFF5A8A62)
-                                  : Colors.white),
+                                  ? const Color.fromARGB(255, 220, 229, 222)
+                                  : const Color.fromARGB(255, 220, 229, 222)),
                         ),
                       ),
                     ),
