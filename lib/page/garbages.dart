@@ -476,16 +476,24 @@ class _GarbagesState extends State<Garbages> {
                         width: 1.0, color: Color.fromARGB(255, 233, 226, 226)),
                   ),
                   onPressed: () async {
-                    context.pushNamed(
-                      'addcomplaint',
-                      queryParameters: {
-                        'lat': lat.toString(),
-                        'lng': lng.toString(),
-                        'adrs': _address,
-                        'tid': tid,
-                        'uid': user!.uid,
-                      },
-                    );
+                    try {
+                      if(user!.uid==null){
+                                              context.pushNamed(
+                          'addcomplaint',
+                          queryParameters: {
+                            'lat': lat.toString(),
+                            'lng': lng.toString(),
+                            'adrs': _address,
+                            'tid': tid,
+                            'uid': user!.uid,
+                          },
+                        );
+                      }
+
+                    } catch (e) {
+                      GoRouter.of(context).push('/login');
+                    }
+                    
                   },
                   child: const Text(
                     'Add complaint',
@@ -505,16 +513,23 @@ class _GarbagesState extends State<Garbages> {
                         width: 1.0, color: Color.fromARGB(255, 238, 234, 234)),
                   ),
                   onPressed: () async {
-                    context.goNamed(
-                      'showcomplaints',
-                      queryParameters: {
-                        'lat': lat.toString(),
-                        'lng': lng.toString(),
-                        'adrs': _address,
-                        'tid': tid,
-                        'uid': user!.uid,
-                      },
-                    );
+                    try {
+                      if(user!.uid==null){
+                                            context.goNamed(
+                          'showcomplaints',
+                          queryParameters: {
+                            'lat': lat.toString(),
+                            'lng': lng.toString(),
+                            'adrs': _address,
+                            'tid': tid,
+                            'uid': user!.uid,
+                          },
+                        );
+                      }
+                    } catch (e) {
+                      GoRouter.of(context).push('/login');
+                    }
+
                   },
                   child: const Text(
                     'Show complaints',
@@ -562,6 +577,8 @@ class _GarbagesState extends State<Garbages> {
               child: const Icon(Icons.add),
               shape: CircleBorder(),
               onTap: () {
+                try {
+                if(user!.uid==null){
                 context.pushNamed(
                   'addbin',
                   queryParameters: {
@@ -574,6 +591,11 @@ class _GarbagesState extends State<Garbages> {
                   updateMarkers();
                   print("here lol it does get called");
                 });
+                } 
+                } catch (e) {
+                  GoRouter.of(context).push('/login');
+                }
+                
               },
               label: 'Add bin here',
             ),
