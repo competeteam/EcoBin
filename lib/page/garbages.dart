@@ -7,6 +7,7 @@ import 'package:dinacom_2024/components/nearby_place_ui.dart';
 import 'package:dinacom_2024/components/prediction_place_ui.dart';
 import 'package:dinacom_2024/models/address_model.dart';
 import 'package:dinacom_2024/models/prediction_model.dart';
+import 'package:dinacom_2024/models/trash_bin_model.dart';
 import 'package:dinacom_2024/models/user_model.dart';
 import 'package:dinacom_2024/services/map_launcher.dart';
 import 'package:dinacom_2024/services/trash_bin_service.dart';
@@ -56,7 +57,7 @@ class _GarbagesState extends State<Garbages> {
   double lng = -122.085749655962;
   String? _address = "225 Bill Graham Pkwy, Mountain View, CA 94043, USA";
 
-  goToBin(double latt, double lngg, String adrs) async {
+  goToBin(double latt, double lngg, String adrs, String types) async {
     _address = adrs;
     lat = latt;
     lng = lngg;
@@ -69,7 +70,7 @@ class _GarbagesState extends State<Garbages> {
     nearbyBinsList = [];
     isFindNearby = true;
 
-    _displayBottomSheet(context, adrs, '', latt, lngg);
+    _displayBottomSheet(context, adrs, '', latt, lngg, types);
   }
 
   // fetchClickedPlaceDetails(String placeID) async {
@@ -115,24 +116,46 @@ class _GarbagesState extends State<Garbages> {
 
   Future<List<Marker>> getMarkers() async {
     final cans = await _trashBinService.getAllTrashCan();
+    print(cans.first!.xCoord);
     return List<Marker>.from(
-      cans.map(
-        (e) => Marker(
-          consumeTapEvents: true,
-          icon: BitmapDescriptor.defaultMarkerWithHue(BitmapDescriptor.hueRed),
-          markerId: MarkerId(e!.xCoord),
-          onTap: () {
-            _displayBottomSheet(context, e.createdLocation, e.imagePath,
-                double.parse(e.xCoord), double.parse(e.yCoord));
-          },
-          position: LatLng(double.parse(e.xCoord!), double.parse(e.yCoord!)),
-        ),
-      ),
+      cans
+          .where((element) =>
+              (isChemicalChecked &&
+                  element!.types.contains(TrashBinType.chemical)) ||
+              (isEWasteChecked &&
+                  element!.types.contains(TrashBinType.eWaste)) ||
+              (isGlassChecked && element!.types.contains(TrashBinType.glass)) ||
+              (isMetalChecked && element!.types.contains(TrashBinType.metal)) ||
+              (isOrganicChecked &&
+                  element!.types.contains(TrashBinType.organic)) ||
+              (isPaperChecked && element!.types.contains(TrashBinType.paper)) ||
+              (isPlasticChecked &&
+                  element!.types.contains(TrashBinType.plastic)))
+          .map(
+            (e) => Marker(
+              consumeTapEvents: true,
+              icon: BitmapDescriptor.defaultMarkerWithHue(
+                  BitmapDescriptor.hueRed),
+              markerId: MarkerId('${e!.xCoord}'),
+              onTap: () {
+                _displayBottomSheet(
+                    context,
+                    e.createdLocation,
+                    e.imagePath,
+                    double.parse('${e.xCoord!}'),
+                    double.parse('${e.yCoord!}'),
+                    e.types.toString());
+              },
+              position: LatLng(
+                  double.parse('${e.xCoord!}'), double.parse('${e.yCoord!}')),
+            ),
+          ),
     );
   }
 
   void updateMarkers() async {
     final ok = await getMarkers();
+    markers.clear();
     setState(() {
       for (var marker in ok) {
         markers.add(marker);
@@ -166,16 +189,22 @@ class _GarbagesState extends State<Garbages> {
   }
 
   searchNearby() async {
-    
-
     final cans = await _trashBinService.getAllTrashCan();
-    List<AddressModel> dists = List<AddressModel>.from(cans.map((e) =>
-        AddressModel(
+    List<AddressModel> dists = List<AddressModel>.from(
+      cans.map(
+        (e) => AddressModel(
             humanReadableAddress: e!.createdLocation,
             latitudePosition: double.parse(e.xCoord),
             longitudePosition: double.parse(e.yCoord),
             dist: calculateDistance(
-                lat, lng, double.parse(e.xCoord), double.parse(e.yCoord)))));
+              lat,
+              lng,
+              double.parse(e.xCoord),
+              double.parse(e.yCoord),
+            ),
+            types: e.types.toString()),
+      ),
+    );
     dists.sort((a, b) => a.dist!.compareTo(b.dist!));
     dropOffPredictionsPlacesList = [];
     nearbyBinsList = dists.take(5).toList();
@@ -209,7 +238,7 @@ class _GarbagesState extends State<Garbages> {
           responseFromPlacesAPI["type"] == "FeatureCollection") {
         print(responseFromPlacesAPI["features"].length);
         print("not err somehowasdddddddddddddddddddd");
-
+        print(responseFromPlacesAPI["features"][0]);
         var predictionsList = (responseFromPlacesAPI["features"] as List)
             .map((e) => AddressModel.fromJson(e))
             .toList();
@@ -267,8 +296,9 @@ class _GarbagesState extends State<Garbages> {
         .animateCamera(CameraUpdate.newCameraPosition(cameraPosition));
   }
 
-  Future _displayBottomSheet(
-      BuildContext context, String adrs, String link, double lat, double lng) {
+  Future _displayBottomSheet(BuildContext context, String adrs, String link,
+      double lat, double lng, String secondary) {
+        final user = Provider.of<UserModel?>(context, listen: false);
     String default_trash_bin =
         'https://firebasestorage.googleapis.com/v0/b/ecobin-9f4b9.appspot.com/o/images%2F1705400888863-images.jpg?alt=media&token=26b725b6-a238-4e1b-a732-bd61caf22bce';
     return showModalBottomSheet(
@@ -276,7 +306,7 @@ class _GarbagesState extends State<Garbages> {
       shape: const RoundedRectangleBorder(
           borderRadius: BorderRadius.vertical(top: Radius.circular(30))),
       builder: (context) => Container(
-        margin: EdgeInsets.only(top: 40, left: 20, right: 20),
+        margin: const EdgeInsets.only(top: 40, left: 20, right: 20),
         height: 350,
         child: Center(
           child: Column(
@@ -294,11 +324,11 @@ class _GarbagesState extends State<Garbages> {
                     height: 0,
                   ),
                 ),
-                subtitle: const Text(
-                  'Organic, Ewaste, Metal',
+                subtitle: Text(
+                  secondary,
                   maxLines: 4,
                   overflow: TextOverflow.ellipsis,
-                  style: TextStyle(
+                  style: const TextStyle(
                     color: Colors.black,
                     fontSize: 16,
                     fontFamily: 'Inter',
@@ -345,11 +375,13 @@ class _GarbagesState extends State<Garbages> {
                     side: const BorderSide(width: 1.0, color: Colors.black),
                   ),
                   onPressed: () async {
-                    context.goNamed('addcomplaint', queryParameters: {
-                      'lat': lat.toString(),
-                      'lng': lng.toString(),
-                      'adrs': _address
-                    }, extra: Provider.of<UserModel?>(context) as UserModel);
+                    context.pushNamed('addcomplaint',
+                        queryParameters: {
+                          'lat': lat.toString(),
+                          'lng': lng.toString(),
+                          'adrs': _address
+                        },
+                        extra: user);
                   },
                   child: const Text(
                     'Add complaint',
@@ -414,34 +446,20 @@ class _GarbagesState extends State<Garbages> {
               child: const Icon(Icons.add),
               shape: CircleBorder(),
               onTap: () {
-                context.goNamed('addbin', queryParameters: {
-                  'lat': lat.toString(),
-                  'lng': lng.toString(),
-                  'adrs': _address
-                }, extra: user);
-              },
-              label: 'Add bin here',
-            ),
-            SpeedDialChild(
-              child: const Icon(Icons.message),
-              shape: CircleBorder(),
-              label: 'Complaint',
-              onTap: () {
                 context
-                    .goNamed('complaint', pathParameters: {'adrs': _address!});
-              },
-            ),
-            SpeedDialChild(
-              child: const Icon(Icons.message),
-              shape: CircleBorder(),
-              label: 'Bins near me',
-              onTap: () {
-                context.goNamed('bins', queryParameters: {
-                  'lat': lat.toString(),
-                  'lng': lng.toString(),
-                  'adrs': _address
+                    .pushNamed('addbin',
+                        queryParameters: {
+                          'lat': lat.toString(),
+                          'lng': lng.toString(),
+                          'adrs': _address
+                        },
+                        extra: user)
+                    .whenComplete(() {
+                  updateMarkers();
+                  print("here lol it does get called");
                 });
               },
+              label: 'Add bin here',
             ),
           ],
         ),
@@ -451,6 +469,8 @@ class _GarbagesState extends State<Garbages> {
               initialCameraPosition: googlePlexInitialPosition,
               mapType: MapType.normal,
               zoomControlsEnabled: true,
+              padding: EdgeInsets.only(
+                  bottom: MediaQuery.of(context).size.height * 0.1),
               mapToolbarEnabled: true,
               onCameraMove: (CameraPosition? position) {
                 EasyDebounce.debounce(
@@ -481,7 +501,7 @@ class _GarbagesState extends State<Garbages> {
             const Align(
               alignment: Alignment.center,
               child: Padding(
-                  padding: EdgeInsets.only(bottom: 35),
+                  padding: EdgeInsets.only(bottom: 95),
                   child: Icon(Icons.pin_drop_outlined)),
             ),
             Align(
@@ -504,11 +524,10 @@ class _GarbagesState extends State<Garbages> {
                         child: Padding(
                           padding: const EdgeInsets.all(3),
                           child: TextField(
-                            
                             onTap: () {
-                              isFiltering=true;
-                              isFindNearby=true;
-                              nearbyBinsList=[];
+                              isFiltering = true;
+                              isFindNearby = true;
+                              nearbyBinsList = [];
                             },
                             controller: destinationTextEditingController,
                             onEditingComplete: () {
@@ -579,9 +598,8 @@ class _GarbagesState extends State<Garbages> {
                       child: OutlinedButton(
                         onPressed: () {
                           setState(() {
-                            if (isFiltering)
-                              nearbyBinsList = []; 
-                              isFindNearby = true;
+                            if (isFiltering) nearbyBinsList = [];
+                            isFindNearby = true;
                             isFiltering = !isFiltering;
                           });
                         },
@@ -603,140 +621,179 @@ class _GarbagesState extends State<Garbages> {
                     ),
                   ],
                 )),
-            isFiltering? Container():
-            Padding(
-              padding: const EdgeInsets.only(top: 50.0),
-              child: Align(
-                alignment: Alignment.center,
-                child: SingleChildScrollView(
-                  padding: const EdgeInsets.only(left: 30.0, right: 30, top: 0),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.center,
-                    mainAxisSize: MainAxisSize.min,
-                    children: <Widget>[
-                      CommonCheckbox(
-                        componentValue: Row(
-                            crossAxisAlignment: CrossAxisAlignment.center,
-                            children: [
-                              SvgPicture.asset('assets/logos/organic_type.svg',
-                                  height: 16.0, width: 16.0),
-                              const SizedBox(width: 5.0),
-                              const Text('Organic',
-                                  style: TextStyle(
-                                      color: Colors.white, fontSize: 16.0)),
-                            ]),
-                        isChecked: isOrganicChecked,
-                        isError: isError,
-                        setStateFunction: () => setState(
-                            () => isOrganicChecked = !isOrganicChecked),
+            isFiltering
+                ? Container()
+                : Padding(
+                    padding: const EdgeInsets.only(top: 50.0),
+                    child: Align(
+                      alignment: Alignment.center,
+                      child: SingleChildScrollView(
+                        padding: const EdgeInsets.only(
+                            left: 30.0, right: 30, top: 0),
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.center,
+                          mainAxisSize: MainAxisSize.min,
+                          children: <Widget>[
+                            CommonCheckbox(
+                              componentValue: Row(
+                                  crossAxisAlignment: CrossAxisAlignment.center,
+                                  children: [
+                                    SvgPicture.asset(
+                                        'assets/logos/organic_type.svg',
+                                        height: 16.0,
+                                        width: 16.0),
+                                    const SizedBox(width: 5.0),
+                                    const Text('Organic',
+                                        style: TextStyle(
+                                            color: Colors.white,
+                                            fontSize: 16.0)),
+                                  ]),
+                              isChecked: isOrganicChecked,
+                              isError: isError,
+                              setStateFunction: () => setState(
+                                () {
+                                  isOrganicChecked = !isOrganicChecked;
+                                  updateMarkers();
+                                },
+                              ),
+                            ),
+                            const SizedBox(height: 10.0),
+                            CommonCheckbox(
+                              componentValue: Row(
+                                  crossAxisAlignment: CrossAxisAlignment.center,
+                                  children: [
+                                    SvgPicture.asset(
+                                        'assets/logos/paper_type.svg',
+                                        height: 16.0,
+                                        width: 16.0),
+                                    const SizedBox(width: 5.0),
+                                    const Text('Paper',
+                                        style: TextStyle(
+                                            color: Colors.white,
+                                            fontSize: 16.0)),
+                                  ]),
+                              isChecked: isPaperChecked,
+                              isError: isError,
+                              setStateFunction: () => setState(() {
+                                isPaperChecked = !isPaperChecked;
+                                updateMarkers();
+                              }),
+                            ),
+                            const SizedBox(height: 10.0),
+                            CommonCheckbox(
+                              componentValue: Row(
+                                  crossAxisAlignment: CrossAxisAlignment.center,
+                                  children: [
+                                    SvgPicture.asset(
+                                        'assets/logos/chemical_type.svg',
+                                        height: 16.0,
+                                        width: 16.0),
+                                    const SizedBox(width: 5.0),
+                                    const Text('Chemical',
+                                        style: TextStyle(
+                                            color: Colors.white,
+                                            fontSize: 16.0)),
+                                  ]),
+                              isChecked: isChemicalChecked,
+                              isError: isError,
+                              setStateFunction: () => setState(() {
+                                isChemicalChecked = !isChemicalChecked;
+                                updateMarkers();
+                              }),
+                            ),
+                            const SizedBox(height: 10.0),
+                            CommonCheckbox(
+                              componentValue: Row(
+                                  crossAxisAlignment: CrossAxisAlignment.center,
+                                  children: [
+                                    SvgPicture.asset(
+                                        'assets/logos/plastic_type.svg',
+                                        height: 16.0,
+                                        width: 16.0),
+                                    const SizedBox(width: 5.0),
+                                    const Text('Plastic',
+                                        style: TextStyle(
+                                            color: Colors.white,
+                                            fontSize: 16.0)),
+                                  ]),
+                              isChecked: isPlasticChecked,
+                              isError: isError,
+                              setStateFunction: () => setState(() {
+                                isPlasticChecked = !isPlasticChecked;
+                                updateMarkers();
+                              }),
+                            ),
+                            const SizedBox(height: 10.0),
+                            CommonCheckbox(
+                              componentValue: Row(
+                                  crossAxisAlignment: CrossAxisAlignment.center,
+                                  children: [
+                                    SvgPicture.asset(
+                                        'assets/logos/glass_type.svg',
+                                        height: 16.0,
+                                        width: 16.0),
+                                    const SizedBox(width: 5.0),
+                                    const Text('Glass',
+                                        style: TextStyle(
+                                            color: Colors.white,
+                                            fontSize: 16.0)),
+                                  ]),
+                              isChecked: isGlassChecked,
+                              isError: isError,
+                              setStateFunction: () => setState(() {
+                                isGlassChecked = !isGlassChecked;
+                                updateMarkers();
+                              }),
+                            ),
+                            const SizedBox(height: 10.0),
+                            CommonCheckbox(
+                              componentValue: Row(
+                                  crossAxisAlignment: CrossAxisAlignment.center,
+                                  children: [
+                                    SvgPicture.asset(
+                                        'assets/logos/metal_type.svg',
+                                        height: 16.0,
+                                        width: 16.0),
+                                    const SizedBox(width: 5.0),
+                                    const Text('Metal',
+                                        style: TextStyle(
+                                            color: Colors.white,
+                                            fontSize: 16.0)),
+                                  ]),
+                              isChecked: isMetalChecked,
+                              isError: isError,
+                              setStateFunction: () => setState(() {
+                                isMetalChecked = !isMetalChecked;
+                                updateMarkers();
+                              }),
+                            ),
+                            const SizedBox(height: 10.0),
+                            CommonCheckbox(
+                              componentValue: Row(
+                                  crossAxisAlignment: CrossAxisAlignment.center,
+                                  children: [
+                                    SvgPicture.asset(
+                                        'assets/logos/ewaste_type.svg',
+                                        height: 16.0,
+                                        width: 16.0),
+                                    const SizedBox(width: 5.0),
+                                    const Text('E Waste',
+                                        style: TextStyle(
+                                            color: Colors.white,
+                                            fontSize: 16.0)),
+                                  ]),
+                              isChecked: isEWasteChecked,
+                              isError: isError,
+                              setStateFunction: () => setState(() {
+                                isEWasteChecked = !isEWasteChecked;
+                                updateMarkers();
+                              }),
+                            ),
+                          ],
+                        ),
                       ),
-                      const SizedBox(height: 10.0),
-                      CommonCheckbox(
-                        componentValue: Row(
-                            crossAxisAlignment: CrossAxisAlignment.center,
-                            children: [
-                              SvgPicture.asset('assets/logos/paper_type.svg',
-                                  height: 16.0, width: 16.0),
-                              const SizedBox(width: 5.0),
-                              const Text('Paper',
-                                  style: TextStyle(
-                                      color: Colors.white, fontSize: 16.0)),
-                            ]),
-                        isChecked: isPaperChecked,
-                        isError: isError,
-                        setStateFunction: () =>
-                            setState(() => isPaperChecked = !isPaperChecked),
-                      ),
-                      const SizedBox(height: 10.0),
-                      CommonCheckbox(
-                        componentValue: Row(
-                            crossAxisAlignment: CrossAxisAlignment.center,
-                            children: [
-                              SvgPicture.asset('assets/logos/chemical_type.svg',
-                                  height: 16.0, width: 16.0),
-                              const SizedBox(width: 5.0),
-                              const Text('Chemical',
-                                  style: TextStyle(
-                                      color: Colors.white, fontSize: 16.0)),
-                            ]),
-                        isChecked: isChemicalChecked,
-                        isError: isError,
-                        setStateFunction: () => setState(
-                            () => isChemicalChecked = !isChemicalChecked),
-                      ),
-                      const SizedBox(height: 10.0),
-                      CommonCheckbox(
-                        componentValue: Row(
-                            crossAxisAlignment: CrossAxisAlignment.center,
-                            children: [
-                              SvgPicture.asset('assets/logos/plastic_type.svg',
-                                  height: 16.0, width: 16.0),
-                              const SizedBox(width: 5.0),
-                              const Text('Plastic',
-                                  style: TextStyle(
-                                      color: Colors.white, fontSize: 16.0)),
-                            ]),
-                        isChecked: isPlasticChecked,
-                        isError: isError,
-                        setStateFunction: () => setState(
-                            () => isPlasticChecked = !isPlasticChecked),
-                      ),
-                      const SizedBox(height: 10.0),
-                      CommonCheckbox(
-                        componentValue: Row(
-                            crossAxisAlignment: CrossAxisAlignment.center,
-                            children: [
-                              SvgPicture.asset('assets/logos/glass_type.svg',
-                                  height: 16.0, width: 16.0),
-                              const SizedBox(width: 5.0),
-                              const Text('Glass',
-                                  style: TextStyle(
-                                      color: Colors.white, fontSize: 16.0)),
-                            ]),
-                        isChecked: isGlassChecked,
-                        isError: isError,
-                        setStateFunction: () =>
-                            setState(() => isGlassChecked = !isGlassChecked),
-                      ),
-                      const SizedBox(height: 10.0),
-                      CommonCheckbox(
-                        componentValue: Row(
-                            crossAxisAlignment: CrossAxisAlignment.center,
-                            children: [
-                              SvgPicture.asset('assets/logos/metal_type.svg',
-                                  height: 16.0, width: 16.0),
-                              const SizedBox(width: 5.0),
-                              const Text('Metal',
-                                  style: TextStyle(
-                                      color: Colors.white, fontSize: 16.0)),
-                            ]),
-                        isChecked: isMetalChecked,
-                        isError: isError,
-                        setStateFunction: () =>
-                            setState(() => isMetalChecked = !isMetalChecked),
-                      ),
-                      const SizedBox(height: 10.0),
-                      CommonCheckbox(
-                        componentValue: Row(
-                            crossAxisAlignment: CrossAxisAlignment.center,
-                            children: [
-                              SvgPicture.asset('assets/logos/ewaste_type.svg',
-                                  height: 16.0, width: 16.0),
-                              const SizedBox(width: 5.0),
-                              const Text('E Waste',
-                                  style: TextStyle(
-                                      color: Colors.white, fontSize: 16.0)),
-                            ]),
-                        isChecked: isEWasteChecked,
-                        isError: isError,
-                        setStateFunction: () =>
-                            setState(() => isEWasteChecked = !isEWasteChecked),
-                      ),
-                    ],
+                    ),
                   ),
-                ),
-              ),
-            ),
             (dropOffPredictionsPlacesList.isNotEmpty)
                 ? Padding(
                     padding: const EdgeInsets.only(left: 8, right: 8, top: 179),
@@ -782,6 +839,7 @@ class _GarbagesState extends State<Garbages> {
                               lng: nearbyBinsList[index].longitudePosition,
                               adrs: nearbyBinsList[index].humanReadableAddress,
                               sec: nearbyBinsList[index].humanReadableAddress,
+                              types: nearbyBinsList[index].types,
                               func: goToBin),
                         );
                       },

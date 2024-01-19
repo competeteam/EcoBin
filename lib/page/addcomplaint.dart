@@ -1,6 +1,9 @@
+import 'dart:math';
+
 import 'package:dinacom_2024/components/profile/title_form_field.dart';
 import 'package:dinacom_2024/models/complaint_model.dart';
 import 'package:dinacom_2024/models/trash_bin_model.dart';
+import 'package:dinacom_2024/models/user_model.dart';
 import 'package:dinacom_2024/services/complaint_service.dart';
 import 'package:dinacom_2024/services/select_image_service.dart';
 import 'package:dinacom_2024/services/trash_bin_service.dart';
@@ -10,10 +13,13 @@ import 'package:flutter_svg/svg.dart';
 import 'package:go_router/go_router.dart';
 
 class AddComplaintPage extends StatefulWidget {
+  final UserModel user;
+
   String? lat;
   String? lng;
   String? adrs;
-  AddComplaintPage({super.key, this.lat, this.lng, this.adrs});
+  AddComplaintPage(
+      {super.key, this.lat, this.lng, this.adrs, required this.user});
 
   @override
   State<AddComplaintPage> createState() => _AddComplaintPageState();
@@ -21,7 +27,16 @@ class AddComplaintPage extends StatefulWidget {
 
 class _AddComplaintPageState extends State<AddComplaintPage> {
   final _formKey = GlobalKey<FormState>();
+  String generateRandomString(int length) {
+    final random = Random();
+    const availableChars =
+        'AaBbCcDdEeFfGgHhIiJjKkLlMmNnOoPpQqRrSsTtUuVvWwXxYyZz1234567890';
+    final randomString = List.generate(length,
+            (index) => availableChars[random.nextInt(availableChars.length)])
+        .join();
 
+    return randomString;
+  }
   final ComplaintService _complaintService = ComplaintService();
   final SelectImageService _selectImageService = SelectImageService();
 
@@ -55,12 +70,12 @@ class _AddComplaintPageState extends State<AddComplaintPage> {
                   await _complaintService.addComplaint(
                       deletedAt: DateTime.now(),
                       createdAt: DateTime.now(),
-                      uid: 'apaja',
-                      cid: 'apaja',
+                      uid: widget.user.uid,
+                      cid: generateRandomString(28),
                       content: content,
                       location: widget.adrs!,
                       type: _type!,
-                      createdBy: 'nanti');
+                      createdBy: widget.user.displayName);
                   context.goNamed('Garbage');
                 },
                 child: const Text('Done',

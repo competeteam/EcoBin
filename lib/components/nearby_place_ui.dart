@@ -10,7 +10,8 @@ class NearbyPlaceUI extends StatefulWidget
   String? adrs;
   String? sec;
   Function? func;
-  NearbyPlaceUI({super.key, this.lat, this.lng, this.adrs, this.sec, this.func});
+  String? types;
+  NearbyPlaceUI({super.key, this.lat, this.lng, this.adrs, this.sec, this.func, this.types});
 
   @override
   State<NearbyPlaceUI> createState() => _NearbyPlaceUIState();
@@ -21,10 +22,13 @@ class _NearbyPlaceUIState extends State<NearbyPlaceUI> {
   @override
   Widget build(BuildContext context) {
     return ElevatedButton(
-      onPressed: (){
+      onPressed: widget.types == null? (){
         widget.func!(widget.lat, widget.lng, widget.adrs
             );
-      },
+      }: () {
+              widget.func!(widget.lat, widget.lng, widget.adrs, widget.types);
+            }
+      ,
       style: ElevatedButton.styleFrom(
         backgroundColor: Colors.white,
         elevation: 5
