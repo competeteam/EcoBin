@@ -1,7 +1,6 @@
 import 'package:dinacom_2024/components/loading/loading.dart';
 import 'package:dinacom_2024/services/auth_service.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_svg/flutter_svg.dart';
 import 'package:go_router/go_router.dart';
 
 class Register extends StatefulWidget {
@@ -240,39 +239,7 @@ class _RegisterState extends State<Register> {
                       Text(errorMessage,
                           style:
                               TextStyle(color: Colors.red[900], fontSize: 12)),
-                      const SizedBox(height: 10),
-                      const Divider(
-                        color: Colors.white,
-                        thickness: 1.0,
-                      ),
-                      const SizedBox(height: 20),
-                      OutlinedButton(
-                        style: OutlinedButton.styleFrom(
-                          fixedSize: const Size.fromHeight(40.0),
-                          side:
-                              const BorderSide(width: 1.0, color: Colors.white),
-                        ),
-                        onPressed: () {},
-                        child: Row(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            crossAxisAlignment: CrossAxisAlignment.center,
-                            children: <Widget>[
-                              SvgPicture.asset(
-                                'assets/logos/google_logo.svg',
-                                height: 28.0,
-                                width: 28.0,
-                              ),
-                              const SizedBox(width: 20.0),
-                              const Text(
-                                'Sign Up with Google',
-                                style: TextStyle(
-                                  color: Colors.white,
-                                  fontSize: 16,
-                                ),
-                              )
-                            ]),
-                      ),
-                      const SizedBox(height: 16),
+                      const SizedBox(height: 8.0),
                       Row(
                         mainAxisAlignment: MainAxisAlignment.start,
                         children: <Widget>[
@@ -285,7 +252,7 @@ class _RegisterState extends State<Register> {
                           ),
                           TextButton(
                             onPressed: () {
-                              GoRouter.of(context).go('/login');
+                              GoRouter.of(context).push('/login');
                             },
                             child: const Text(
                               'Login',
