@@ -138,8 +138,7 @@ class _GarbagesState extends State<Garbages> {
                   element!.types.contains(TrashBinType.organic)) ||
               (isPaperChecked && element!.types.contains(TrashBinType.paper)) ||
               (isPlasticChecked &&
-                  element!.types.contains(TrashBinType.plastic))
-                  )
+                  element!.types.contains(TrashBinType.plastic)))
           .map(
             (e) => Marker(
               consumeTapEvents: true,
@@ -205,8 +204,9 @@ class _GarbagesState extends State<Garbages> {
   searchNearby() async {
     final cans = await _trashBinService.getAllTrashCan();
     List<AddressModel> dists = List<AddressModel>.from(
-      cans.where((element) => 
-      (isChemicalChecked &&
+      cans
+          .where((element) =>
+              (isChemicalChecked &&
                   element!.types.contains(TrashBinType.chemical)) ||
               (isEWasteChecked &&
                   element!.types.contains(TrashBinType.eWaste)) ||
@@ -216,25 +216,25 @@ class _GarbagesState extends State<Garbages> {
                   element!.types.contains(TrashBinType.organic)) ||
               (isPaperChecked && element!.types.contains(TrashBinType.paper)) ||
               (isPlasticChecked &&
-                  element!.types.contains(TrashBinType.plastic))
-      ).map(
-        (e) => AddressModel(
-            humanReadableAddress: e!.createdLocation,
-            latitudePosition: double.parse(e.xCoord),
-            longitudePosition: double.parse(e.yCoord),
-            dist: calculateDistance(
-              lat,
-              lng,
-              double.parse(e.xCoord),
-              double.parse(e.yCoord),
-            ),
-            types: e.types
-                .join(", ")
-                .toString()
-                .replaceAll("TrashBinType.", "")
-                .capitalize(),
-            tid: e.tid),
-      ),
+                  element!.types.contains(TrashBinType.plastic)))
+          .map(
+            (e) => AddressModel(
+                humanReadableAddress: e!.createdLocation,
+                latitudePosition: double.parse(e.xCoord),
+                longitudePosition: double.parse(e.yCoord),
+                dist: calculateDistance(
+                  lat,
+                  lng,
+                  double.parse(e.xCoord),
+                  double.parse(e.yCoord),
+                ),
+                types: e.types
+                    .join(", ")
+                    .toString()
+                    .replaceAll("TrashBinType.", "")
+                    .capitalize(),
+                tid: e.tid),
+          ),
     );
     dists.sort((a, b) => a.dist!.compareTo(b.dist!));
     dropOffPredictionsPlacesList = [];
@@ -477,23 +477,19 @@ class _GarbagesState extends State<Garbages> {
                   ),
                   onPressed: () async {
                     try {
-                      if(user!.uid==null){
-                                              context.pushNamed(
-                          'addcomplaint',
-                          queryParameters: {
-                            'lat': lat.toString(),
-                            'lng': lng.toString(),
-                            'adrs': _address,
-                            'tid': tid,
-                            'uid': user!.uid,
-                          },
-                        );
-                      }
-
+                      context.pushNamed(
+                        'addcomplaint',
+                        queryParameters: {
+                          'lat': lat.toString(),
+                          'lng': lng.toString(),
+                          'adrs': _address,
+                          'tid': tid,
+                          'uid': user!.uid,
+                        },
+                      );
                     } catch (e) {
                       GoRouter.of(context).push('/login');
                     }
-                    
                   },
                   child: const Text(
                     'Add complaint',
@@ -514,8 +510,7 @@ class _GarbagesState extends State<Garbages> {
                   ),
                   onPressed: () async {
                     try {
-                      if(user!.uid==null){
-                                            context.goNamed(
+                        context.goNamed(
                           'showcomplaints',
                           queryParameters: {
                             'lat': lat.toString(),
@@ -525,11 +520,9 @@ class _GarbagesState extends State<Garbages> {
                             'uid': user!.uid,
                           },
                         );
-                      }
                     } catch (e) {
                       GoRouter.of(context).push('/login');
                     }
-
                   },
                   child: const Text(
                     'Show complaints',
@@ -578,24 +571,21 @@ class _GarbagesState extends State<Garbages> {
               shape: CircleBorder(),
               onTap: () {
                 try {
-                if(user!.uid==null){
-                context.pushNamed(
-                  'addbin',
-                  queryParameters: {
-                    'lat': lat.toString(),
-                    'lng': lng.toString(),
-                    'adrs': _address,
-                    'uid': user!.uid
-                  },
-                ).whenComplete(() {
-                  updateMarkers();
-                  print("here lol it does get called");
-                });
-                } 
+                  context.pushNamed(
+                    'addbin',
+                    queryParameters: {
+                      'lat': lat.toString(),
+                      'lng': lng.toString(),
+                      'adrs': _address,
+                      'uid': user!.uid
+                    },
+                  ).whenComplete(() {
+                    updateMarkers();
+                    print("here lol it does get called");
+                  });
                 } catch (e) {
                   GoRouter.of(context).push('/login');
                 }
-                
               },
               label: 'Add bin here',
             ),
