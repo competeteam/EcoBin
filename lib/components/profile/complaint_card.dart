@@ -54,9 +54,12 @@ class ComplaintCard extends StatelessWidget {
                       children: [
                         _complaintCardHeaderLogo(type),
                         const SizedBox(width: 10.0),
-                        Text(location,
-                            style: const TextStyle(
-                                color: Colors.white, fontSize: 16.0)),
+                        Expanded(
+                          child: Text(location,
+                              overflow: TextOverflow.ellipsis,
+                              style: const TextStyle(
+                                  color: Colors.white, fontSize: 16.0)),
+                        ),
                       ],
                     ),
                     const SizedBox(height: 5.0),
