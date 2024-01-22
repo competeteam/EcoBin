@@ -90,7 +90,7 @@ class _OnboardingState extends State<Onboarding> {
                           children: [
                             OnboardingPage(
                               imagePath: onboardingImages['garbage']!,
-                              title: 'Discovery New Bins',
+                              title: 'Discover New Bins',
                               subTitle:
                                   'Explore your surroundings to locate available trash bins effortlessly',
                             ),
