@@ -16,10 +16,10 @@ class _OnboardingState extends State<Onboarding> {
   bool lastPage = false;
 
   Map<String, String> onboardingImages = {
-    'classificator' : 'assets/images/onboarding_classificator.png',
-    'guide' : 'assets/images/onboarding_guide.png',
-    'garbage' : 'assets/images/onboarding_garbage.png',
-    'garbage func' : 'assets/images/garbagefunc_onboarding.png',
+    'classificator': 'assets/images/onboarding_classificator.png',
+    'guide': 'assets/images/onboarding_guide.png',
+    'garbage': 'assets/images/onboarding_garbage.png',
+    'garbage func': 'assets/images/garbagefunc_onboarding.png',
   };
 
   @override
@@ -60,7 +60,6 @@ class _OnboardingState extends State<Onboarding> {
                     TextButton(
                       onPressed: () {
                         completeOnboarding();
-                        print('Skip is clicked');
                         GoRouter.of(context).go('/garbage');
                       },
                       child: const Text(

@@ -8,7 +8,7 @@ class TrashBinService {
   TrashBinService({this.uid, this.tid});
 
   final CollectionReference collectionReference =
-  FirebaseFirestore.instance.collection('trash-bins');
+      FirebaseFirestore.instance.collection('trash-bins');
 
   Future<void> addTrashBin({
     required DateTime createdAt,
@@ -24,10 +24,11 @@ class TrashBinService {
     bool isFull = false,
   }) async {
     try {
-      final docRef = collectionReference.withConverter(
-          fromFirestore: TrashBinModel.fromFirestore,
-          toFirestore: (TrashBinModel trashBin, options) =>
-              trashBin.toFirestore())
+      final docRef = collectionReference
+          .withConverter(
+              fromFirestore: TrashBinModel.fromFirestore,
+              toFirestore: (TrashBinModel trashBin, options) =>
+                  trashBin.toFirestore())
           .doc(tid);
 
       TrashBinModel trashBin = TrashBinModel(
@@ -49,10 +50,11 @@ class TrashBinService {
     }
   }
 
-  Future<void> updateTrashBin({required String tid,
-    required String imagePath,
-    required String createdLocation,
-    required List<TrashBinType> types}) async {
+  Future<void> updateTrashBin(
+      {required String tid,
+      required String imagePath,
+      required String createdLocation,
+      required List<TrashBinType> types}) async {
     try {
       final docRef = collectionReference.doc(tid).withConverter(
           fromFirestore: TrashBinModel.fromFirestore,
@@ -110,7 +112,8 @@ class TrashBinService {
   Future<TrashBinModel?> get trashBinModel async {
     final docRef = collectionReference.doc(tid).withConverter(
         fromFirestore: TrashBinModel.fromFirestore,
-        toFirestore: (TrashBinModel trashBin, options) => trashBin.toFirestore());
+        toFirestore: (TrashBinModel trashBin, options) =>
+            trashBin.toFirestore());
 
     final docSnap = await docRef.get();
 

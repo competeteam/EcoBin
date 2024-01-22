@@ -14,8 +14,6 @@ class Wrapper extends StatelessWidget {
       '/camera/preview',
     ];
 
-    print('This is current location ${GoRouterState.of(context).matchedLocation}');
-    
     const List<BottomNavigationBarItem> navigationBarItems =
         <BottomNavigationBarItem>[
       BottomNavigationBarItem(
@@ -32,20 +30,22 @@ class Wrapper extends StatelessWidget {
 
     return Scaffold(
       body: navigationShell,
-      bottomNavigationBar: hideNavbarUrl.contains(GoRouterState.of(context).matchedLocation)
-      ? null
-      : BottomNavigationBar(
-        type: BottomNavigationBarType.fixed,
-        backgroundColor: const Color(0xFF2D2D2D),
-        selectedItemColor: const Color(0xFF75BC7B),
-        unselectedItemColor: const Color(0xFFD7D7D7),
-        currentIndex: navigationShell.currentIndex >= 0 && navigationShell.currentIndex < navigationBarItems.length
-          ? navigationShell.currentIndex
-          : 0,
-        landscapeLayout: BottomNavigationBarLandscapeLayout.centered,
-        items: navigationBarItems,
-        onTap: _onTap,
-      ),
+      bottomNavigationBar: hideNavbarUrl
+              .contains(GoRouterState.of(context).matchedLocation)
+          ? null
+          : BottomNavigationBar(
+              type: BottomNavigationBarType.fixed,
+              backgroundColor: const Color(0xFF2D2D2D),
+              selectedItemColor: const Color(0xFF75BC7B),
+              unselectedItemColor: const Color(0xFFD7D7D7),
+              currentIndex: navigationShell.currentIndex >= 0 &&
+                      navigationShell.currentIndex < navigationBarItems.length
+                  ? navigationShell.currentIndex
+                  : 0,
+              landscapeLayout: BottomNavigationBarLandscapeLayout.centered,
+              items: navigationBarItems,
+              onTap: _onTap,
+            ),
     );
   }
 

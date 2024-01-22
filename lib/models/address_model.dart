@@ -1,5 +1,5 @@
 class AddressModel {
-  String? secondary_text;
+  String? secondaryText;
   String? humanReadableAddress;
   double? latitudePosition;
   double? longitudePosition;
@@ -11,7 +11,7 @@ class AddressModel {
       {this.humanReadableAddress,
       this.latitudePosition,
       this.longitudePosition,
-      this.secondary_text,
+      this.secondaryText,
       this.dist = 0,
       this.types,
       this.tid});
@@ -20,7 +20,7 @@ class AddressModel {
     latitudePosition = json["properties"]["lat"];
     longitudePosition = json["properties"]["lon"];
     humanReadableAddress = json["properties"]["formatted"];
-    secondary_text = json["properties"]["address_line2"];
+    secondaryText = json["properties"]["address_line2"];
     dist = 0;
   }
 }

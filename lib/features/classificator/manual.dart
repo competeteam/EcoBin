@@ -64,15 +64,13 @@ class _ManualClassificatorState extends State<ManualClassificator> {
       nextQuestion = questionTree.no;
     }
 
-    print('This is next question ${nextQuestion?.text}');
-
     if (nextQuestion != null) {
       setState(() {
         questionTree = nextQuestion!;
       });
-    } 
+    }
 
-    if(questionTree.yes == null && questionTree.no == null) {
+    if (questionTree.yes == null && questionTree.no == null) {
       setState(() {
         result = questionTree.text;
       });
@@ -81,10 +79,8 @@ class _ManualClassificatorState extends State<ManualClassificator> {
 
   @override
   Widget build(BuildContext context) {
-    print('This is the result $result');
     return result == ''
-        ? ClassificatorQuestionCard(
-            questionTree.text, handleResponse)
+        ? ClassificatorQuestionCard(questionTree.text, handleResponse)
         : ClassificatorResultCard(result);
   }
 }

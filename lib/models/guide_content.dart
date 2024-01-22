@@ -1,17 +1,16 @@
-import 'dart:async';
 import 'dart:ui';
-import 'dart:io';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/services.dart';
 
-class GuideContent{
+class GuideContent {
   final String? title;
   final String? content;
   String? imagePath;
   final Timestamp createdAt;
   Color cardColor;
+
   GuideContent({
     this.title,
     this.content,
@@ -20,14 +19,10 @@ class GuideContent{
     this.cardColor = const Color.fromRGBO(55, 126, 181, 1),
   }) : createdAt = createdAt ?? Timestamp.now() {
     try {
-      print(File(imagePath!).existsSync());
-    }
-    catch (e) {
-      print(e);
+      // TODO: Implement
+    } catch (e) {
       imagePath = "assets/images/photo_unavailable_placeholder_basic.jpg";
     }
-
-
   }
 
   factory GuideContent.fromFirestore(
@@ -36,11 +31,10 @@ class GuideContent{
     final data = snapshot.data();
 
     return GuideContent(
-      title: data?['title'],
-      content: data?['content'],
-      imagePath: data?['imagePath'],
-      createdAt: data?['createdAt']
-    );
+        title: data?['title'],
+        content: data?['content'],
+        imagePath: data?['imagePath'],
+        createdAt: data?['createdAt']);
   }
 
   Map<String, dynamic> toFirestore() {
@@ -51,7 +45,6 @@ class GuideContent{
       throw Exception("Guide content should have content");
     }
 
-
     return {
       "title": title,
       "content": content,
@@ -59,6 +52,4 @@ class GuideContent{
       if (imagePath != null) "imagePath": imagePath,
     };
   }
-
-
 }

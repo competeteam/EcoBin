@@ -24,21 +24,20 @@ class ComplaintModel {
   final String createdBy;
   final String resolvedBy;
 
-  ComplaintModel(
-      {required this.deletedAt,
-      required this.createdAt,
-      required this.uid ,
-      required this.cid ,
-      required this.tid ,
-      required this.content ,
-      required this.location ,
-      required this.isResolved ,
-      required this.resolvedAt ,
-      required this.type ,
-      required this.createdBy ,
-      required this.resolvedBy ,
-      
-      });
+  ComplaintModel({
+    required this.deletedAt,
+    required this.createdAt,
+    required this.uid,
+    required this.cid,
+    required this.tid,
+    required this.content,
+    required this.location,
+    required this.isResolved,
+    required this.resolvedAt,
+    required this.type,
+    required this.createdBy,
+    required this.resolvedBy,
+  });
 
   factory ComplaintModel.fromFirestore(
     DocumentSnapshot<Map<String, dynamic>> snapshot,

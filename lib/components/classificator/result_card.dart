@@ -13,14 +13,14 @@ class ClassificatorResultCard extends StatefulWidget {
 
 class _ClassificatorResultCardState extends State<ClassificatorResultCard> {
   Map<String, String> images = {
-    'Paper' : 'assets/images/paper_image.png',
-    'Organic' : 'assets/images/organic_image.png',
-    'Chemical' : 'assets/images/chemical_image.png',
-    'Glass' : 'assets/images/glass_image.png',
-    'E Waste' : 'assets/images/ewaste_image.png',
-    'Metal' : 'assets/images/metal_image.png',
-    'Battery' : 'assets/images/battery_image.png',
-    'Plastic' : 'assets/images/plastic_image.png',
+    'Paper': 'assets/images/paper_image.png',
+    'Organic': 'assets/images/organic_image.png',
+    'Chemical': 'assets/images/chemical_image.png',
+    'Glass': 'assets/images/glass_image.png',
+    'E Waste': 'assets/images/ewaste_image.png',
+    'Metal': 'assets/images/metal_image.png',
+    'Battery': 'assets/images/battery_image.png',
+    'Plastic': 'assets/images/plastic_image.png',
   };
 
   @override

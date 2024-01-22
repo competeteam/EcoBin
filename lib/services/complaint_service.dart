@@ -26,10 +26,13 @@ class ComplaintService {
     String resolvedBy = "",
   }) async {
     try {
-      final docRef = db.collection("complaints").withConverter(
-          fromFirestore: ComplaintModel.fromFirestore,
-          toFirestore: (ComplaintModel complaint, options) =>
-              complaint.toFirestore()).doc(cid);
+      final docRef = db
+          .collection("complaints")
+          .withConverter(
+              fromFirestore: ComplaintModel.fromFirestore,
+              toFirestore: (ComplaintModel complaint, options) =>
+                  complaint.toFirestore())
+          .doc(cid);
 
       ComplaintModel complaint = ComplaintModel(
           deletedAt: deletedAt,
@@ -46,21 +49,21 @@ class ComplaintService {
           resolvedBy: resolvedBy);
 
       await docRef.set(complaint);
-
     } catch (e) {
-      print(e);
+      // TODO: Implement
     }
   }
 
   void updateComplaint(String complaintID, Map<String, dynamic> data) async {
     final docRef = db.collection("complaints").doc(complaintID).withConverter(
         fromFirestore: ComplaintModel.fromFirestore,
-        toFirestore: (ComplaintModel complaint, options) => complaint.toFirestore());
+        toFirestore: (ComplaintModel complaint, options) =>
+            complaint.toFirestore());
 
     await docRef.update(data);
   }
 
-    Future<void> resolveComplaint(
+  Future<void> resolveComplaint(
       {required String cid,
       required String uid,
       required DateTime resolvedAt}) async {
@@ -77,14 +80,14 @@ class ComplaintService {
       });
     } catch (e) {
       // TODO: throw error
-      print(e);
     }
   }
 
   void deleteComplaint(String complaintID) async {
     final docRef = db.collection("complaints").doc(complaintID).withConverter(
         fromFirestore: ComplaintModel.fromFirestore,
-        toFirestore: (ComplaintModel complaint, options) => complaint.toFirestore());
+        toFirestore: (ComplaintModel complaint, options) =>
+            complaint.toFirestore());
 
     await docRef.update({"deletedAt": Timestamp.now().seconds});
   }
@@ -143,14 +146,15 @@ class ComplaintService {
 
       return complaints;
     } catch (e) {
-     print(e);
-     return List.empty();
+      return List.empty();
     }
   }
+
   Future<ComplaintModel?> getComplaintByComplaintID(String complaintID) async {
     final docRef = db.collection("complaints").doc(complaintID).withConverter(
         fromFirestore: ComplaintModel.fromFirestore,
-        toFirestore: (ComplaintModel complaint, options) => complaint.toFirestore());
+        toFirestore: (ComplaintModel complaint, options) =>
+            complaint.toFirestore());
 
     final docSnap = await docRef.get();
 
@@ -160,6 +164,7 @@ class ComplaintService {
       return complaint;
     } else {
       // TODO: Throw exception
+      return null;
     }
   }
 }

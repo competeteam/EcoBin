@@ -2,11 +2,9 @@ import 'dart:async';
 import 'dart:convert';
 import 'dart:math' show cos, sqrt, asin;
 
-import 'package:dinacom_2024/components/common/checbox.dart';
-import 'package:dinacom_2024/components/nearby_place_ui.dart';
-import 'package:dinacom_2024/components/prediction_place_ui.dart';
+import 'package:dinacom_2024/common/checbox.dart';
+import 'package:dinacom_2024/components/garbages/nearby_place_ui.dart';
 import 'package:dinacom_2024/models/address_model.dart';
-import 'package:dinacom_2024/models/prediction_model.dart';
 import 'package:dinacom_2024/models/trash_bin_model.dart';
 import 'package:dinacom_2024/models/user_model.dart';
 import 'package:dinacom_2024/services/map_launcher.dart';
@@ -47,8 +45,8 @@ class _GarbagesState extends State<Garbages> {
   List<AddressModel> dropOffPredictionsPlacesList = [];
   List<AddressModel> nearbyBinsList = [];
 
-  String map_api_key = dotenv.env['GOOGLE_MAPS_API_KEY']!;
-  String autocomplete_api_key = dotenv.env['AUTOCOMPLETE_API_KEY']!;
+  String mapAPIKey = dotenv.env['GOOGLE_MAPS_API_KEY']!;
+  String autocompleteAPIKey = dotenv.env['AUTOCOMPLETE_API_KEY']!;
 
   bool isOrganicChecked = true;
   bool isPaperChecked = true;
@@ -72,7 +70,7 @@ class _GarbagesState extends State<Garbages> {
     _address = adrs;
     lat = latt;
     lng = lngg;
-    destLocation = LatLng(lat!, lng!);
+    destLocation = LatLng(lat, lng);
     CameraPosition cameraPosition =
         CameraPosition(target: destLocation!, zoom: 15);
     controllerGoogleMap!
@@ -114,7 +112,7 @@ class _GarbagesState extends State<Garbages> {
     _address = adrs;
     lat = latt;
     lng = lngg;
-    destLocation = LatLng(lat!, lng!);
+    destLocation = LatLng(lat, lng);
     CameraPosition cameraPosition =
         CameraPosition(target: destLocation!, zoom: 15);
     controllerGoogleMap!
@@ -127,7 +125,6 @@ class _GarbagesState extends State<Garbages> {
 
   Future<List<Marker>> getMarkers() async {
     final cans = await _trashBinService.getAllTrashCan();
-    print(cans.first!.xCoord);
     return List<Marker>.from(
       cans
           .where((element) =>
@@ -147,14 +144,14 @@ class _GarbagesState extends State<Garbages> {
               consumeTapEvents: true,
               icon: BitmapDescriptor.defaultMarkerWithHue(
                   BitmapDescriptor.hueRed),
-              markerId: MarkerId('${e!.xCoord}'),
+              markerId: MarkerId(e!.xCoord),
               onTap: () {
                 _displayBottomSheet(
                     context,
                     e.createdLocation,
                     e.imagePath,
-                    double.parse('${e.xCoord!}'),
-                    double.parse('${e.yCoord!}'),
+                    double.parse(e.xCoord),
+                    double.parse(e.yCoord),
                     e.types
                         .join(', ')
                         .toString()
@@ -162,8 +159,7 @@ class _GarbagesState extends State<Garbages> {
                         .capitalize(),
                     e.tid);
               },
-              position: LatLng(
-                  double.parse('${e.xCoord!}'), double.parse('${e.yCoord!}')),
+              position: LatLng(double.parse(e.xCoord), double.parse(e.yCoord)),
             ),
           ),
     );
@@ -255,13 +251,10 @@ class _GarbagesState extends State<Garbages> {
       dropOffPredictionsPlacesList = List.empty();
     }
     if (locationName.length > 1) {
-      String apiPlacesUrl =
-          "https://maps.googleapis.com/maps/api/place/autocomplete/json?input=$locationName&key=$map_api_key&components=country:id";
       String apiPlacesUrl2 =
-          "https://api.geoapify.com/v1/geocode/autocomplete?text=$locationName&apiKey=$autocomplete_api_key";
+          "https://api.geoapify.com/v1/geocode/autocomplete?text=$locationName&apiKey=$autocompleteAPIKey";
 
       var responseFromPlacesAPI = await sendRequestToAPI(apiPlacesUrl2);
-      print(responseFromPlacesAPI);
 
       if (responseFromPlacesAPI == "error" ||
           responseFromPlacesAPI["status"] == "REQUEST_DENIED") {
@@ -270,9 +263,6 @@ class _GarbagesState extends State<Garbages> {
 
       if (responseFromPlacesAPI["status"] == "OK" ||
           responseFromPlacesAPI["type"] == "FeatureCollection") {
-        print(responseFromPlacesAPI["features"].length);
-        print("not err somehowasdddddddddddddddddddd");
-        print(responseFromPlacesAPI["features"][0]);
         var predictionsList = (responseFromPlacesAPI["features"] as List)
             .map((e) => AddressModel.fromJson(e))
             .toList();
@@ -297,17 +287,12 @@ class _GarbagesState extends State<Garbages> {
           destLocation!.latitude, destLocation!.longitude);
 
       setState(() {
-        _address = data.first.street! +
-            ", " +
-            data.first.subLocality! +
-            ", " +
-            data.first.locality! +
-            ", " +
-            data.first.subAdministrativeArea!;
+        _address =
+            '${data.first.street!}, ${data.first.subLocality!}, ${data.first.locality!}, ${data.first.subAdministrativeArea!}';
       });
       _trashBinService.getAllTrashCan();
     } catch (e) {
-      print(e);
+      // TODO: Implement
     }
   }
 
@@ -333,10 +318,10 @@ class _GarbagesState extends State<Garbages> {
   Future _displayBottomSheet(BuildContext context, String adrs, String link,
       double lat, double lng, String secondary, String tid) {
     final user = Provider.of<UserModel?>(context, listen: false);
-    String default_trash_bin =
+    String defaultTrashBin =
         'https://firebasestorage.googleapis.com/v0/b/ecobin-9f4b9.appspot.com/o/images%2F1705400888863-images.jpg?alt=media&token=26b725b6-a238-4e1b-a732-bd61caf22bce';
     return showModalBottomSheet(
-      backgroundColor: Color.fromARGB(248, 35, 33, 33),
+      backgroundColor: const Color.fromARGB(248, 35, 33, 33),
       context: context,
       shape: const RoundedRectangleBorder(
           borderRadius: BorderRadius.vertical(top: Radius.circular(30))),
@@ -356,7 +341,7 @@ class _GarbagesState extends State<Garbages> {
                       mainAxisSize: MainAxisSize.max,
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: <Widget>[
-                        Container(
+                        SizedBox(
                           width: MediaQuery.of(context).size.width * 0.6,
                           child: Padding(
                             padding: const EdgeInsets.fromLTRB(10, 0, 0, 0),
@@ -374,7 +359,7 @@ class _GarbagesState extends State<Garbages> {
                             ),
                           ),
                         ),
-                        Container(
+                        SizedBox(
                           width: MediaQuery.of(context).size.width * 0.6,
                           child: Padding(
                             padding: const EdgeInsets.fromLTRB(10, 10, 0, 0),
@@ -403,7 +388,7 @@ class _GarbagesState extends State<Garbages> {
                         ),
                         child: Image(
                             image: NetworkImage(
-                                link == '' ? default_trash_bin : link),
+                                link == '' ? defaultTrashBin : link),
                             fit: BoxFit.fill),
                       ),
                     ),
@@ -553,7 +538,7 @@ class _GarbagesState extends State<Garbages> {
     zoom: 14.4746,
   );
 
-  Set<Marker> markers = Set();
+  Set<Marker> markers = {};
   var mymarkers = [];
 
   @override
@@ -571,7 +556,7 @@ class _GarbagesState extends State<Garbages> {
           children: [
             SpeedDialChild(
               child: const Icon(Icons.add),
-              shape: CircleBorder(),
+              shape: const CircleBorder(),
               onTap: () {
                 try {
                   context.pushNamed(
@@ -584,7 +569,6 @@ class _GarbagesState extends State<Garbages> {
                     },
                   ).whenComplete(() {
                     updateMarkers();
-                    print("here lol it does get called");
                   });
                 } catch (e) {
                   GoRouter.of(context).push('/login');
@@ -605,7 +589,7 @@ class _GarbagesState extends State<Garbages> {
               mapToolbarEnabled: true,
               onCameraMove: (CameraPosition? position) {
                 EasyDebounce.debounce(
-                    'refresh location', Duration(milliseconds: 500), () {
+                    'refresh location', const Duration(milliseconds: 500), () {
                   if (destLocation != position!.target) {
                     setState(() {
                       destLocation = position.target;
@@ -638,7 +622,7 @@ class _GarbagesState extends State<Garbages> {
             Align(
               alignment: Alignment.topCenter,
               child: Padding(
-                padding: EdgeInsets.only(top: 75, right: 20),
+                padding: const EdgeInsets.only(top: 75, right: 20),
                 child: Row(
                   children: [
                     const SizedBox(
@@ -647,7 +631,7 @@ class _GarbagesState extends State<Garbages> {
                     Expanded(
                       child: Container(
                         decoration: BoxDecoration(
-                          color: Color.fromARGB(248, 54, 51, 51),
+                          color: const Color.fromARGB(248, 54, 51, 51),
                           borderRadius: BorderRadius.circular(50),
                           // boxShadow: [
                           //   BoxShadow(color: Colors.black, blurRadius: 3)
@@ -656,7 +640,7 @@ class _GarbagesState extends State<Garbages> {
                         child: Padding(
                           padding: const EdgeInsets.all(3),
                           child: TextField(
-                            style: TextStyle(color: Colors.white),
+                            style: const TextStyle(color: Colors.white),
                             onTap: () {
                               isFiltering = true;
                               isFindNearby = true;
@@ -703,17 +687,16 @@ class _GarbagesState extends State<Garbages> {
                       child: OutlinedButton(
                         onPressed: () {
                           setState(() {
-                            print(isFindNearby);
-                            if (!isFindNearby)
+                            if (!isFindNearby) {
                               nearbyBinsList = [];
-                            else
+                            } else {
                               searchNearby();
+                            }
                             isFindNearby = !isFindNearby;
-                            print(isFindNearby);
                           });
                         },
                         style: OutlinedButton.styleFrom(
-                            fixedSize: Size(170, 40),
+                            fixedSize: const Size(170, 40),
                             backgroundColor: isFindNearby
                                 ? const Color.fromARGB(248, 76, 73, 73)
                                 : const Color(0xFF5A8A62),
@@ -739,7 +722,7 @@ class _GarbagesState extends State<Garbages> {
                           });
                         },
                         style: OutlinedButton.styleFrom(
-                            fixedSize: Size(160, 40),
+                            fixedSize: const Size(160, 40),
                             backgroundColor: isFiltering
                                 ? const Color.fromARGB(248, 76, 73, 73)
                                 : const Color(0xFF5A8A62),
@@ -946,7 +929,7 @@ class _GarbagesState extends State<Garbages> {
                               adrs: dropOffPredictionsPlacesList[index]
                                   .humanReadableAddress,
                               sec: dropOffPredictionsPlacesList[index]
-                                  .secondary_text,
+                                  .secondaryText,
                               func: fetchClickedPlaceDetails),
                         );
                       },
@@ -973,10 +956,8 @@ class _GarbagesState extends State<Garbages> {
                               lat: nearbyBinsList[index].latitudePosition,
                               lng: nearbyBinsList[index].longitudePosition,
                               adrs: nearbyBinsList[index].humanReadableAddress,
-                              sec: nearbyBinsList[index]
-                                      .dist!
-                                      .toStringAsFixed(3) +
-                                  ' km from current location. ',
+                              sec:
+                                  '${nearbyBinsList[index].dist!.toStringAsFixed(3)} km from current location.',
                               types: nearbyBinsList[index].types,
                               tid: nearbyBinsList[index].tid,
                               func: goToBin),

@@ -1,8 +1,8 @@
 import 'dart:typed_data';
 
 import 'package:firebase_storage/firebase_storage.dart';
-import 'package:image_picker/image_picker.dart';
 import 'package:image/image.dart' as img;
+import 'package:image_picker/image_picker.dart';
 
 class SelectImageService {
   final storageRef = FirebaseStorage.instance.ref();
@@ -27,9 +27,11 @@ class SelectImageService {
     int width = 800;
     int height = 800;
 
-    img.Image resizedImage = img.copyResize(modifiedImage!, width: width, height: height);
+    img.Image resizedImage =
+        img.copyResize(modifiedImage!, width: width, height: height);
 
-    Uint8List compressedBytes = img.encodeJpg(resizedImage, quality: 85) as Uint8List;
+    Uint8List compressedBytes =
+        img.encodeJpg(resizedImage, quality: 85) as Uint8List;
 
     final imageRef = storageRef.child(
         "images/${DateTime.now().millisecondsSinceEpoch.toString()}-${_file!.name}");
@@ -40,7 +42,7 @@ class SelectImageService {
       String downloadURL = await imageRef.getDownloadURL();
 
       return downloadURL;
-    } on FirebaseException catch (e) {
+    } on FirebaseException catch (_) {
       // TODO: Throw error
       return '';
     }

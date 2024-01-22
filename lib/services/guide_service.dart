@@ -3,6 +3,7 @@ import 'package:dinacom_2024/models/guide_content.dart';
 
 class GuideService {
   FirebaseFirestore db = FirebaseFirestore.instance;
+
   Future<List<GuideContent>?> getAllGuides() async {
     final docRef = db.collection("guides").withConverter(
         fromFirestore: GuideContent.fromFirestore,

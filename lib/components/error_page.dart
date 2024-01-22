@@ -8,8 +8,7 @@ class ErrorPage extends StatelessWidget {
     return Container(
         color: const Color(0xFF222222),
         child: const Center(
-            child: Text('Error'),
-        )
-    );
+          child: Text('Error'),
+        ));
   }
 }

@@ -77,12 +77,14 @@ class UserService {
     }
   }
 
-  Future<void> addCarbonFootprint(String userID, double addedCarbonFootprint) async {
+  Future<void> addCarbonFootprint(
+      String userID, double addedCarbonFootprint) async {
     final docRef = collectionReference.doc(userID).withConverter(
         fromFirestore: UserModel.fromFirestore,
         toFirestore: (UserModel user, options) => user.toFirestore());
 
-    final oldCarbonFootprint = await docRef.get().then((value) => value.data()!.totalCarbonFootprint);
+    final oldCarbonFootprint =
+        await docRef.get().then((value) => value.data()!.totalCarbonFootprint);
     if (oldCarbonFootprint + addedCarbonFootprint < 0.0) {
       throw Exception("Cannot set carbon footprint to negatives");
     }
@@ -110,5 +112,4 @@ class UserService {
 
     return docSnap.data();
   }
-
 }

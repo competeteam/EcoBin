@@ -2,7 +2,6 @@ import 'package:dinacom_2024/models/user_model.dart';
 import 'package:dinacom_2024/services/user_service.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
 
 class Calculator extends StatefulWidget {
@@ -44,16 +43,21 @@ class _CalculatorState extends State<Calculator> {
     // Table 9
     // Assumption: disposal using landfill method
     // To convert short tons to kg, we divide by 907.18
-    'Organic Waste' : 0.48  / 907.18,     // mixed organics
-    "Plastic Waste" : 0.02  / 907.18,     // mixed plastics
-    "Paper Waste"   : 0.80  / 907.18,     // mixed paper (general)
-    "Metal Waste"   : 0.02  / 907.18,     // mixed metals
-    "E Waste"       : 0.02  / 907.18,     // mixed electronics
-    "Glass Waste"   : 0.02  / 907.18,     // glass
+    'Organic Waste': 0.48 / 907.18,
+    // mixed organics
+    "Plastic Waste": 0.02 / 907.18,
+    // mixed plastics
+    "Paper Waste": 0.80 / 907.18,
+    // mixed paper (general)
+    "Metal Waste": 0.02 / 907.18,
+    // mixed metals
+    "E Waste": 0.02 / 907.18,
+    // mixed electronics
+    "Glass Waste": 0.02 / 907.18,
+    // glass
   };
 
   _CalculatorState();
-
 
   void updateInputCarbonFootprint() {
     double tempInputCarbonFootprint = 0;
@@ -76,10 +80,9 @@ class _CalculatorState extends State<Calculator> {
     if (user != null) {
       getUserEmission(user);
     }
-    WidgetsBinding.instance.addPostFrameCallback((timeStamp) {setState(() {
-
-    });});
-
+    WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
+      setState(() {});
+    });
 
     return Scaffold(
       backgroundColor: const Color(0xF9212121),
@@ -104,7 +107,6 @@ class _CalculatorState extends State<Calculator> {
                 height: 0,
               ),
             ),
-        
             const Text(
               'Find out your impact on this planet.',
               style: TextStyle(
@@ -134,7 +136,9 @@ class _CalculatorState extends State<Calculator> {
                         height: 0,
                       ),
                     ),
-                    const SizedBox(height: 9,),
+                    const SizedBox(
+                      height: 9,
+                    ),
                     CircleAvatar(
                       radius: 75,
                       backgroundColor: const Color(0xFF5B8A62),
@@ -183,38 +187,40 @@ class _CalculatorState extends State<Calculator> {
                       ),
                       textAlign: TextAlign.center,
                     ),
-                    const SizedBox(height: 9,),
+                    const SizedBox(
+                      height: 9,
+                    ),
                     CircleAvatar(
-                        radius: 50,
-                        backgroundColor: const Color(0xFF5B8A62),
-                        child: Text.rich(
-                          TextSpan(
-                            children: [
-                              TextSpan(
-                                text: inputCarbonFootprint.toStringAsFixed(2),
-                                style: const TextStyle(
-                                  color: Colors.white,
-                                  fontSize: 24,
-                                  fontFamily: 'Inter',
-                                  fontWeight: FontWeight.w400,
-                                  height: 0,
-                                ),
+                      radius: 50,
+                      backgroundColor: const Color(0xFF5B8A62),
+                      child: Text.rich(
+                        TextSpan(
+                          children: [
+                            TextSpan(
+                              text: inputCarbonFootprint.toStringAsFixed(2),
+                              style: const TextStyle(
+                                color: Colors.white,
+                                fontSize: 24,
+                                fontFamily: 'Inter',
+                                fontWeight: FontWeight.w400,
+                                height: 0,
                               ),
-                              const TextSpan(
-                                text: '\ntonnes',
-                                style: TextStyle(
-                                  color: Colors.white,
-                                  fontSize: 18,
-                                  fontFamily: 'Inter',
-                                  fontWeight: FontWeight.w400,
-                                  height: 0,
-                                ),
+                            ),
+                            const TextSpan(
+                              text: '\ntonnes',
+                              style: TextStyle(
+                                color: Colors.white,
+                                fontSize: 18,
+                                fontFamily: 'Inter',
+                                fontWeight: FontWeight.w400,
+                                height: 0,
                               ),
-                            ],
-                          ),
-                          textAlign: TextAlign.center,
-                          overflow: TextOverflow.fade,
+                            ),
+                          ],
                         ),
+                        textAlign: TextAlign.center,
+                        overflow: TextOverflow.fade,
+                      ),
                     )
                   ],
                 ),
@@ -234,39 +240,39 @@ class _CalculatorState extends State<Calculator> {
               ),
             ),
             const Divider(),
-        
-            for (int i = 0; i < _inputFields.length; i++)
-              _inputFields[i],
-        
-            if (user != null) ElevatedButton(
-              onPressed: () {
-                updateInputCarbonFootprint();
-                _userService.addCarbonFootprint(user.uid, inputCarbonFootprint);
-                for (var element in _inputFields) {element.removeText();}
-                setState(() {
-                  carbonFootprintPerWaste.clear();
-                });
-                updateInputCarbonFootprint();
-              },
-              style: const ButtonStyle(
-                backgroundColor: MaterialStatePropertyAll(Colors.black12),
-                foregroundColor: MaterialStatePropertyAll(Colors.white60),
-                overlayColor: MaterialStatePropertyAll(Color(0xFF5B8A62)),
-              ),
-              child: const Text(
-                'Submit input',
-                style: TextStyle(
-                  fontSize: 18,
-                  fontFamily: 'Inter',
-                  fontWeight: FontWeight.w400,
-                  height: 0,
+            for (int i = 0; i < _inputFields.length; i++) _inputFields[i],
+            if (user != null)
+              ElevatedButton(
+                onPressed: () {
+                  updateInputCarbonFootprint();
+                  _userService.addCarbonFootprint(
+                      user.uid, inputCarbonFootprint);
+                  for (var element in _inputFields) {
+                    element.removeText();
+                  }
+                  setState(() {
+                    carbonFootprintPerWaste.clear();
+                  });
+                  updateInputCarbonFootprint();
+                },
+                style: const ButtonStyle(
+                  backgroundColor: MaterialStatePropertyAll(Colors.black12),
+                  foregroundColor: MaterialStatePropertyAll(Colors.white60),
+                  overlayColor: MaterialStatePropertyAll(Color(0xFF5B8A62)),
                 ),
-
+                child: const Text(
+                  'Submit input',
+                  style: TextStyle(
+                    fontSize: 18,
+                    fontFamily: 'Inter',
+                    fontWeight: FontWeight.w400,
+                    height: 0,
+                  ),
+                ),
               ),
+            const SizedBox(
+              height: 18,
             ),
-        
-            const SizedBox(height: 18,),
-        
           ],
         ),
       ),
@@ -274,16 +280,17 @@ class _CalculatorState extends State<Calculator> {
   }
 }
 
-
 class CalculatorInputFieldChanged extends Notification {
   final double value;
   final String wasteType;
+
   CalculatorInputFieldChanged({required this.value, required this.wasteType});
 }
 
 class CalculatorInputField extends StatefulWidget {
   final String wasteType;
   final TextEditingController controller = TextEditingController();
+
   CalculatorInputField({
     super.key,
     this.wasteType = "",
@@ -323,18 +330,20 @@ class _CalculatorInputFieldState extends State<CalculatorInputField> {
 
     double? poss = double.tryParse(widget.controller.text);
     if (poss == null) {
-      throw Exception("Non numeric input detected at ${widget.wasteType} label.");
-    }
-    else {
+      throw Exception(
+          "Non numeric input detected at ${widget.wasteType} label.");
+    } else {
       return poss;
     }
   }
 
   void _onFocusChange() {
     setState(() {
-      labelColor = _focus.hasFocus ? const Color(0xFF2896EC) : const Color(0xFF77777A);
+      labelColor =
+          _focus.hasFocus ? const Color(0xFF2896EC) : const Color(0xFF77777A);
     });
   }
+
   @override
   Widget build(BuildContext context) {
     return Column(
@@ -351,7 +360,6 @@ class _CalculatorInputFieldState extends State<CalculatorInputField> {
             height: 0,
           ),
         ),
-
         TextField(
           style: const TextStyle(
             color: Colors.white,
@@ -368,11 +376,10 @@ class _CalculatorInputFieldState extends State<CalculatorInputField> {
           ],
           onChanged: (value) {
             CalculatorInputFieldChanged(
-                value: getDoubleValue(),
-                wasteType: widget.wasteType,
+              value: getDoubleValue(),
+              wasteType: widget.wasteType,
             ).dispatch(context);
           },
-
           decoration: const InputDecoration(
             fillColor: Color(0xFF2C2C2E),
             border: OutlineInputBorder(),
@@ -388,7 +395,10 @@ class _CalculatorInputFieldState extends State<CalculatorInputField> {
             ),
             suffixIcon: Padding(
               padding: EdgeInsets.all(10.0),
-              child: Text('kg', style: TextStyle(color: Colors.white), ),
+              child: Text(
+                'kg',
+                style: TextStyle(color: Colors.white),
+              ),
             ),
             suffixIconConstraints: BoxConstraints(minWidth: 0, minHeight: 0),
             suffixStyle: TextStyle(
@@ -401,7 +411,6 @@ class _CalculatorInputFieldState extends State<CalculatorInputField> {
             hintText: '0',
           ),
         ),
-
         const SizedBox(
           height: 10,
         )

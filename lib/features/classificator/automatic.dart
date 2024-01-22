@@ -2,12 +2,13 @@ import 'dart:io';
 
 import 'package:dinacom_2024/common/helper.dart';
 import 'package:dinacom_2024/components/classificator/result_card.dart';
-import 'package:dinacom_2024/components/loading/loading.dart';
+import 'package:dinacom_2024/components/loading.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_tflite/flutter_tflite.dart';
 
 class AutomaticClassificator extends StatefulWidget {
   final File file;
+
   const AutomaticClassificator(this.file, {super.key});
 
   @override
@@ -58,8 +59,9 @@ class _AutomaticClassificatorState extends State<AutomaticClassificator> {
     return Scaffold(
       body: Center(
         child: !_loading
-        ? ClassificatorResultCard(capitalize('${_output[0]['label']}'.replaceAll(RegExp(r'[0-9]'), ''), 1))
-        : const Loading(),
+            ? ClassificatorResultCard(capitalize(
+                '${_output[0]['label']}'.replaceAll(RegExp(r'[0-9]'), ''), 1))
+            : const Loading(),
       ),
     );
   }

@@ -12,8 +12,7 @@ class ClassificatorQuestionCard extends StatefulWidget {
       _ClassificatorQuestionCardState();
 }
 
-class _ClassificatorQuestionCardState
-    extends State<ClassificatorQuestionCard> {
+class _ClassificatorQuestionCardState extends State<ClassificatorQuestionCard> {
   @override
   Widget build(BuildContext context) {
     String question = widget.questions;

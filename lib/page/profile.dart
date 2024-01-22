@@ -1,9 +1,8 @@
-import 'package:dinacom_2024/page/profile/login.dart';
-import 'package:dinacom_2024/page/profile/user_profile.dart';
+import 'package:dinacom_2024/features/profile/login.dart';
+import 'package:dinacom_2024/features/profile/user_profile.dart';
+import 'package:dinacom_2024/models/user_model.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-
-import 'package:dinacom_2024/models/user_model.dart';
 
 class Profile extends StatelessWidget {
   const Profile({super.key});
