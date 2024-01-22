@@ -59,6 +59,7 @@ dependencies:
   shared_preferences: ^2.2.2
   smooth_page_indicator: ^1.1.0
   flutter_tflite: ^1.0.1
+  flutter_dotenv: ^5.1.0
 
 dev_dependencies:
   flutter_test:
