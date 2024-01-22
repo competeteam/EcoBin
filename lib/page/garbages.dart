@@ -13,6 +13,7 @@ import 'package:dinacom_2024/services/map_launcher.dart';
 import 'package:dinacom_2024/services/trash_bin_service.dart';
 import 'package:easy_debounce/easy_debounce.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:flutter_speed_dial/flutter_speed_dial.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:geocoding/geocoding.dart';
@@ -41,11 +42,13 @@ class _GarbagesState extends State<Garbages> {
   bool isFindNearby = true;
   TextEditingController destinationTextEditingController =
       TextEditingController();
+
   // List<PredictionModel> dropOffPredictionsPlacesList = []; google maps punya
   List<AddressModel> dropOffPredictionsPlacesList = [];
   List<AddressModel> nearbyBinsList = [];
-  String map_api_key = "AIzaSyAo8mKGA9Lu3v77seiutfmPAP8ErsiRhiE";
-  String autocomplete_api_key = "6340be1c7c4746ce923eb55a79fe87bd";
+
+  String map_api_key = dotenv.env['GOOGLE_MAPS_API_KEY']!;
+  String autocomplete_api_key = dotenv.env['AUTOCOMPLETE_API_KEY']!;
 
   bool isOrganicChecked = true;
   bool isPaperChecked = true;
@@ -510,16 +513,16 @@ class _GarbagesState extends State<Garbages> {
                   ),
                   onPressed: () async {
                     try {
-                        context.goNamed(
-                          'showcomplaints',
-                          queryParameters: {
-                            'lat': lat.toString(),
-                            'lng': lng.toString(),
-                            'adrs': _address,
-                            'tid': tid,
-                            'uid': user!.uid,
-                          },
-                        );
+                      context.goNamed(
+                        'showcomplaints',
+                        queryParameters: {
+                          'lat': lat.toString(),
+                          'lng': lng.toString(),
+                          'adrs': _address,
+                          'tid': tid,
+                          'uid': user!.uid,
+                        },
+                      );
                     } catch (e) {
                       GoRouter.of(context).push('/login');
                     }

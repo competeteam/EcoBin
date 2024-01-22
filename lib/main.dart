@@ -3,6 +3,7 @@ import 'package:dinacom_2024/router/app_navigation.dart';
 import 'package:dinacom_2024/services/auth_service.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:go_router/go_router.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
@@ -23,6 +24,8 @@ void main() async {
     }
   });
 
+  await dotenv.load(fileName: '.env');
+
   runApp(const MyApp());
 }
 
@@ -31,7 +34,6 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-
     return StreamProvider<UserModel?>.value(
         value: AuthService().user,
         initialData: null,
@@ -43,7 +45,6 @@ class MyApp extends StatelessWidget {
             visualDensity: VisualDensity.adaptivePlatformDensity,
           ),
           routerConfig: AppNavigation.getRouter(),
-        )
-    );
+        ));
   }
 }
