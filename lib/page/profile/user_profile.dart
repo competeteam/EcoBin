@@ -71,10 +71,9 @@ class _UserProfileState extends State<UserProfile> {
       String location = userModel.city != '' && userModel.province != ''
           ? '${userModel.city}, ${userModel.province}'
           : '';
-      String trashBinCount = userModel.trashBinCount.toString();
       String totalTrashBinFillCount =
           userModel.totalTrashBinFillCount.toString();
-      String totalEmissionReduced = userModel.totalEmissionReduced.toString();
+      String totalCarbonFootprint = userModel.totalCarbonFootprint.toStringAsFixed(2);
 
       ImageProvider image;
 
@@ -85,6 +84,8 @@ class _UserProfileState extends State<UserProfile> {
       }
 
       List<TrashBinModel?> trashBinModels = _futureTrashBinModel;
+
+      String trashBinCount = trashBinModels.length.toString();
 
       List<TrashBinCard> userTrashBins = trashBinModels
           .map((trashBinModel) => TrashBinCard(
@@ -177,7 +178,6 @@ class _UserProfileState extends State<UserProfile> {
                   ),
                   const SizedBox(height: 35.0),
                   Container(
-                      height: 80.0,
                       padding: const EdgeInsets.all(10.0),
                       decoration: const BoxDecoration(
                         color: Color(0xFF3B3B3B),
@@ -218,11 +218,11 @@ class _UserProfileState extends State<UserProfile> {
                               width: 1.0, color: Color(0xFF9D9D9D)),
                           Column(
                             children: <Widget>[
-                              Text(totalEmissionReduced,
+                              Text(totalCarbonFootprint,
                                   style: const TextStyle(
                                       color: Colors.white, fontSize: 20.0)),
                               const SizedBox(height: 5.0),
-                              const Text('Emission\nReduced',
+                              const Text('Carbon\nFootprint',
                                   style: TextStyle(
                                     color: Color(0xFF9D9D9D),
                                     fontSize: 14.0,

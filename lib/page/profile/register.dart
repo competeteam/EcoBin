@@ -88,6 +88,8 @@ class _RegisterState extends State<Register> {
                         },
                         decoration: const InputDecoration(
                           isDense: true,
+                          enabledBorder: OutlineInputBorder(
+                            borderSide: BorderSide(color: Color(0xFF646464)),),
                           contentPadding: EdgeInsets.all(12.0),
                           border: OutlineInputBorder(
                             borderRadius:
@@ -121,6 +123,8 @@ class _RegisterState extends State<Register> {
                         decoration: const InputDecoration(
                           isDense: true,
                           contentPadding: EdgeInsets.all(12.0),
+                          enabledBorder: OutlineInputBorder(
+                            borderSide: BorderSide(color: Color(0xFF646464)),),
                           border: OutlineInputBorder(
                             borderRadius:
                                 BorderRadius.all(Radius.circular(5.0)),
@@ -151,6 +155,9 @@ class _RegisterState extends State<Register> {
                         decoration: const InputDecoration(
                           isDense: true,
                           contentPadding: EdgeInsets.all(12.0),
+                          focusColor: Color(0xFF5B8A62),
+                          enabledBorder: OutlineInputBorder(
+                            borderSide: BorderSide(color: Color(0xFF646464)),),
                           border: OutlineInputBorder(
                             borderRadius:
                                 BorderRadius.all(Radius.circular(5.0)),
@@ -185,6 +192,8 @@ class _RegisterState extends State<Register> {
                         decoration: const InputDecoration(
                           isDense: true,
                           contentPadding: EdgeInsets.all(12.0),
+                          enabledBorder: OutlineInputBorder(
+                            borderSide: BorderSide(color: Color(0xFF646464)),),
                           border: OutlineInputBorder(
                             borderRadius:
                                 BorderRadius.all(Radius.circular(5.0)),
