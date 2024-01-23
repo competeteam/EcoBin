@@ -7,6 +7,8 @@
 
 EcoBin is an Android Application that aims to provide a platform for a community-driven city waste management system.
 
+[Download Latest Version](https://github.com/competeteam/EcoBin/releases/latest)
+
 ## ⚡ Main Features
 
 ![](docs/feature-1.png)
